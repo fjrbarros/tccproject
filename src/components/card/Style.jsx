@@ -1,13 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(({
+export const useStyles = makeStyles(hiddenCardEdit => ({
     root: {
         minWidth: '210px',
         maxHeight: '132px',
         margin: '5px 5px',
         borderRadius: '8px',
-        // backgroundImage: 'linear-gradient(45deg, rgb(7, 5, 117) -38%, rgb(0, 51, 212) 20%, rgb(0, 110, 232) 70%, rgb(0, 255, 247) 122%)',
-        backgroundColor: 'rgb(0,0,0,0.6)',
+        backgroundImage: 'linear-gradient(135deg, #5a4fa9, #2f9aee)',
         color: '#ffffff',
         transition: 'box-shadow .3s',
         border: '1px solid transparent',
@@ -17,7 +16,7 @@ export const useStyles = makeStyles(({
             backgroundColor: 'rgb(0,0,0,0.7)'
         },
         '@media (max-width: 499px)': {
-           flex: '1'
+            flex: '1'
         }
     },
 
@@ -42,7 +41,8 @@ export const useStyles = makeStyles(({
     },
 
     buttonCard: {
-        color: '#ffffff'
+        color: '#ffffff',
+        textTransform: 'none'
     },
 
     cardBottom: {
@@ -53,5 +53,48 @@ export const useStyles = makeStyles(({
 
     cardBottomFlex: {
         flex: 1
+    },
+
+    cardMore: {
+        margin: '3px 0px 0px -10px',
+        cursor: 'pointer',
+        borderRadius: '5px',
+        '&:hover': {
+            backgroundColor: 'rgb(0,0,0,0.2)'
+        }
+    },
+
+    iconCardMoreOption: {
+        fontSize: '1.2rem',
+        marginRight: '5px'
+    },
+
+    typCardMoreOpt: {
+        height: '25px',
+        width: hiddenCardEdit => hiddenCardEdit ? '0px' : '100%',
+        display: hiddenCardEdit => hiddenCardEdit ? 'none' : 'flex',
+        fontSize: '0.85rem',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'width 0.4s',
+        marginTop: '6px',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: 'rgb(0,0,0,0.15)'
+        }
+    },
+
+    rootEdit: {
+        height: '132px',
+        width: hiddenCardEdit => hiddenCardEdit ? '0px' : '212px',
+        textAlign: 'center',
+        margin: '-1px 0px 0px -1px',
+        backgroundImage: 'linear-gradient(135deg, #2f9aee, #5a4fa9)',
+        borderRadius: '8px',
+        zIndex: 9999,
+        position: 'absolute',
+        transition: 'width .4s',
+        display: 'flex',
+        flexDirection: 'column'
     }
 }));

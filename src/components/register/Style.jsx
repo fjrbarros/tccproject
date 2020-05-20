@@ -12,14 +12,6 @@ export const useStyles = makeStyles(props => ({
         }
     },
 
-    title: {
-        fontSize: '1.3rem',
-        textAlign: 'center',
-        fontStyle: 'italic',
-        color: '#616161',
-        marginTop: '10px'
-    },
-
     marginTopBottom: {
         margin: '15px 0px'
     },

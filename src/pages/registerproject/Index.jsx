@@ -16,18 +16,17 @@ function PageRegisterProject() {
 
     let history = useHistory();
 
-    const [dialog, setDialog] = useState({
-        open: false,
-        message: '',
-        type: '',
-        title: ''
-    });
+    const classes = useStyles();
+
+    const userId = useSelector(state => state.id);
 
     const [dataTypeProject, setDataTypeProject] = useState([]);
 
-    const classes = useStyles();
+    const [disabledBaseModel, setDisabledBaseModel] = useState(true);
 
     const [optionBaseModel, setOptionBaseModel] = useState([{}]);
+
+    const [openDrawer, setOpenDrawer] = useState(false);
 
     const [valueAutoSelect, setValueAutoSelect] = useState({
         typeProject: { valor: '', descricao: '' },
@@ -39,9 +38,16 @@ function PageRegisterProject() {
         dateEnd: new Date()
     });
 
-    const [disabledBaseModel, setDisabledBaseModel] = useState(true);
+    const [dialog, setDialog] = useState({
+        open: false,
+        message: '',
+        type: '',
+        title: ''
+    });
 
-    const userId = useSelector(state => state.id);
+    useEffect(() => {
+        executeRequestRecoverData();
+    }, []);
 
     function executeRequestGetItensBaseModel(typeProject) {
 
@@ -53,10 +59,6 @@ function PageRegisterProject() {
                 setOptionBaseModel(resp.data);
             }).catch(error => { });
     }
-
-    useEffect(() => {
-        executeRequestRecoverData();
-    }, []);
 
     function handleCloseDialog() {
         setDialog({
@@ -83,8 +85,6 @@ function PageRegisterProject() {
             title: 'Confirmação'
         });
     }
-
-    const [openDrawer, setOpenDrawer] = useState(false);
 
     function handleDrawerOpen() {
         setOpenDrawer(true);
@@ -143,12 +143,11 @@ function PageRegisterProject() {
                             name='typeProject'
                             value={valueAutoSelect.typeProject}
                             onChange={(event, newValue) => {
-                                setValueAutoSelect({ 
-                                    ...valueAutoSelect, 
-                                    typeProject: newValue ? newValue : {} 
+                                setValueAutoSelect({
+                                    ...valueAutoSelect,
+                                    typeProject: newValue ? newValue : {}
                                 });
-                                 if(newValue) executeRequestGetItensBaseModel(newValue.valor);
-                                console.log(newValue)
+                                if (newValue) executeRequestGetItensBaseModel(newValue.valor);
                             }}
                         />
                         <Autocomplete
@@ -160,11 +159,10 @@ function PageRegisterProject() {
                             name='baseModel'
                             value={valueAutoSelect.baseModel}
                             onChange={(event, newValue) => {
-                                setValueAutoSelect({ 
-                                    ...valueAutoSelect, 
-                                    baseModel: newValue ? newValue : {} 
+                                setValueAutoSelect({
+                                    ...valueAutoSelect,
+                                    baseModel: newValue ? newValue : {}
                                 });
-                                console.log(newValue)
                             }}
                         />
                         <Box className={classes.containerDate}>

@@ -1,9 +1,7 @@
-export function validateForm(values, errorFn, required) {
+export function validateForm(values, errorFn) {
     let msg;
     if(values.hasOwnProperty('name')) {
-        if(required && !required.name) {
-            errorFn('name', '');
-        }else if((msg = validateName(values.name), required)) {
+        if((msg = validateName(values.name))) {
             errorFn('name', msg)
         }
     }

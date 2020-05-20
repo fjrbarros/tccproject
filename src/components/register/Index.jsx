@@ -27,10 +27,6 @@ function ComponentRegister(props) {
         confPassword: '',
     });
 
-    const [required] = useState({
-        name: props.isRequiredName || false
-    });
-
     const [submited, setSubmited] = useState(false);
 
     function handleChange(event) {
@@ -44,84 +40,73 @@ function ComponentRegister(props) {
     }
 
     return (
-        <Box>
-            {
-                props.title ?
-                <Typography
-                    className={classes.title}
-                >   Meus dados
-                </Typography> 
-                : null
-            }
-    
         <form className={classes.cadastro} onSubmit={handleSubmit}>
-                <TextField
-                    label='Nome completo'
-                    name='name'
-                    fullWidth
-                    className={classes.marginTopBottom}
-                    error={!!error.name}
-                    helperText={error.name}
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                <PhoneField
-                    label='Fone'
-                    name='phone'
-                    mask='(99) 99999-9999'
-                    fullWidth
-                    className={classes.marginBottom}
-                    error={!!error.phone}
-                    helperText={error.phone}
-                    value={values.phone}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                <TextField
-                    label='E-mail'
-                    fullWidth
-                    className={classes.marginBottom}
-                    name='email'
-                    value={values.email}
-                    error={!!error.email}
-                    helperText={error.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                <PasswordField
-                    label='Senha'
-                    fullWidth
-                    className={classes.marginBottom}
-                    name='password'
-                    value={values.password}
-                    error={!!error.password}
-                    helperText={error.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                <PasswordField
-                    label='Confirmação senha'
-                    fullWidth
-                    className={classes.marginBottom}
-                    name='confPassword'
-                    value={values.confPassword}
-                    error={!!error.confPassword}
-                    helperText={error.confPassword}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                <Button
-                    className={classes.saveButton}
-                    variant='contained'
-                    color='primary'
-                    startIcon={<SaveIcon />}
-                    type='submit'
-                >
-                    Salvar
+            <TextField
+                label='Nome completo'
+                name='name'
+                fullWidth
+                className={classes.marginTopBottom}
+                error={!!error.name}
+                helperText={error.name}
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+            <PhoneField
+                label='Fone'
+                name='phone'
+                mask='(99) 99999-9999'
+                fullWidth
+                className={classes.marginBottom}
+                error={!!error.phone}
+                helperText={error.phone}
+                value={values.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+            <TextField
+                label='E-mail'
+                fullWidth
+                className={classes.marginBottom}
+                name='email'
+                value={values.email}
+                error={!!error.email}
+                helperText={error.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+            <PasswordField
+                label='Senha'
+                fullWidth
+                className={classes.marginBottom}
+                name='password'
+                value={values.password}
+                error={!!error.password}
+                helperText={error.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+            <PasswordField
+                label='Confirmação senha'
+                fullWidth
+                className={classes.marginBottom}
+                name='confPassword'
+                value={values.confPassword}
+                error={!!error.confPassword}
+                helperText={error.confPassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+            <Button
+                className={classes.saveButton}
+                variant='contained'
+                color='primary'
+                startIcon={<SaveIcon />}
+                type='submit'
+            >
+                Salvar
             </Button>
-            </form>
-        </Box>
+        </form>
     );
 
     function handleSubmit(event) {
@@ -132,14 +117,15 @@ function ComponentRegister(props) {
 
     function validateFormCadastro() {
         const errors = {};
-        validateForm(values, (campo, msg) => errors[campo] = msg, required);
+        validateForm(values, (campo, msg) => errors[campo] = msg);
         setError(errors);
-        if (Object.keys(errors).length === 0) {
-            // executeRequest();
-        }
+        // if (Object.keys(errors).length === 0) {
+        //     executeRequest();
+        // }
     }
 
     // function executeRequest() {
+        
     //     const url = '/usuario/login/';
     //     const data = {
     //         email: values.email,

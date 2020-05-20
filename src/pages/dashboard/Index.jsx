@@ -128,26 +128,18 @@ function Dashboard() {
                             return (
                                 <ComponentCard
                                     key={project.id}
-                                    title={project.descricao}
+                                    title={project.tipoProjeto}
+                                    description={project.descricao}
+                                    isAdm={project.userAdmin}
                                     textButton='Abrir'
                                 />
                             )
                         })
                     }
                     {/* <ComponentCard
-                        title='adsfasfasfsa'
-                        textButton='Abrir'
-                    />
-                    <ComponentCard
-                        title='adsfasfasfsa'
-                        textButton='Abrir'
-                    />
-                    <ComponentCard
-                        title='adsfasfasfsa'
-                        textButton='Abrir'
-                    />
-                    <ComponentCard
-                        title='adsfasfasfsa'
+                        title='Teste'
+                        description='Testando'
+                        isAdm={true}
                         textButton='Abrir'
                     /> */}
                 </Box>
