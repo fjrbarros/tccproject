@@ -26,6 +26,26 @@ export function validateForm(values, errorFn) {
             errorFn('confPassword', msg)
         }
     }
+    if(values.hasOwnProperty('titleProject')) {
+        if((msg = validateTitleProject(values.titleProject))) {
+            errorFn('titleProject', msg)
+        }
+    }
+    if(values.hasOwnProperty('typeProject')) {
+        if((msg = validateTypeProject(values.typeProject))) {
+            errorFn('typeProject', msg)
+        }
+    }
+    if(values.hasOwnProperty('dateInit')) {
+        if((msg = validatetDateInit(values.dateInit))) {
+            errorFn('dateInit', msg)
+        }
+    }
+    if(values.hasOwnProperty('dateEnd')) {
+        if((msg = validatetDateEnd(values.dateEnd))) {
+            errorFn('dateEnd', msg)
+        }
+    }
 }
 
 function validateName(name, required) {
@@ -80,4 +100,24 @@ function validateConfPassword(confPassword, password) {
     }
 
     return '';
+}
+
+function validateTitleProject(titleProject) {
+    if(!titleProject) return 'Titulo do projeto obrigatório.';
+}
+
+function validateTypeProject(typeProject) {
+    if(!typeProject) return 'Tipo do projeto obrigatório.';
+}
+
+function validatetDateInit(dateInit) {
+    if(!dateInit) return 'Data de início obrigatório.'
+
+    if(dateInit.toString() === 'Invalid Date') return 'Data inválida.'
+}
+
+function validatetDateEnd(dateEnd) {
+    if(!dateEnd) return 'Data de término obrigatório.'
+
+    if(dateEnd.toString() === 'Invalid Date') return 'Data inválida.'
 }

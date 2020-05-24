@@ -3,14 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useStyles } from './Style';
 import Api from '../../util/api/Index';
+import { validateForm } from '../../util/validate/Index';
+import { format } from "date-fns";
 import TopBar from '../../components/topbar/Index';
 import ComponentDrawer from '../../components/drawer/Index';
 import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import { Box, TextField, Button } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import SaveIcon from '@material-ui/icons/Save';
 import ComponentDate from '../../core/input/date/Index';
+import InputAutoComplete from '../../core/input/autocomplete/Index'
 
 function PageRegisterProject() {
 
@@ -24,17 +26,17 @@ function PageRegisterProject() {
 
     const [disabledBaseModel, setDisabledBaseModel] = useState(true);
 
-    const [optionBaseModel, setOptionBaseModel] = useState([{}]);
-
     const [openDrawer, setOpenDrawer] = useState(false);
 
-    const [valueAutoSelect, setValueAutoSelect] = useState({
-        typeProject: { valor: '', descricao: '' },
-        baseModel: { valor: '', descricao: '' }
-    });
+    const [dataModelBase, setDataModelBase] = useState(null);
 
-    const [date, setDate] = useState({
-        dateStart: new Date(),
+    const [valueTypeProject, setValueTypeProject] = useState(null);
+
+    const [valueModelBase, setValueModelBase] = useState(null);
+
+    const [values, setValues] = useState({
+        titleProject: '',
+        dateInit: new Date(),
         dateEnd: new Date()
     });
 
@@ -45,20 +47,16 @@ function PageRegisterProject() {
         title: ''
     });
 
+    const [error, setError] = useState({
+        titleProject: '',
+        typeProject: '',
+        dateInit: '',
+        dateEnd: ''
+    });
+
     useEffect(() => {
         executeRequestRecoverData();
     }, []);
-
-    function executeRequestGetItensBaseModel(typeProject) {
-
-        const url = `/templateProjeto/${userId}/${typeProject}`;
-
-        Api.get(url)
-            .then(resp => {
-                if (resp.data.length > 0) setDisabledBaseModel(false);
-                setOptionBaseModel(resp.data);
-            }).catch(error => { });
-    }
 
     function handleCloseDialog() {
         setDialog({
@@ -77,13 +75,7 @@ function PageRegisterProject() {
     }
 
     function handleClickLogout() {
-        setDialog({
-            ...dialog,
-            message: 'Deseja sair do sistema?',
-            type: 'confirm',
-            open: true,
-            title: 'Confirmação'
-        });
+        openDialog('confirm', 'Deseja sair do sistema?');
     }
 
     function handleDrawerOpen() {
@@ -106,14 +98,34 @@ function PageRegisterProject() {
                 setDataTypeProject(resp.data[5].valores);
             })
             .catch(error => {
-                setDialog({
-                    ...dialog,
-                    message: error.response.data.message,
-                    type: 'alert',
-                    open: true,
-                    title: 'Atenção'
-                });
+                openDialog('alert', error.response.data.message);
             });
+    }
+
+    function executeRequestGetItensBaseModel(typeProject) {
+
+        const url = `/templateProjeto/${userId}/${typeProject}`;
+
+        Api.get(url)
+            .then(resp => {
+                if (resp.data.length > 0) setDisabledBaseModel(false);
+                setDataModelBase(resp.data);
+            }).catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
+    }
+
+    function handleChange(event) {
+        setValues({ ...values, [event.target.name]: event.target.value });
+    }
+
+    function handleChageTypeProject(event, newValue) {
+        setValueTypeProject(newValue);
+        if (newValue) executeRequestGetItensBaseModel(newValue.valor);
+    }
+
+    function handleChageModelBase(event, newValue) {
+        setValueModelBase(newValue);
     }
 
     return (
@@ -129,53 +141,57 @@ function PageRegisterProject() {
                 menuDrawer onDrawerOpen={handleDrawerOpen}
             />
             <Body topBar='65px' >
-                <form className={classes.container} onSubmit={teste}>
+                <form className={classes.container} onSubmit={subTeste}>
                     <Box className={classes.containerCenter}>
                         <TextField
                             className={classes.containerInput}
                             label='Título'
+                            name='titleProject'
+                            error={!!error.titleProject}
+                            helperText={error.titleProject}
+                            value={values.titleProject}
+                            onChange={handleChange}
                         />
-                        <Autocomplete
+                        <InputAutoComplete
                             className={classes.containerInput}
-                            options={dataTypeProject}
-                            getOptionLabel={option => option.descricao}
-                            renderInput={params => <TextField {...params} label="Tipo de projeto" />}
+                            label='Tipo de projeto'
                             name='typeProject'
-                            value={valueAutoSelect.typeProject}
-                            onChange={(event, newValue) => {
-                                setValueAutoSelect({
-                                    ...valueAutoSelect,
-                                    typeProject: newValue ? newValue : {}
-                                });
-                                if (newValue) executeRequestGetItensBaseModel(newValue.valor);
-                            }}
+                            error={!!error.typeProject}
+                            helperText={error.typeProject}
+                            options={dataTypeProject}
+                            getOptionLabel={(option) => option.descricao}
+                            getOptionSelected={(option, value) => option.descricao === value.descricao}
+                            value={valueTypeProject}
+                            onChange={handleChageTypeProject}
                         />
-                        <Autocomplete
+                        <InputAutoComplete
                             className={classes.containerInput}
-                            options={optionBaseModel}
-                            getOptionLabel={option => option.descricao}
-                            renderInput={params => <TextField {...params} label='Modelo de base' />}
-                            disabled={disabledBaseModel}
+                            label='Modelo de base'
                             name='baseModel'
-                            value={valueAutoSelect.baseModel}
-                            onChange={(event, newValue) => {
-                                setValueAutoSelect({
-                                    ...valueAutoSelect,
-                                    baseModel: newValue ? newValue : {}
-                                });
-                            }}
+                            options={dataModelBase}
+                            getOptionLabel={(option) => option.descricao}
+                            getOptionSelected={(option, value) => option.descricao === value.descricao}
+                            disabled={disabledBaseModel}
+                            value={valueModelBase}
+                            onChange={handleChageModelBase}
                         />
                         <Box className={classes.containerDate}>
                             <ComponentDate
                                 className={classes.dateStart}
                                 label='Data de início'
-                                value={date.dateStart}
-                                onChange={date => setDate({ ...date, dateStart: date })}
+                                name='dateInit'
+                                error={!!error.dateInit}
+                                helperText={error.dateInit}
+                                value={values.dateInit}
+                                onChange={date => setValues({ ...values, dateInit: date })}
                             />
                             <ComponentDate
                                 label='Data de término'
-                                value={date.dateEnd}
-                                onChange={date => setDate({ ...date, dateEnd: date })}
+                                name='dateEnd'
+                                error={!!error.dateEnd}
+                                helperText={error.dateEnd}
+                                value={values.dateEnd}
+                                onChange={date => setValues({ ...values, dateEnd: date })}
                             />
                         </Box>
                         <Button
@@ -186,7 +202,7 @@ function PageRegisterProject() {
                             type='submit'
                         >
                             Salvar
-                </Button>
+                        </Button>
                     </Box>
                 </form>
             </Body>
@@ -206,9 +222,73 @@ function PageRegisterProject() {
         </React.Fragment>
     );
 
-    function teste(event) {
+    function subTeste(event) {
         event.preventDefault();
-        alert('Em desenvolvimento.');
+        validateFormRegisterProject();
+    }
+
+    function validateFormRegisterProject() {
+        const errors = {};
+        validateForm(getValuesRegisterProject(), (campo, msg) => errors[campo] = msg);
+        setError(errors);
+        if (Object.keys(errors).length === 0) {
+            saveNewProject();
+        }
+    }
+
+    function getValuesRegisterProject() {
+        return {
+            titleProject: values.titleProject,
+            typeProject: valueTypeProject,
+            dateInit: values.dateInit,
+            dateEnd: values.dateEnd
+        }
+    }
+
+    function saveNewProject() {
+        const url = '/projeto';
+        const data = {
+            descricao: values.titleProject,
+            idTemplateProjeto: valueModelBase ? valueModelBase.valor : null,
+            tipoProjeto: valueTypeProject ? valueTypeProject.valor : null,
+            dataInicio: getDateFormat(values.dateInit),
+            dataPrevistaTermino: getDateFormat(values.dateEnd),
+            idUsuario: userId
+        };
+
+        //trocar icone msg e lipar campos
+
+        Api.post(url, data)
+            .then(resp => {
+                openDialog('alert', 'Dados salvos com sucesso.');
+            })
+            .catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
+    }
+
+    function getDateFormat(date) {
+        return format(date, 'dd/MM/yyyy');
+    }
+
+    function openDialog(type, message) {
+        if(type === 'alert') {
+            setDialog({
+                ...dialog,
+                message: message,
+                type: type,
+                open: true,
+                title: 'Atenção'
+            });
+        } else if( type === 'confirm') {
+            setDialog({
+                ...dialog,
+                message: message,
+                type: type,
+                open: true,
+                title: 'Confirmação'
+            });
+        }
     }
 }
 

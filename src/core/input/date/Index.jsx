@@ -10,10 +10,9 @@ function ComponentDate(props) {
             <KeyboardDatePicker
                 className={props.className}
                 autoOk
+                {...props}
                 variant='inline'
-                label={props.label}
                 format='dd/MM/yyyy'
-                value={props.value}
                 InputAdornmentProps={{ position: 'end' }}
                 onChange={props.onChange}
             />

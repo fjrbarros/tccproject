@@ -34,8 +34,9 @@ function AlertDialog(props) {
             case 'error':
                 return (
                     <Button
-                        variant="contained"
-                        color="primary"
+                        variant='contained'
+                        color='primary'
+                        size='small'
                         onClick={props.optionOk}
                     >
                         Ok
@@ -45,15 +46,17 @@ function AlertDialog(props) {
                 return (
                     <React.Fragment>
                         <Button
-                            variant="contained"
-                            color="primary"
+                            variant='contained'
+                            color='primary'
+                            size='small'
                             onClick={props.optionYes}
                         >
                             Sim
                         </Button>
                         <Button
-                            variant="contained"
-                            color="primary"
+                            variant='contained'
+                            color='primary'
+                            size='small'
                             onClick={props.optionNo}
                         >
                             Não
@@ -63,8 +66,9 @@ function AlertDialog(props) {
             default:
                 return (
                     <Button
-                        variant="contained"
-                        color="primary"
+                        variant='contained'
+                        color='primary'
+                        size='small'
                         onClick={props.optionOk}
                     >
                         Ok
