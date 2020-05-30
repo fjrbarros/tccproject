@@ -24,14 +24,17 @@ function ComponentCard(props) {
                         <EditIcon className={classes.iconCardMoreOption} />
                         Editar projeto
                     </Typography>
-                    <Typography className={classes.typCardMoreOpt} >
+                    <Typography
+                        className={classes.typCardMoreOpt}
+                        onClick={props.onClickRemove}
+                    >
                         <DeleteForeverIcon className={classes.iconCardMoreOption} />
                         Excluir projeto
                     </Typography>
                     <Typography className={classes.typCardMoreOpt} >
                         <DoneAllIcon className={classes.iconCardMoreOption} /> Encerrar projeto
                     </Typography>
-                    <Typography 
+                    <Typography
                         className={classes.typCardMoreOpt}
                         onClick={() => setHiddenCardEdit(true)}
                     >

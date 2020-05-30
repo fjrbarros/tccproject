@@ -131,8 +131,9 @@ export const useStyles = makeStyles(isMenuActive => ({
         color: '#ffffff',
         width: '28px',
         height: isMenuActive => isMenuActive ? '28px' : '0px',
+        display: isMenuActive => isMenuActive ? 'block' : 'none',
         borderRadius: '3px',
-        transition: 'all 0.5s ease',
+        transition: 'all 0.2s ease',
         '&:hover': {
             backgroundColor: 'rgb(0,0,0,0.5)'
         }

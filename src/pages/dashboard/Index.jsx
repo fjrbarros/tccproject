@@ -5,12 +5,11 @@ import { useHistory } from 'react-router-dom';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import TopBar from '../../components/topbar/Index';
-import { Box } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import ComponentDrawer from '../../components/drawer/Index';
 import ComponentCard from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 import ModalFilter from '../../components/filter/Index';
-
 
 function Dashboard() {
 
@@ -24,70 +23,42 @@ function Dashboard() {
 
     const [dataProject, setDataProject] = useState([]);
 
-    const [dialog, setDialog] = useState({
-        open: false,
-        message: '',
-        type: '',
-        title: ''
-    });
-
     const [openModalFilter, setOpenModalFilter] = useState(false);
+
+    const [responseError, setResponseError] = useState('');
 
     const msgFormat = msgFormatDay();
 
     const classes = useStyles(dataProject.length);
 
-    const toggleDrawer = (open) => event => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
+    const [openDialog, setOpenDialog] = useState({
+        isLogout: false,
+        isRemoveProject: false,
+        isAlert: false
+    });
 
+    const [removeProject, setRemoveProject] = useState({
+        id: null,
+        description: ''
+    });
+
+    const toggleDrawer = (open) => event => {
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
         setOpenDrawer(open);
     };
 
     useEffect(() => {
-        executeRequestProjects();
-    }, []);
-
-    function executeRequestProjects() {
-        const url = '/projeto';
-
-        Api.get(url, {
+        Api.get('/projeto', {
             params: {
                 usuario: userId
             }
         }).then(resp => {
             setDataProject(resp.data);
         }).catch(error => {
-            setDialog({
-                ...dialog,
-                message: error.response.data.message,
-                type: 'alert',
-                open: true,
-                title: 'Atenção'
-            });
+            setOpenDialog({ ...openDialog, isAlert: true });
+            setResponseError(error.response.data.message);
         });
-    }
-
-    function handleClickLogout() {
-        setDialog({
-            ...dialog,
-            message: 'Deseja sair do sistema?',
-            type: 'confirm',
-            open: true,
-            title: 'Confirmação'
-        });
-    }
-
-    function handleCloseDialog() {
-        setDialog({
-            ...dialog,
-            message: '',
-            type: '',
-            open: false,
-            title: ''
-        });
-    }
+    });
 
     function handleDrawerOpen() {
         setOpenDrawer(true);
@@ -101,12 +72,6 @@ function Dashboard() {
         setOpenModalFilter(false);
     }
 
-    function handleClickOptionYes() {
-        handleCloseDialog();
-        localStorage.setItem('authenticad', false);
-        history.push('/login');
-    }
-
     return (
         <React.Fragment>
             <TopBar
@@ -117,7 +82,7 @@ function Dashboard() {
                 iconRegisterTemplate linkRegisterTemplate='/register-template'
                 iconRegisterProject linkRegisterProject='/register-project'
                 iconMyData linkMyData='/mydata'
-                iconLogOut onClickLogout={handleClickLogout}
+                iconLogOut onClickLogout={() => setOpenDialog({ ...openDialog, isLogout: true })}
                 menuDrawer onDrawerOpen={handleDrawerOpen}
             />
             <Body topBar='65px' >
@@ -131,38 +96,81 @@ function Dashboard() {
                                     title={project.tipoProjeto}
                                     description={project.descricao}
                                     isAdm={project.userAdmin}
+                                    onClickRemove={() => handleRemoveProject(project)}
                                     textButton='Abrir'
                                 />
                             )
                         })
                     }
-                    {/* <ComponentCard
-                        title='Teste'
-                        description='Testando'
-                        isAdm={true}
-                        textButton='Abrir'
-                    /> */}
                 </Box>
             </Body>
             <ComponentDrawer
                 open={openDrawer}
                 toggleDrawer={toggleDrawer}
             />
-            <Dialog
-                type={dialog.type}
-                title={dialog.title}
-                text={dialog.message}
-                open={dialog.open}
-                optionOk={handleCloseDialog}
-                optionYes={handleClickOptionYes}
-                optionNo={handleCloseDialog}
-            />
+            {
+                openDialog.isLogout && getComponentDialog(
+                    'confirm',
+                    'Deseja sair do sistema?',
+                    handleLogoutSystem
+                )
+            }
+            {
+                openDialog.isRemoveProject && getComponentDialog(
+                    'confirm',
+                    `Deseja remover o projeto ${removeProject.description}?`,
+                    onRemoveProject
+                )
+            }
+            {
+                openDialog.isAlert && getComponentDialog(
+                    'alert',
+                    `${responseError}`,
+                    null
+                )
+            }
             <ModalFilter
                 open={openModalFilter}
                 closeModal={handleCloseModal}
             />
         </React.Fragment>
     );
+
+    function getComponentDialog(type, message, fnClickYes) {
+        return (
+            <Dialog
+                type={type}
+                title={type === 'cofirm' ? 'Confirmação' : 'Atenção'}
+                text={message}
+                open={openDialog.isLogout || openDialog.isRemoveProject || openDialog.isAlert}
+                optionOk={resetData}
+                optionYes={() => fnClickYes()}
+                optionNo={resetData}
+            />
+        );
+    }
+
+    function handleLogoutSystem() {
+        setOpenDialog({ ...openDialog, isLogout: false });
+        localStorage.setItem('authenticad', false);
+        history.push('/login');
+    }
+
+    function handleRemoveProject(project) {
+        setRemoveProject({ id: project.id, description: project.descricao });
+        setOpenDialog({ ...openDialog, isRemoveProject: true });
+    }
+
+    function onRemoveProject() {
+        console.log('Id: ' + removeProject.id + ' Descrição: ' + removeProject.description);
+        resetData();
+    }
+
+    function resetData() {
+        setRemoveProject({ id: null, description: '' });
+        setOpenDialog({ isLogout: false, isRemoveProject: false, isAlert: false });
+        setResponseError('');
+    }
 
     function msgFormatDay() {
         const msgDay = getMsgDay();
@@ -175,17 +183,17 @@ function Dashboard() {
 
     function getMsgDay() {
         const date = new Date();
-        const hours = date.getHours();;
+        const hours = date.getHours();
 
         if (hours >= 18 && hours < 24) {
             return 'Boa noite';
         }
 
-        else if (hours >= 12 && hours < 18) {
+        if (hours >= 12 && hours < 18) {
             return 'Boa tarde';
         }
 
-        else if (hours >= 0 && hours < 12) {
+        if (hours >= 0 && hours < 12) {
             return 'Bom dia';
         }
 

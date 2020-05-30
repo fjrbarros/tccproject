@@ -91,7 +91,7 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
         margin: '-1px 0px 0px -1px',
         backgroundImage: 'linear-gradient(135deg, #2f9aee, #5a4fa9)',
         borderRadius: '8px',
-        zIndex: 9999,
+        zIndex: 999,
         position: 'absolute',
         transition: 'width .4s',
         display: 'flex',

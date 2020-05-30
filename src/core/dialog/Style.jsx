@@ -4,7 +4,8 @@ export const useStyles = makeStyles(props => ({
     dialog: {
         '& .MuiDialog-paperWidthSm': {
             width: '300px',
-            maxWidth: '600px'
+            maxWidth: '600px',
+            zIndex: 9999
         }
     },
 

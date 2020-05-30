@@ -19,10 +19,6 @@ function TopBar(props) {
 
   const classes = useStyles(isMenuActive);
 
-  function handleClickMenu() {
-    setMenuActive(!isMenuActive);
-  }
-
   return (
     <Box className={classes.root}>
       <AppBar position='static'>
@@ -57,178 +53,124 @@ function TopBar(props) {
           <Box className={classes.toolbarRight} >
             <Box className={classes.toolbarRightFlex} />
             {
-              props.iconHome ?
-                <Tooltip title='Home' placement='bottom'>
-                  <Link to={props.linkHome}>
-                    <HomeIcon className={classes.allIcon} />
-                  </Link>
-                </Tooltip>
-                :
-                null
+              props.iconHome &&
+              <Tooltip title='Home' placement='bottom'>
+                <Link to={props.linkHome}>
+                  <HomeIcon className={classes.allIcon} />
+                </Link>
+              </Tooltip>
             }
             {
-              props.iconFilter ?
-                <Tooltip title='Filtrar por status' placement='bottom'>
-                  <FilterListIcon
-                    onClick={props.onClickFilter}
-                    className={classes.allIcon}
-                  />
-                </Tooltip>
-                :
-                null
+              props.iconFilter &&
+              <Tooltip title='Filtrar por status' placement='bottom'>
+                <FilterListIcon
+                  onClick={props.onClickFilter}
+                  className={classes.allIcon}
+                />
+              </Tooltip>
             }
             {
-              props.iconRegisterTemplate ?
-                <Tooltip title='Cadastrar template' placement='bottom'>
-                  <Link to={props.linkRegisterTemplate}>
-                    <PostAddIcon className={classes.allIcon} />
-                  </Link>
-                </Tooltip>
-                :
-                null
+              props.iconRegisterTemplate &&
+              <Tooltip title='Cadastrar template' placement='bottom'>
+                <Link to={props.linkRegisterTemplate}>
+                  <PostAddIcon className={classes.allIcon} />
+                </Link>
+              </Tooltip>
             }
             {
-              props.iconRegisterProject ?
-                <Tooltip title='Cadastrar projeto' placement='bottom'>
-                  <Link to={props.linkRegisterProject}>
-                    <AddIcon className={classes.allIcon} />
-                  </Link>
-                </Tooltip>
-                :
-                null
+              props.iconRegisterProject &&
+              <Tooltip title='Cadastrar projeto' placement='bottom'>
+                <Link to={props.linkRegisterProject}>
+                  <AddIcon className={classes.allIcon} />
+                </Link>
+              </Tooltip>
             }
             {
-              props.iconMyData ?
-                <Tooltip title='Meus dados' placement='bottom'>
-                  <Link to={props.linkMyData}>
-                    <PersonIcon className={classes.allIcon} />
-                  </Link>
-                </Tooltip>
-                :
-                null
+              props.iconMyData &&
+              <Tooltip title='Meus dados' placement='bottom'>
+                <Link to={props.linkMyData}>
+                  <PersonIcon className={classes.allIcon} />
+                </Link>
+              </Tooltip>
             }
             {
-              props.iconLogOut ?
-                <Tooltip title='Logout' placement='bottom'>
-                  <PowerSettingsNewIcon
-                    onClick={props.onClickLogout}
-                    className={classes.allIcon}
-                  />
-                </Tooltip>
-                :
-                null
+              props.iconLogOut &&
+              <Tooltip title='Logout' placement='bottom'>
+                <PowerSettingsNewIcon
+                  onClick={props.onClickLogout}
+                  className={classes.allIcon}
+                />
+              </Tooltip>
             }
             {
-              props.iconMenu ?
-                <Tooltip title='Menu' placement='left'>
-                  <Box className={classes.menuIcon} onClick={handleClickMenu}>
-                    <Box />
-                  </Box>
-                </Tooltip>
-                :
-                null
+              props.iconMenu &&
+              <Tooltip title='Menu' placement='left'>
+                <Box
+                  className={classes.menuIcon}
+                  onClick={() => setMenuActive(!isMenuActive)}
+                >
+                  <Box />
+                </Box>
+              </Tooltip>
             }
           </Box>
         </Toolbar>
       </AppBar>
       <Box className={classes.menuItems}>
         {
-          props.iconHome ?
-            <Tooltip title='Home' placement='left'>
-              <HomeIcon
-                onClick={() => handleClickIcon('home')}
-                className={classes.allIconMenu}
-              />
-            </Tooltip>
-            :
-            null
+          props.iconHome &&
+          <Tooltip title='Home' placement='left'>
+            <Link to={props.linkHome} >
+              <HomeIcon className={classes.allIconMenu} />
+            </Link>
+          </Tooltip>
         }
         {
-          props.iconFilter ?
-            <Tooltip title='Filtrar por status' placement='left'>
-              <FilterListIcon
-                onClick={() => handleClickIcon('filter')}
-                className={classes.allIconMenu}
-              />
-            </Tooltip>
-            :
-            null
+          props.iconFilter &&
+          <Tooltip title='Filtrar por status' placement='left'>
+            <FilterListIcon
+              onClick={props.onClickFilter}
+              // onClick={handleClickMenu}
+              className={classes.allIconMenu}
+            />
+          </Tooltip>
         }
         {
-          props.iconRegisterTemplate ?
-            <Tooltip title='Cadastrar template' placement='left'>
-              <PostAddIcon
-                onClick={() => handleClickIcon('template')}
-                className={classes.allIconMenu}
-              />
-            </Tooltip>
-            :
-            null
+          props.iconRegisterTemplate &&
+          <Tooltip title='Cadastrar template' placement='left'>
+            <Link to={props.linkRegisterTemplate}>
+              <PostAddIcon className={classes.allIconMenu} />
+            </Link>
+          </Tooltip>
         }
         {
-          props.iconRegisterProject ?
-            <Tooltip title='Cadastrar projeto' placement='left'>
-              <AddIcon
-                onClick={() => handleClickIcon('project')}
-                className={classes.allIconMenu}
-              />
-            </Tooltip>
-            :
-            null
+          props.iconRegisterProject &&
+          <Tooltip title='Cadastrar projeto' placement='left'>
+            <Link to={props.linkRegisterProject}>
+              <AddIcon className={classes.allIconMenu} />
+            </Link>
+          </Tooltip>
         }
         {
-          props.iconMyData ?
-            <Tooltip title='Meus dados' placement='left'>
-              <PersonIcon
-                onClick={() => handleClickIcon('myData')}
-                className={classes.allIconMenu}
-              />
-            </Tooltip>
-            :
-            null
+          props.iconMyData &&
+          <Tooltip title='Meus dados' placement='left'>
+            <Link to={props.linkMyData}>
+              <PersonIcon className={classes.allIconMenu} />
+            </Link>
+          </Tooltip>
         }
         {
-          props.iconLogOut ?
-            <Tooltip title='Logout' placement='left'>
-              <PowerSettingsNewIcon
-                onClick={() => handleClickIcon('logout')}
-                className={classes.allIconMenu}
-              />
-            </Tooltip>
-            :
-            null
+          props.iconLogOut &&
+          <Tooltip title='Logout' placement='left'>
+            <PowerSettingsNewIcon
+              onClick={props.onClickLogout}
+              className={classes.allIconMenu}
+            />
+          </Tooltip>
         }
       </Box>
     </Box>
   );
-
-  function handleClickIcon(icon) {
-
-    setMenuActive(false);
-
-    switch (icon) {
-      case 'home':
-        props.onClickHome();
-        break;
-      case 'filter':
-        props.onClickFilter();
-        break;
-      case 'template':
-        props.onClickRegisterTemplate();
-        break;
-      case 'project':
-        props.onClickRegisterProject();
-        break;
-      case 'myData':
-        props.onClickMyData();
-        break;
-      case 'logout':
-        props.onClickLogout();
-        break;
-      default:
-        break;
-    }
-  }
 }
 
 export default TopBar;

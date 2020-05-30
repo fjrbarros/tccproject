@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useStyles } from './Style';
-import Api from '../../util/api/Index';
 import { validateForm } from '../../util/validate/Index';
 import { format } from "date-fns";
+import { Box, TextField, Button } from '@material-ui/core';
+import Toast from 'light-toast';
+import Api from '../../util/api/Index';
 import TopBar from '../../components/topbar/Index';
 import ComponentDrawer from '../../components/drawer/Index';
 import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
-import { Box, TextField, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import ComponentDate from '../../core/input/date/Index';
 import InputAutoComplete from '../../core/input/autocomplete/Index'
@@ -55,8 +56,14 @@ function PageRegisterProject() {
     });
 
     useEffect(() => {
-        executeRequestRecoverData();
-    }, []);
+        Api.get('/dados')
+            .then(resp => {
+                setDataTypeProject(resp.data[5].valores);
+            })
+            .catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
+    });
 
     function handleCloseDialog() {
         setDialog({
@@ -89,18 +96,6 @@ function PageRegisterProject() {
 
         setOpenDrawer(open);
     };
-
-    function executeRequestRecoverData() {
-        const url = '/dados';
-
-        Api.get(url)
-            .then(resp => {
-                setDataTypeProject(resp.data[5].valores);
-            })
-            .catch(error => {
-                openDialog('alert', error.response.data.message);
-            });
-    }
 
     function executeRequestGetItensBaseModel(typeProject) {
 
@@ -256,11 +251,10 @@ function PageRegisterProject() {
             idUsuario: userId
         };
 
-        //trocar icone msg e lipar campos
-
         Api.post(url, data)
             .then(resp => {
-                openDialog('alert', 'Dados salvos com sucesso.');
+                Toast.success('Dados salvos com sucesso.', 2000);
+                resetForm();
             })
             .catch(error => {
                 openDialog('alert', error.response.data.message);
@@ -271,8 +265,19 @@ function PageRegisterProject() {
         return format(date, 'dd/MM/yyyy');
     }
 
+    function resetForm() {
+        setValueTypeProject(null);
+        setValueModelBase(null);
+        setValues({
+            ...values,
+            titleProject: '',
+            dateInit: new Date(),
+            dateEnd: new Date()
+        });
+    }
+
     function openDialog(type, message) {
-        if(type === 'alert') {
+        if (type === 'alert') {
             setDialog({
                 ...dialog,
                 message: message,
@@ -280,7 +285,7 @@ function PageRegisterProject() {
                 open: true,
                 title: 'Atenção'
             });
-        } else if( type === 'confirm') {
+        } else if (type === 'confirm') {
             setDialog({
                 ...dialog,
                 message: message,
