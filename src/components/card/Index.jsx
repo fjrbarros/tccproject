@@ -14,7 +14,11 @@ function ComponentCard(props) {
 
     const [hiddenCardEdit, setHiddenCardEdit] = useState(true);
 
-    const classes = useStyles(hiddenCardEdit);
+    const { percentual } = props;
+
+    const objStyle = { percentual: percentual, hiddenCardEdit: hiddenCardEdit };
+
+    const classes = useStyles(objStyle);
 
     return (
         <React.Fragment>
@@ -54,6 +58,14 @@ function ComponentCard(props) {
                     <Typography>
                         {props.description}
                     </Typography>
+                </Box>
+                <Box className={classes.progressBar}>
+                    <Box className={classes.progressBarContent}>
+                        <Box className={classes.progressBarColor}></Box>
+                    </Box>
+                    <Box className={classes.progressBarRadius}>
+                        <strong>{percentual}%</strong>
+                    </Box>
                 </Box>
                 <Box className={classes.cardBottom}>
                     {

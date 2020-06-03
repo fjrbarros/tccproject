@@ -48,17 +48,8 @@ function Dashboard() {
     };
 
     useEffect(() => {
-        Api.get('/projeto', {
-            params: {
-                usuario: userId
-            }
-        }).then(resp => {
-            setDataProject(resp.data);
-        }).catch(error => {
-            setOpenDialog({ ...openDialog, isAlert: true });
-            setResponseError(error.response.data.message);
-        });
-    });
+        executeRequestProject();
+    }, []);
 
     function handleDrawerOpen() {
         setOpenDrawer(true);
@@ -70,6 +61,19 @@ function Dashboard() {
 
     function handleCloseModal() {
         setOpenModalFilter(false);
+    }
+
+    function executeRequestProject() {
+        Api.get('/projeto', {
+            params: {
+                usuario: userId
+            }
+        }).then(resp => {
+            setDataProject(resp.data);
+        }).catch(error => {
+            setOpenDialog({ ...openDialog, isAlert: true });
+            setResponseError(error.response.data.message);
+        });
     }
 
     return (
@@ -96,6 +100,7 @@ function Dashboard() {
                                     title={project.tipoProjeto}
                                     description={project.descricao}
                                     isAdm={project.userAdmin}
+                                    percentual={project.percentualConclusao}
                                     onClickRemove={() => handleRemoveProject(project)}
                                     textButton='Abrir'
                                 />

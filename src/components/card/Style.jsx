@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(hiddenCardEdit => ({
+export const useStyles = makeStyles(props => ({
     root: {
         minWidth: '210px',
+        maxWidth: '212px',
         maxHeight: '132px',
         margin: '5px 5px',
         borderRadius: '8px',
@@ -36,13 +37,48 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
     },
 
     cardCenter: {
-        minHeight: '50px',
+        minHeight: '30px',
         padding: '8px 0px 0px 10px'
     },
 
     buttonCard: {
         color: '#ffffff',
         textTransform: 'none'
+    },
+
+    progressBar: {
+        height: '20px',
+        display: 'flex',
+        alignItems: 'center'
+    },
+
+    progressBarContent: {
+        height: '8px',
+        width: '100%',
+        backgroundColor: '#f0f0f0',
+        borderTopRightRadius: '10px',
+        borderBottomRightRadius: '10px'
+    },
+
+    progressBarColor: {
+        height: '100%',
+        width: props => `${props.percentual}%`,
+        background: props => props.percentual <= 40 ? 'rgb(255, 0, 0)' : 
+        props.percentual <= 70 ? 
+        'linear-gradient(90deg, rgb(255, 0, 0) 25%, rgb(255, 231, 0) 70%)' : 
+        'linear-gradient(90deg, rgb(255, 0, 0) 12%, rgb(255, 231, 0) 55%, rgb(0, 250, 25) 90%)'
+    },
+
+    progressBarRadius: {
+        height: '18px',
+        borderRadius: '10px',
+        width: '30px',
+        marginLeft: '-30px',
+        background: 'radial-gradient(circle, rgba(0,192,232,1) 0%, rgba(6,48,161,1) 0%, rgba(2,67,128,1) 44%, rgba(5,136,186,1) 89%)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '10px'
     },
 
     cardBottom: {
@@ -71,8 +107,8 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
 
     typCardMoreOpt: {
         height: '25px',
-        width: hiddenCardEdit => hiddenCardEdit ? '0px' : '100%',
-        display: hiddenCardEdit => hiddenCardEdit ? 'none' : 'flex',
+        width: props => props.hiddenCardEdit ? '0px' : '100%',
+        display: props => props.hiddenCardEdit ? 'none' : 'flex',
         fontSize: '0.85rem',
         alignItems: 'center',
         justifyContent: 'center',
@@ -86,7 +122,7 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
 
     rootEdit: {
         height: '132px',
-        width: hiddenCardEdit => hiddenCardEdit ? '0px' : '212px',
+        width: props => props.hiddenCardEdit ? '0px' : '212px',
         textAlign: 'center',
         margin: '-1px 0px 0px -1px',
         backgroundImage: 'linear-gradient(135deg, #2f9aee, #5a4fa9)',

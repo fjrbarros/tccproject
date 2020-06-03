@@ -56,14 +56,8 @@ function PageRegisterProject() {
     });
 
     useEffect(() => {
-        Api.get('/dados')
-            .then(resp => {
-                setDataTypeProject(resp.data[5].valores);
-            })
-            .catch(error => {
-                openDialog('alert', error.response.data.message);
-            });
-    });
+        executeRequestGetDataTypeProject();
+    }, []);
 
     function handleCloseDialog() {
         setDialog({
@@ -96,6 +90,16 @@ function PageRegisterProject() {
 
         setOpenDrawer(open);
     };
+
+    function executeRequestGetDataTypeProject() {
+        Api.get('/dados')
+            .then(resp => {
+                setDataTypeProject(resp.data[5].valores);
+            })
+            .catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
+    }
 
     function executeRequestGetItensBaseModel(typeProject) {
 
