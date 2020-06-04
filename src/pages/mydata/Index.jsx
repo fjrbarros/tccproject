@@ -70,7 +70,7 @@ function PageMyData() {
         menuDrawer onDrawerOpen={handleDrawerOpen}
       />
       <Body topBar='65px' >
-        <ComponentRegister topBar='75px' isMyData={true}/>
+        <ComponentRegister topBar='75px' isMyData/>
       </Body>
       <ComponentDrawer
         open={openDrawer}

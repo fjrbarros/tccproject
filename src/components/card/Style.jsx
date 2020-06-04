@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles(props => ({
     root: {
         minWidth: '210px',
-        maxWidth: '212px',
+        maxWidth: '210px',
         maxHeight: '132px',
         margin: '5px 5px',
         borderRadius: '8px',
@@ -38,7 +38,10 @@ export const useStyles = makeStyles(props => ({
 
     cardCenter: {
         minHeight: '30px',
-        padding: '8px 0px 0px 10px'
+        maxHeight: '30px',
+        overflowY: 'auto',
+        wordBreak: 'break-all',
+        padding: '8px 0px 0px 8px'
     },
 
     buttonCard: {

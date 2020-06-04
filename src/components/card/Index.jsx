@@ -55,9 +55,7 @@ function ComponentCard(props) {
                     </Typography>
                 </Box>
                 <Box className={classes.cardCenter}>
-                    <Typography>
-                        {props.description}
-                    </Typography>
+                    <Typography> {props.description} </Typography>
                 </Box>
                 <Box className={classes.progressBar}>
                     <Box className={classes.progressBarContent}>

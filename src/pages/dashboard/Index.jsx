@@ -71,8 +71,8 @@ function Dashboard() {
         }).then(resp => {
             setDataProject(resp.data);
         }).catch(error => {
-            setOpenDialog({ ...openDialog, isAlert: true });
             setResponseError(error.response.data.message);
+            setOpenDialog({ ...openDialog, isAlert: true });
         });
     }
 
@@ -167,8 +167,14 @@ function Dashboard() {
     }
 
     function onRemoveProject() {
-        console.log('Id: ' + removeProject.id + ' Descrição: ' + removeProject.description);
-        resetData();
+        Api.delete(`/projeto/${removeProject.id}`)
+            .then(resp => {
+                executeRequestProject();
+                resetData();
+            }).catch(error => {
+                setResponseError(error.response.data.message);
+                setOpenDialog({ ...openDialog, isAlert: true });
+            });
     }
 
     function resetData() {

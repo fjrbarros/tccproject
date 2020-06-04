@@ -86,9 +86,9 @@ function PageLogin() {
     function updateUserDataReducer(data) {
         dispatch({
             type:'UPDATE_USER', 
-            name: data.nome,
-            phone: data.foneContato,
-            email: data.email,
+            name: data.nome ? data.nome : '',
+            phone: data.foneContato ? data.foneContato : '',
+            email: data.email ? data.email : '',
             id: data.id
         });
     }

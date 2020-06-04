@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
 import { Button, TextField } from '@material-ui/core';
+import { validateForm } from '../../util/validate/Index';
+import { useSelector } from 'react-redux';
 import PhoneField from '../../core/input/phone/Index';
 import PasswordField from '../../core/input/password/Index';
 import SaveIcon from '@material-ui/icons/Save';
-import { validateForm } from '../../util/validate/Index';
 
 
 function ComponentRegister(props) {
@@ -29,6 +30,19 @@ function ComponentRegister(props) {
 
     const [submited, setSubmited] = useState(false);
 
+    const { isMyData } = props;
+
+    const [isEditRegister, setIsEditRegister] = useState(isMyData);
+
+    const _name = useSelector(state => state.name);
+    const _email = useSelector(state => state.email);
+    const _phone = useSelector(state => state.phone);
+
+    if (isEditRegister) {
+        loadUserData();
+        setIsEditRegister(false);
+    }
+
     function handleChange(event) {
         setValues({ ...values, [event.target.name]: event.target.value });
 
@@ -37,6 +51,15 @@ function ComponentRegister(props) {
 
     function handleBlur() {
         if (submited) validateFormCadastro();
+    }
+
+    function loadUserData() {
+        setValues({
+            ...values,
+            name: _name,
+            email: _email,
+            phone: _phone
+        });
     }
 
     return (
@@ -125,7 +148,7 @@ function ComponentRegister(props) {
     }
 
     // function executeRequest() {
-        
+
     //     const url = '/usuario/login/';
     //     const data = {
     //         email: values.email,
