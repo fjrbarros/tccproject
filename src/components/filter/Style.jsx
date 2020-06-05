@@ -1,38 +1,46 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(theme => ({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    container: {
-        backgroundColor: theme.palette.background.paper,
-        width: '300px',
-        padding: '10px',
-    },
-
-    containerButton: {
-        display: 'flex',
-        height: '30px',
-        marginTop: '10px'
-    },
-
-    flex: {
-        flex: '1'
-    },
-
-    cancelButton: {
-        backgroundColor: '#e80000',
-        color: '#ffffff',
-        marginRight: '5px',
-        '&:hover': {
-            backgroundColor: '#af0606'
+export const useStyles = makeStyles(props => ({
+    dialog: {
+        '& .MuiDialog-paperWidthSm': {
+            width: '300px',
+            maxWidth: '600px',
+            zIndex: 9999
         }
     },
 
-    formControl: {
-        minWidth: '300px'
+    dialogHeader: {
+        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column'
+    },
+
+    dialogHeaderTitle: {
+        padding: '5px'
+    },
+
+    dialogContent: {
+        padding: '8px'
+    },
+
+    iconFilter: {
+        fontSize: '2.5rem',
+        color: '#3f51b5'
+    },
+
+    titleFilter: {
+        fontSize: '1.3rem',
+        color: '#544e4e'
+    },
+
+    buttonFilter: {
+        textTransform: 'none'
+    },
+
+    iconButton: {
+        marginRight: '3px',
+        fontSize: '1.2rem'
     }
 }))

@@ -21,6 +21,8 @@ function Dashboard() {
 
     const [openDrawer, setOpenDrawer] = useState(false);
 
+    const [defaultDataProject, setDefaultDataProject] = useState([]);
+
     const [dataProject, setDataProject] = useState([]);
 
     const [openModalFilter, setOpenModalFilter] = useState(false);
@@ -30,6 +32,10 @@ function Dashboard() {
     const msgFormat = msgFormatDay();
 
     const classes = useStyles(dataProject.length);
+
+    const [valueFilter, setValueFilter] = useState(null);
+
+    const [enumFilter, setEnumFilter] = useState(null);
 
     const [openDialog, setOpenDialog] = useState({
         isLogout: false,
@@ -48,6 +54,7 @@ function Dashboard() {
     };
 
     useEffect(() => {
+        executeRequestDataFilter();
         executeRequestProject();
     }, []);
 
@@ -55,12 +62,16 @@ function Dashboard() {
         setOpenDrawer(true);
     }
 
-    function handleClickIconFilter() {
-        setOpenModalFilter(true);
-    }
-
-    function handleCloseModal() {
-        setOpenModalFilter(false);
+    function executeRequestDataFilter() {
+        Api.get('/dados')
+            .then(resp => {
+                const all = [{valor: 'TODOS', descricao: 'Todos'}];
+                const allValuesFilter = all.concat(resp.data[4].valores);
+                setEnumFilter(allValuesFilter);
+            })
+            .catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
     }
 
     function executeRequestProject() {
@@ -70,6 +81,7 @@ function Dashboard() {
             }
         }).then(resp => {
             setDataProject(resp.data);
+            setDefaultDataProject(resp.data);
         }).catch(error => {
             setResponseError(error.response.data.message);
             setOpenDialog({ ...openDialog, isAlert: true });
@@ -82,7 +94,7 @@ function Dashboard() {
                 textCenter={msgFormat}
                 iconMenu
                 iconHome linkHome='/dashboard'
-                iconFilter onClickFilter={handleClickIconFilter}
+                iconFilter onClickFilter={() => setOpenModalFilter(true)}
                 iconRegisterTemplate linkRegisterTemplate='/register-template'
                 iconRegisterProject linkRegisterProject='/register-project'
                 iconMyData linkMyData='/mydata'
@@ -134,12 +146,45 @@ function Dashboard() {
                     null
                 )
             }
-            <ModalFilter
-                open={openModalFilter}
-                closeModal={handleCloseModal}
-            />
+            {
+                openModalFilter && getComponentFielter()
+            }
         </React.Fragment>
     );
+
+    function getComponentFielter() {
+        return (
+            <ModalFilter
+                open={openModalFilter}
+                optionSearch={handleClickOptionSearch}
+                optionClose={() => setOpenModalFilter(false)}
+                onChange={handleChageFilter}
+                option={enumFilter}
+                value={valueFilter}
+            />
+        )
+    }
+
+    function handleChageFilter(event, newValue) {
+        setValueFilter(newValue);
+    }
+
+    function handleClickOptionSearch() {
+        if(!valueFilter || valueFilter.valor === 'TODOS') {
+            setDataProject(defaultDataProject);
+            setOpenModalFilter(false);
+            setValueFilter(null);
+            return;
+        }
+
+        const newDataProject = defaultDataProject.filter((project) => {
+            return project.status === valueFilter.valor;
+        });
+
+        setDataProject(newDataProject);
+        setValueFilter(null);
+        setOpenModalFilter(false);
+    }
 
     function getComponentDialog(type, message, fnClickYes) {
         return (

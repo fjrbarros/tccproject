@@ -81,7 +81,6 @@ function AlertDialog(props) {
         <Box>
             <Dialog
                 open={props.open}
-                onClose={props.onClose}
                 className={classes.dialog}
             >
                 <Box className={classes.dialogHeader}>
