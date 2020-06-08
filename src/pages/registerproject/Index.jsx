@@ -5,7 +5,8 @@ import { useStyles } from './Style';
 import { validateForm } from '../../util/validate/Index';
 import { format } from "date-fns";
 import { Box, TextField, Button } from '@material-ui/core';
-import Toast from 'light-toast';
+import Toast from 'toasted-notes';
+import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
 import TopBar from '../../components/topbar/Index';
 import ComponentDrawer from '../../components/drawer/Index';
@@ -257,7 +258,7 @@ function PageRegisterProject() {
 
         Api.post(url, data)
             .then(resp => {
-                Toast.success('Dados salvos com sucesso.', 2000);
+                Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
                 resetForm();
             })
             .catch(error => {

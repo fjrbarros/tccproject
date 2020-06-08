@@ -35,14 +35,19 @@ function ComponentCard(props) {
                         <DeleteForeverIcon className={classes.iconCardMoreOption} />
                         Excluir projeto
                     </Typography>
-                    <Typography className={classes.typCardMoreOpt} >
-                        <DoneAllIcon className={classes.iconCardMoreOption} /> Encerrar projeto
+                    <Typography 
+                        className={classes.typCardMoreOpt} 
+                        onClick={props.onClickClose}
+                    >
+                        <DoneAllIcon className={classes.iconCardMoreOption} /> 
+                        Encerrar projeto
                     </Typography>
                     <Typography
                         className={classes.typCardMoreOpt}
                         onClick={() => setHiddenCardEdit(true)}
                     >
-                        <KeyboardBackspaceIcon className={classes.iconCardMoreOption} /> Voltar
+                        <KeyboardBackspaceIcon className={classes.iconCardMoreOption} /> 
+                        Voltar
                     </Typography>
                 </Box>
                 <Box className={classes.cardHeader}>

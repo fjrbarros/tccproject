@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useStyles } from './Style';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import Toast from 'toasted-notes';
+import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import TopBar from '../../components/topbar/Index';
@@ -10,6 +12,7 @@ import ComponentDrawer from '../../components/drawer/Index';
 import ComponentCard from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 import ModalFilter from '../../components/filter/Index';
+import CloseProject from '../../components/closeproject/Index';
 
 function Dashboard() {
 
@@ -27,6 +30,8 @@ function Dashboard() {
 
     const [openModalFilter, setOpenModalFilter] = useState(false);
 
+    const [openModalCloseProject, setOpenModalCloseProject] = useState(false);
+
     const [responseError, setResponseError] = useState('');
 
     const msgFormat = msgFormatDay();
@@ -36,6 +41,14 @@ function Dashboard() {
     const [valueFilter, setValueFilter] = useState(null);
 
     const [enumFilter, setEnumFilter] = useState(null);
+
+    const [valueClose, setValueClose] = useState(null);
+
+    const [enumClose, setEnumClose] = useState(null);
+
+    const [errorCloseProject, setErrorCloseProject] = useState('');
+
+    const [projectId, setProjectId] = useState(null);
 
     const [openDialog, setOpenDialog] = useState({
         isLogout: false,
@@ -54,7 +67,7 @@ function Dashboard() {
     };
 
     useEffect(() => {
-        executeRequestDataFilter();
+        executeRequestDataEnum();
         executeRequestProject();
     }, []);
 
@@ -62,12 +75,13 @@ function Dashboard() {
         setOpenDrawer(true);
     }
 
-    function executeRequestDataFilter() {
+    function executeRequestDataEnum() {
         Api.get('/dados')
             .then(resp => {
-                const all = [{valor: 'TODOS', descricao: 'Todos'}];
+                const all = [{ valor: 'TODOS', descricao: 'Todos' }];
                 const allValuesFilter = all.concat(resp.data[4].valores);
                 setEnumFilter(allValuesFilter);
+                setEnumClose(resp.data[1].valores);
             })
             .catch(error => {
                 openDialog('alert', error.response.data.message);
@@ -114,6 +128,7 @@ function Dashboard() {
                                     isAdm={project.userAdmin}
                                     percentual={project.percentualConclusao}
                                     onClickRemove={() => handleRemoveProject(project)}
+                                    onClickClose={() => handleCloseProject(project)}
                                     textButton='Abrir'
                                 />
                             )
@@ -147,12 +162,52 @@ function Dashboard() {
                 )
             }
             {
-                openModalFilter && getComponentFielter()
+                openModalFilter && getComponentFilter()
+            }
+            {
+                openModalCloseProject && getComponentCloseProject()
             }
         </React.Fragment>
     );
 
-    function getComponentFielter() {
+    function getComponentCloseProject() {
+        return (
+            <CloseProject
+                error={!!errorCloseProject}
+                helperText={errorCloseProject}
+                open={openModalCloseProject}
+                optionOk={onCloseProject}
+                optionClose={() => setOpenModalCloseProject(false)}
+                onChange={handleChageClose}
+                option={enumClose}
+                value={valueClose}
+            />
+        );
+    }
+
+    function onCloseProject() {
+        if (!valueClose) {
+            setErrorCloseProject('Campo obrigatório!');
+            return;
+        }
+
+        setErrorCloseProject('');
+
+        Api.post(`/projeto/${projectId}/encerramento`)
+            .then(resp => {
+                Toast.notify('Projeto encerrado com sucesso.', { duration: 2000 });
+                executeRequestProject();
+                setOpenModalCloseProject(false);
+            }).catch(error => {
+                setResponseError(error.response.data.message);
+                setOpenDialog({ ...openDialog, isAlert: true });
+            });
+
+        // http://54.233.238.26:8080/projectmanager/api/v1/projeto/136/encerramento  post
+        // http://54.233.238.26:8080/projectmanager/api/v1/projeto/141/encerramento
+    }
+
+    function getComponentFilter() {
         return (
             <ModalFilter
                 open={openModalFilter}
@@ -169,8 +224,12 @@ function Dashboard() {
         setValueFilter(newValue);
     }
 
+    function handleChageClose(event, newValue) {
+        setValueClose(newValue);
+    }
+
     function handleClickOptionSearch() {
-        if(!valueFilter || valueFilter.valor === 'TODOS') {
+        if (!valueFilter || valueFilter.valor === 'TODOS') {
             setDataProject(defaultDataProject);
             setOpenModalFilter(false);
             setValueFilter(null);
@@ -206,6 +265,11 @@ function Dashboard() {
         history.push('/login');
     }
 
+    function handleCloseProject(project) {
+        setProjectId(project.id);
+        setOpenModalCloseProject(true);
+    }
+
     function handleRemoveProject(project) {
         setRemoveProject({ id: project.id, description: project.descricao });
         setOpenDialog({ ...openDialog, isRemoveProject: true });
@@ -214,6 +278,7 @@ function Dashboard() {
     function onRemoveProject() {
         Api.delete(`/projeto/${removeProject.id}`)
             .then(resp => {
+                Toast.notify('Projeto removido com sucesso.', { duration: 2000 });
                 executeRequestProject();
                 resetData();
             }).catch(error => {
@@ -224,7 +289,12 @@ function Dashboard() {
 
     function resetData() {
         setRemoveProject({ id: null, description: '' });
-        setOpenDialog({ isLogout: false, isRemoveProject: false, isAlert: false });
+        setOpenDialog({
+            isLogout: false,
+            isRemoveProject: false,
+            isAlert: false,
+            isCloseProject: false
+        });
         setResponseError('');
     }
 
