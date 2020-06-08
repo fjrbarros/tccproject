@@ -185,28 +185,6 @@ function Dashboard() {
         );
     }
 
-    function onCloseProject() {
-        if (!valueClose) {
-            setErrorCloseProject('Campo obrigatório!');
-            return;
-        }
-
-        setErrorCloseProject('');
-
-        Api.post(`/projeto/${projectId}/encerramento`)
-            .then(resp => {
-                Toast.notify('Projeto encerrado com sucesso.', { duration: 2000 });
-                executeRequestProject();
-                setOpenModalCloseProject(false);
-            }).catch(error => {
-                setResponseError(error.response.data.message);
-                setOpenDialog({ ...openDialog, isAlert: true });
-            });
-
-        // http://54.233.238.26:8080/projectmanager/api/v1/projeto/136/encerramento  post
-        // http://54.233.238.26:8080/projectmanager/api/v1/projeto/141/encerramento
-    }
-
     function getComponentFilter() {
         return (
             <ModalFilter
@@ -218,6 +196,20 @@ function Dashboard() {
                 value={valueFilter}
             />
         )
+    }
+
+    function getComponentDialog(type, message, fnClickYes) {
+        return (
+            <Dialog
+                type={type}
+                title={type === 'cofirm' ? 'Confirmação' : 'Atenção'}
+                text={message}
+                open={openDialog.isLogout || openDialog.isRemoveProject || openDialog.isAlert}
+                optionOk={resetData}
+                optionYes={() => fnClickYes()}
+                optionNo={resetData}
+            />
+        );
     }
 
     function handleChageFilter(event, newValue) {
@@ -245,20 +237,6 @@ function Dashboard() {
         setOpenModalFilter(false);
     }
 
-    function getComponentDialog(type, message, fnClickYes) {
-        return (
-            <Dialog
-                type={type}
-                title={type === 'cofirm' ? 'Confirmação' : 'Atenção'}
-                text={message}
-                open={openDialog.isLogout || openDialog.isRemoveProject || openDialog.isAlert}
-                optionOk={resetData}
-                optionYes={() => fnClickYes()}
-                optionNo={resetData}
-            />
-        );
-    }
-
     function handleLogoutSystem() {
         setOpenDialog({ ...openDialog, isLogout: false });
         localStorage.setItem('authenticad', false);
@@ -273,6 +251,32 @@ function Dashboard() {
     function handleRemoveProject(project) {
         setRemoveProject({ id: project.id, description: project.descricao });
         setOpenDialog({ ...openDialog, isRemoveProject: true });
+    }
+
+    function onCloseProject() {
+        if (!valueClose) {
+            setErrorCloseProject('Campo obrigatório!');
+            return;
+        }
+
+        setErrorCloseProject('');
+        setValueClose(false);
+
+        const url = `/projeto/${projectId}/encerramento`;
+        const data = {
+            motivo: valueClose.valor,
+            idUsuario: userId
+        };
+
+        Api.post(url, data)
+            .then(resp => {
+                Toast.notify('Projeto encerrado com sucesso.', { duration: 2000 });
+                executeRequestProject();
+                setOpenModalCloseProject(false);
+            }).catch(error => {
+                setResponseError(error.response.data.message);
+                setOpenDialog({ ...openDialog, isAlert: true });
+            });
     }
 
     function onRemoveProject() {
