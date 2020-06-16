@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useStyles } from './Style';
 import { validateForm } from '../../util/validate/Index';
 import { format } from "date-fns";
-import { Box, TextField, Button } from '@material-ui/core';
+import { Box, TextField, Button, Typography, Tooltip } from '@material-ui/core';
 import Toast from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
@@ -14,9 +14,17 @@ import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import SaveIcon from '@material-ui/icons/Save';
 import ComponentDate from '../../core/input/date/Index';
-import InputAutoComplete from '../../core/input/autocomplete/Index'
+import InputAutoComplete from '../../core/input/autocomplete/Index';
+import Loading from '../../components/loading/Index';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
-function PageRegisterProject() {
+function PageRegisterProject(props) {
+
+    const propsLocation = props.history.location;
+
+    const isEdit = propsLocation.state ? propsLocation.state.isEdit : null;
+
+    const Project = propsLocation.state ? propsLocation.state.Project : null;
 
     let history = useHistory();
 
@@ -35,6 +43,8 @@ function PageRegisterProject() {
     const [valueTypeProject, setValueTypeProject] = useState(null);
 
     const [valueModelBase, setValueModelBase] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [values, setValues] = useState({
         titleProject: '',
@@ -93,11 +103,18 @@ function PageRegisterProject() {
     };
 
     function executeRequestGetDataTypeProject() {
+        setIsLoading(true);
         Api.get('/dados')
             .then(resp => {
                 setDataTypeProject(resp.data[5].valores);
+                if (isEdit) {
+                    setDataEditProject(resp.data[5].valores);
+                    return;
+                }
+                setIsLoading(false);
             })
             .catch(error => {
+                setIsLoading(false);
                 openDialog('alert', error.response.data.message);
             });
     }
@@ -126,6 +143,24 @@ function PageRegisterProject() {
 
     function handleChageModelBase(event, newValue) {
         setValueModelBase(newValue);
+    }
+
+    function setDataEditProject(data) {
+        const newTypeProject = data.filter(item => item.valor === Project.tipoProjeto);
+        const dateInitProject = Project.dataInicio.split('/');
+        const dateEndProject = Project.dataPrevistaTermino.split('/');
+        const newDateInit = new Date(`${dateInitProject[2]}/${dateInitProject[1]}/${dateInitProject[0]}`);
+        const newDateEnd = new Date(`${dateEndProject[2]}/${dateEndProject[1]}/${dateEndProject[0]}`);
+
+        setValues({
+            ...values,
+            titleProject: Project.descricao,
+            dateInit: newDateInit,
+            dateEnd: newDateEnd
+        });
+
+        setValueTypeProject(newTypeProject[0]);
+        setIsLoading(false);
     }
 
     return (
@@ -194,6 +229,18 @@ function PageRegisterProject() {
                                 onChange={date => setValues({ ...values, dateEnd: date })}
                             />
                         </Box>
+                        <Box className={classes.addMemberProject}>
+                            <Box className={classes.flex}></Box>
+                            <Typography className={classes.addMemberProjectTitle}>
+                                Adicionar membro
+                            </Typography>
+                            <Tooltip title='Adicionar membro' placement='bottom'>
+                                <AddBoxIcon className={classes.iconAddMemberProject}/>
+                            </Tooltip>
+                        </Box>
+                        <Box className={classes.containerMemberProject}>
+
+                        </Box>
                         <Button
                             className={classes.saveButton}
                             variant='contained'
@@ -219,6 +266,7 @@ function PageRegisterProject() {
                 optionYes={handleClickOptionYes}
                 optionNo={handleCloseDialog}
             />
+            {isLoading && <Loading />}
         </React.Fragment>
     );
 

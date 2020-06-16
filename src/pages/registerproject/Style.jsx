@@ -20,7 +20,8 @@ export const useStyles = makeStyles(({
     },
 
     containerDate: {
-        display: 'flex'
+        display: 'flex',
+        marginBottom: '20px'
     },
 
     dateStart: {
@@ -30,5 +31,36 @@ export const useStyles = makeStyles(({
     saveButton: {
         width: '50%',
         marginTop: '10px'
+    },
+
+    addMemberProject: {
+        height: '20px',
+        width: '100%',
+        display: 'flex',
+        marginBottom: '7px'
+    },
+
+    flex: {
+        flex: 1
+    },
+
+    addMemberProjectTitle: {
+        fontSize: '1.2rem',
+        fontStyle: 'italic',
+        color: '#464545'
+    },
+
+    iconAddMemberProject: {
+        marginLeft: '5px',
+        cursor: 'pointer',
+        color: '#062faa',
+        fontSize: '1.7rem'
+    },
+
+    containerMemberProject: {
+        height: '50px',
+        width: '100%',
+        border: '1px solid #b7b4b4',
+        borderRadius: '5px'
     }
 }));

@@ -1,33 +1,28 @@
 import React, { useState } from 'react';
+import { Box, TextField } from '@material-ui/core';
 import { useStyles } from './Style';
-import Modal from '@material-ui/core/Modal';
-import { Backdrop, Fade, TextField, Button, Box } from '@material-ui/core';
-import Dialog from '../../core/dialog/Index';
 import Api from '../../util/api/Index';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import SendIcon from '@material-ui/icons/Send';
+import CloseIcon from '@material-ui/icons/Close';
 
 function ModalRecuverPassword(props) {
-    const classes = useStyles();
+
+    const classes = useStyles(props);
+
     const [valueEmail, setValueEmail] = useState('');
+
     const [error, setError] = useState('');
+
     const [submited, setSubmited] = useState(false);
-
-    const [openDialog, setOpenDialog] = useState(false);
-
-    const [textDialog, setTextDialog] = useState('');
-
-    const [typeDialog, setTypeDialog] = useState('');
-
-    const [titleDialog, setTitleDialog] = useState('');
 
     function handleChange(event) {
         setValueEmail(event.target.value);
 
         if (submited) validateFormRecPassword();
-    }
-
-    function handleClickOptionOk() {
-        setOpenDialog(false);
-        setTextDialog('');
     }
 
     function handleBlur() {
@@ -55,17 +50,9 @@ function ModalRecuverPassword(props) {
         Api.post(url, data)
             .then(resp => {
                 handleClose();
-                setTextDialog('E-mail enviado com sucesso!');
-                setTypeDialog('info');
-                setTitleDialog('Confirmação');
-                setOpenDialog(true);
             })
             .catch(error => {
                 handleClose();
-                setTypeDialog('alert');
-                setTitleDialog('Atenção');
-                setTextDialog(error.response.data.message);
-                setOpenDialog(true);
             });
     }
 
@@ -77,65 +64,62 @@ function ModalRecuverPassword(props) {
     }
 
     return (
-        <React.Fragment>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={props.open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
-            >
-                <Fade in={props.open}>
-                    <form className={classes.paper} onSubmit={handleSubmit}>
-                        <TextField
-                            label='E-mail'
-                            fullWidth
-                            name='email'
-                            error={!!error}
-                            helperText={error}
-                            value={valueEmail}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-                        <Box className={classes.modalBottom}>
-                            <Box className={classes.bottomLeft} />
-                            <Button
-                                className={classes.buttonSave}
-                                type='submit'
-                            >   Salvar
-                        </Button>
-                        </Box>
-                    </form>
-                </Fade>
-            </Modal>
+        <Box>
             <Dialog
-                type={typeDialog}
-                title={titleDialog}
-                text={textDialog}
-                open={openDialog}
-                optionOk={handleClickOptionOk}
-            />
-        </React.Fragment>
+                open={props.open}
+                className={classes.dialog}
+            >
+                <DialogContent className={classes.dialogContent}>
+                    <TextField
+                        label='E-mail'
+                        fullWidth
+                        name='email'
+                        error={!!error}
+                        helperText={error}
+                        value={valueEmail}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        className={classes.button}
+                        variant='contained'
+                        color='primary'
+                        size='small'
+                        onClick={handleSubmit}
+                    >
+                    <SendIcon className={classes.iconButton} />
+                        Enviar
+                    </Button>
+                    <Button
+                        className={classes.button}
+                        variant='contained'
+                        color='primary'
+                        size='small'
+                        onClick={handleClose}
+                    >
+                        <CloseIcon className={classes.iconButton} />
+                        Fechar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
     );
-}
 
-function validateEmail(email) {
-    if (!email) {
-        return 'E-mail é obrigatório!';
+    function validateEmail(email) {
+        if (!email) {
+            return 'E-mail é obrigatório!';
+        }
+
+        const regex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
+
+        if (!regex.test(email)) {
+            return 'E-mail inválido';
+        }
+
+        return '';
     }
-
-    const regex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
-
-    if (!regex.test(email)) {
-        return 'E-mail inválido';
-    }
-
-    return '';
 }
 
 export default ModalRecuverPassword;

@@ -3,19 +3,18 @@ import { Button } from '@material-ui/core';
 
 export const useStyles = makeStyles(({
     body: {
-        // background: 'linear-gradient(45deg, rgba(150, 0, 121, 0.85) 0%, rgba(0, 90, 224, 0.85) 64%, rgba(0, 255, 221, 0.85) 126%)',
         background: 'linear-gradient(45deg, rgb(0, 34, 109) -38%, rgb(8, 51, 187) 20%, rgb(0, 120, 171) 70%, rgb(0, 255, 247) 122%)',
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '550px',
+        overflowY: 'auto',
         color: '#ffffff'
     },
 
     form: {
         width: '350px',
-        // background: 'rgb(0,0,0,0.1)',
         padding: '0 30px',
         boxShadow: '0px 0px 15px #312e2e',
         borderRadius: '10px',

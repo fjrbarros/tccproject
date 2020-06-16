@@ -3,6 +3,7 @@ import { useStyles, CustomButton } from './Styles';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { validateForm } from '../../util/validate/Index';
+import { encryptData } from '../../util/authentication/Index';
 import { useHistory } from 'react-router-dom';
 import { IconButton, InputAdornment, TextField, Box } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
@@ -10,6 +11,7 @@ import Api from '../../util/api/Index';
 import Logo from '../../assets/logo.png';
 import ModalRecuverPassword from '../../components/recuverpassword/Index';
 import Dialog from '../../core/dialog/Index';
+import Loading from '../../components/loading/Index';
 
 function PageLogin() {
 
@@ -18,6 +20,16 @@ function PageLogin() {
     const [openModal, setOpenModal] = useState(false);
 
     let history = useHistory();
+
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const [textDialog, setTextDialog] = useState('');
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [submited, setSubmited] = useState(false);
+
+    const [isLoading, setIsloading] = useState(false);
 
     const [values, setValues] = useState({
         email: '',
@@ -28,14 +40,6 @@ function PageLogin() {
         email: '',
         password: ''
     });
-
-    const [openDialog, setOpenDialog] = useState(false);
-
-    const [textDialog, setTextDialog] = useState('');
-
-    const [showPassword, setShowPassword] = useState(false);
-
-    const [submited, setSubmited] = useState(false);
 
     const classes = useStyles();
 
@@ -71,21 +75,26 @@ function PageLogin() {
             tokenConfirmacao: ''
         };
 
+        setIsloading(true);
+
         Api.post(url, data)
             .then(resp => {
+                setIsloading(false);
                 updateUserDataReducer(resp.data);
+                encryptData(data);
                 localStorage.setItem('authenticad', true);
                 history.push('/dashboard');
             })
             .catch(error => {
-                setTextDialog(error.response.data.message);
+                setIsloading(false);
+                setTextDialog(error.response.data.error);
                 setOpenDialog(true);
             });
     }
 
     function updateUserDataReducer(data) {
         dispatch({
-            type:'UPDATE_USER', 
+            type: 'UPDATE_USER',
             name: data.nome ? data.nome : '',
             phone: data.foneContato ? data.foneContato : '',
             email: data.email ? data.email : '',
@@ -93,7 +102,7 @@ function PageLogin() {
         });
     }
 
-    function handleChange(event) { 
+    function handleChange(event) {
         setValues({ ...values, [event.target.name]: event.target.value });
         if (submited) validateFormLogin()
     }
@@ -197,13 +206,14 @@ function PageLogin() {
                 open={openModal}
                 closeModal={handleCloseModal}
             />
-            <Dialog 
+            <Dialog
                 type='error'
                 title='Erro'
-                text= {textDialog}
+                text={textDialog}
                 open={openDialog}
                 optionOk={handleClickOptionOk}
             />
+            {isLoading && <Loading />}
         </Box>
     );
 }

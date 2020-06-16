@@ -132,7 +132,7 @@ export const useStyles = makeStyles(props => ({
         borderRadius: '8px',
         zIndex: 999,
         position: 'absolute',
-        transition: 'width .4s',
+        transition: 'width .2s',
         display: 'flex',
         flexDirection: 'column'
     }

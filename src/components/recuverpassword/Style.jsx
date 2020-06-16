@@ -1,33 +1,24 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(theme => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+export const useStyles = makeStyles(props => ({
+    dialog: {
+        '& .MuiDialog-paperWidthSm': {
+            width: '300px',
+            maxWidth: '600px',
+            zIndex: 9999
+        }
+    },
 
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    width: '300px',
-    padding: '10px',
-  },
+    dialogContent: {
+        padding: '8px'
+    },
 
-  modalBottom: {
-    display: 'flex',
-    marginTop: '10px'
-  },
+    button: {
+        textTransform: 'none'
+    },
 
-  bottomLeft: {
-    flex: '1'
-  },
-
-  buttonSave: {
-    fontSize: '12px',
-    background: '#1b73ff',
-    color: '#ffffff',
-    '&:hover': {
-      background: '#0062ff'
+    iconButton: {
+        marginRight: '5px',
+        fontSize: '1rem'
     }
-  }
 }))

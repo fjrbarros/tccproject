@@ -8,7 +8,7 @@ export const useStyles = makeStyles(props => ({
         textAlign: 'center',
         '@media (max-width: 600px)': {
             width: '97%',
-            height: props => props.topBar ? 'calc(100vh - ' + `${props.topBar}` + ')' : '100vh'
+            height: props => props.topBar ? `calc(100vh - ${props.topBar})` : '100vh'
         }
     },
 

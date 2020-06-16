@@ -24,7 +24,10 @@ function ComponentCard(props) {
         <React.Fragment>
             <Box className={classes.root}>
                 <Box className={classes.rootEdit}>
-                    <Typography className={classes.typCardMoreOpt} >
+                    <Typography 
+                        className={classes.typCardMoreOpt} 
+                        onClick={props.onClickEdit}
+                    >
                         <EditIcon className={classes.iconCardMoreOption} />
                         Editar projeto
                     </Typography>

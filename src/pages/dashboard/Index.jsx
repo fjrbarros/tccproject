@@ -84,7 +84,8 @@ function Dashboard() {
                 setEnumClose(resp.data[1].valores);
             })
             .catch(error => {
-                openDialog('alert', error.response.data.message);
+                setResponseError(error.response.data.error);
+                setOpenDialog({ ...openDialog, isAlert: true });
             });
     }
 
@@ -97,7 +98,7 @@ function Dashboard() {
             setDataProject(resp.data);
             setDefaultDataProject(resp.data);
         }).catch(error => {
-            setResponseError(error.response.data.message);
+            setResponseError(error.response.data.error);
             setOpenDialog({ ...openDialog, isAlert: true });
         });
     }
@@ -129,6 +130,7 @@ function Dashboard() {
                                     percentual={project.percentualConclusao}
                                     onClickRemove={() => handleRemoveProject(project)}
                                     onClickClose={() => handleCloseProject(project)}
+                                    onClickEdit={() => handleEditProject(project)}
                                     textButton='Abrir'
                                 />
                             )
@@ -210,6 +212,16 @@ function Dashboard() {
                 optionNo={resetData}
             />
         );
+    }
+
+    function handleEditProject(project) {
+        history.push({
+            pathname: '/register-project',
+            state: {
+                isEdit: true,
+                Project: project
+            }
+        });
     }
 
     function handleChageFilter(event, newValue) {
