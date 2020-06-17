@@ -17,84 +17,41 @@ import ComponentDate from '../../core/input/date/Index';
 import InputAutoComplete from '../../core/input/autocomplete/Index';
 import Loading from '../../components/loading/Index';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ComponentList from '../../components/list/Index';
+import ComponentRegisterMember from '../../components/registermember/Index';
 
 function PageRegisterProject(props) {
-
     const propsLocation = props.history.location;
-
     const isEdit = propsLocation.state ? propsLocation.state.isEdit : null;
-
     const Project = propsLocation.state ? propsLocation.state.Project : null;
-
-    let history = useHistory();
-
+    const history = useHistory();
     const classes = useStyles();
-
     const userId = useSelector(state => state.id);
-
     const [dataTypeProject, setDataTypeProject] = useState([]);
-
     const [disabledBaseModel, setDisabledBaseModel] = useState(true);
-
     const [openDrawer, setOpenDrawer] = useState(false);
-
     const [dataModelBase, setDataModelBase] = useState(null);
-
     const [valueTypeProject, setValueTypeProject] = useState(null);
-
     const [valueModelBase, setValueModelBase] = useState(null);
-
     const [isLoading, setIsLoading] = useState(false);
-
+    const [openRegisterMember, setOpenRegisterMember] = useState(false);
     const [values, setValues] = useState({
         titleProject: '',
         dateInit: new Date(),
         dateEnd: new Date()
     });
-
     const [dialog, setDialog] = useState({
         open: false,
         message: '',
         type: '',
         title: ''
     });
-
     const [error, setError] = useState({
         titleProject: '',
         typeProject: '',
         dateInit: '',
         dateEnd: ''
     });
-
-    useEffect(() => {
-        executeRequestGetDataTypeProject();
-    }, []);
-
-    function handleCloseDialog() {
-        setDialog({
-            ...dialog,
-            message: '',
-            type: '',
-            open: false,
-            title: ''
-        });
-    }
-
-    function handleClickOptionYes() {
-        handleCloseDialog();
-        localStorage.setItem('authenticad', false);
-        history.push('/login');
-    }
-
-    function handleClickLogout() {
-        openDialog('confirm', 'Deseja sair do sistema?');
-    }
-
-    function handleDrawerOpen() {
-        setOpenDrawer(true);
-    }
-
     const toggleDrawer = (open) => event => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -103,66 +60,9 @@ function PageRegisterProject(props) {
         setOpenDrawer(open);
     };
 
-    function executeRequestGetDataTypeProject() {
-        setIsLoading(true);
-        Api.get('/dados')
-            .then(resp => {
-                setDataTypeProject(resp.data[5].valores);
-                if (isEdit) {
-                    setDataEditProject(resp.data[5].valores);
-                    return;
-                }
-                setIsLoading(false);
-            })
-            .catch(error => {
-                setIsLoading(false);
-                openDialog('alert', error.response.data.message);
-            });
-    }
-
-    function executeRequestGetItensBaseModel(typeProject) {
-
-        const url = `/templateProjeto/${userId}/${typeProject}`;
-
-        Api.get(url)
-            .then(resp => {
-                if (resp.data.length > 0) setDisabledBaseModel(false);
-                setDataModelBase(resp.data);
-            }).catch(error => {
-                openDialog('alert', error.response.data.message);
-            });
-    }
-
-    function handleChange(event) {
-        setValues({ ...values, [event.target.name]: event.target.value });
-    }
-
-    function handleChageTypeProject(event, newValue) {
-        setValueTypeProject(newValue);
-        if (newValue) executeRequestGetItensBaseModel(newValue.valor);
-    }
-
-    function handleChageModelBase(event, newValue) {
-        setValueModelBase(newValue);
-    }
-
-    function setDataEditProject(data) {
-        const newTypeProject = data.filter(item => item.valor === Project.tipoProjeto);
-        const dateInitProject = Project.dataInicio.split('/');
-        const dateEndProject = Project.dataPrevistaTermino.split('/');
-        const newDateInit = new Date(`${dateInitProject[2]}/${dateInitProject[1]}/${dateInitProject[0]}`);
-        const newDateEnd = new Date(`${dateEndProject[2]}/${dateEndProject[1]}/${dateEndProject[0]}`);
-
-        setValues({
-            ...values,
-            titleProject: Project.descricao,
-            dateInit: newDateInit,
-            dateEnd: newDateEnd
-        });
-
-        setValueTypeProject(newTypeProject[0]);
-        setIsLoading(false);
-    }
+    useEffect(() => {
+        executeRequestGetDataTypeProject();
+    }, []);
 
     return (
         <React.Fragment>
@@ -236,56 +136,14 @@ function PageRegisterProject(props) {
                                 Adicionar membro
                             </Typography>
                             <Tooltip title='Adicionar membro' placement='bottom'>
-                                <AddBoxIcon className={classes.iconAddMemberProject} />
+                                <AddBoxIcon
+                                    className={classes.iconAddMemberProject}
+                                    onClick={handleAddMemberProject}
+                                />
                             </Tooltip>
                         </Box>
                         <Box className={classes.containerMemberProject}>
-                            <ul className={classes.listMember}>
-                                <li className={classes.itemListMember}>
-                                    <Typography
-                                        className={classes.itemListDescription}>
-                                        Teste
-                                    </Typography>
-                                    <Tooltip title='Remover membro' placement='bottom'>
-                                        <DeleteForeverIcon
-                                            className={classes.iconRemoveMember}
-                                        />
-                                    </Tooltip>
-                                </li>
-                                <li className={classes.itemListMember}>
-                                    <Typography
-                                        className={classes.itemListDescription}>
-                                        Teste
-                                    </Typography>
-                                    <Tooltip title='Remover membro' placement='bottom'>
-                                        <DeleteForeverIcon
-                                            className={classes.iconRemoveMember}
-                                        />
-                                    </Tooltip>
-                                </li>
-                                <li className={classes.itemListMember}>
-                                    <Typography
-                                        className={classes.itemListDescription}>
-                                        Teste
-                                    </Typography>
-                                    <Tooltip title='Remover membro' placement='bottom'>
-                                        <DeleteForeverIcon
-                                            className={classes.iconRemoveMember}
-                                        />
-                                    </Tooltip>
-                                </li>
-                                <li className={classes.itemListMember}>
-                                    <Typography
-                                        className={classes.itemListDescription}>
-                                        Teste
-                                    </Typography>
-                                    <Tooltip title='Remover membro' placement='bottom'>
-                                        <DeleteForeverIcon
-                                            className={classes.iconRemoveMember}
-                                        />
-                                    </Tooltip>
-                                </li>
-                            </ul>
+                            <ComponentList />
                         </Box>
                         <Button
                             className={classes.saveButton}
@@ -312,9 +170,102 @@ function PageRegisterProject(props) {
                 optionYes={handleClickOptionYes}
                 optionNo={handleCloseDialog}
             />
+            <ComponentRegisterMember 
+                open={openRegisterMember}
+                close={() => setOpenRegisterMember(false)}
+            />
             {isLoading && <Loading />}
         </React.Fragment>
     );
+
+    function handleAddMemberProject() {
+        setOpenRegisterMember(true);
+    }
+
+    function handleCloseDialog() {
+        setDialog({
+            ...dialog,
+            message: '',
+            type: '',
+            open: false,
+            title: ''
+        });
+    }
+
+    function handleClickOptionYes() {
+        handleCloseDialog();
+        localStorage.setItem('authenticad', false);
+        history.push('/login');
+    }
+
+    function handleClickLogout() {
+        openDialog('confirm', 'Deseja sair do sistema?');
+    }
+
+    function handleDrawerOpen() {
+        setOpenDrawer(true);
+    }
+
+    function executeRequestGetDataTypeProject() {
+        setIsLoading(true);
+        Api.get('/dados')
+            .then(resp => {
+                setDataTypeProject(resp.data[5].valores);
+                if (isEdit) {
+                    setDataEditProject(resp.data[5].valores);
+                    return;
+                }
+                setIsLoading(false);
+            })
+            .catch(error => {
+                setIsLoading(false);
+                openDialog('alert', error.response.data.message);
+            });
+    }
+
+    function executeRequestGetItensBaseModel(typeProject) {
+
+        const url = `/templateProjeto/${userId}/${typeProject}`;
+
+        Api.get(url)
+            .then(resp => {
+                if (resp.data.length > 0) setDisabledBaseModel(false);
+                setDataModelBase(resp.data);
+            }).catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
+    }
+
+    function handleChange(event) {
+        setValues({ ...values, [event.target.name]: event.target.value });
+    }
+
+    function handleChageTypeProject(event, newValue) {
+        setValueTypeProject(newValue);
+        if (newValue) executeRequestGetItensBaseModel(newValue.valor);
+    }
+
+    function handleChageModelBase(event, newValue) {
+        setValueModelBase(newValue);
+    }
+
+    function setDataEditProject(data) {
+        const newTypeProject = data.filter(item => item.valor === Project.tipoProjeto);
+        const dateInitProject = Project.dataInicio.split('/');
+        const dateEndProject = Project.dataPrevistaTermino.split('/');
+        const newDateInit = new Date(`${dateInitProject[2]}/${dateInitProject[1]}/${dateInitProject[0]}`);
+        const newDateEnd = new Date(`${dateEndProject[2]}/${dateEndProject[1]}/${dateEndProject[0]}`);
+
+        setValues({
+            ...values,
+            titleProject: Project.descricao,
+            dateInit: newDateInit,
+            dateEnd: newDateEnd
+        });
+
+        setValueTypeProject(newTypeProject[0]);
+        setIsLoading(false);
+    }
 
     function subTeste(event) {
         event.preventDefault();
