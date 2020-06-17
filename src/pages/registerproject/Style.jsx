@@ -37,7 +37,7 @@ export const useStyles = makeStyles(({
         height: '20px',
         width: '100%',
         display: 'flex',
-        marginBottom: '7px'
+        marginBottom: '10px'
     },
 
     flex: {
@@ -58,9 +58,39 @@ export const useStyles = makeStyles(({
     },
 
     containerMemberProject: {
-        height: '50px',
+        height: '70px',
         width: '100%',
         border: '1px solid #b7b4b4',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        overflowY: 'auto',
+        padding: '3px 0px 0px 0px'
+    },
+
+    listMember: {
+        listStyle: 'none',
+        margin: 'initial',
+        paddingInlineStart: '0px',
+        textAlign: 'left'
+    },
+
+    itemListMember: {
+        display: 'flex',
+        padding: '0px 5px',
+        marginBottom: '3px',
+        height: '20px',
+        '&:hover': {
+            backgroundColor: 'rgb(0,0,0,0.1)'
+        }
+    },
+
+    itemListDescription: {
+        width: '100%',
+        fontSize: '0.9rem'
+    },
+
+    iconRemoveMember: {
+        color: '#d02020',
+        cursor: 'pointer',
+        fontSize: '1.2rem'
     }
 }));

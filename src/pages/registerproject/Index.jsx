@@ -17,6 +17,7 @@ import ComponentDate from '../../core/input/date/Index';
 import InputAutoComplete from '../../core/input/autocomplete/Index';
 import Loading from '../../components/loading/Index';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 function PageRegisterProject(props) {
 
@@ -235,11 +236,56 @@ function PageRegisterProject(props) {
                                 Adicionar membro
                             </Typography>
                             <Tooltip title='Adicionar membro' placement='bottom'>
-                                <AddBoxIcon className={classes.iconAddMemberProject}/>
+                                <AddBoxIcon className={classes.iconAddMemberProject} />
                             </Tooltip>
                         </Box>
                         <Box className={classes.containerMemberProject}>
-
+                            <ul className={classes.listMember}>
+                                <li className={classes.itemListMember}>
+                                    <Typography
+                                        className={classes.itemListDescription}>
+                                        Teste
+                                    </Typography>
+                                    <Tooltip title='Remover membro' placement='bottom'>
+                                        <DeleteForeverIcon
+                                            className={classes.iconRemoveMember}
+                                        />
+                                    </Tooltip>
+                                </li>
+                                <li className={classes.itemListMember}>
+                                    <Typography
+                                        className={classes.itemListDescription}>
+                                        Teste
+                                    </Typography>
+                                    <Tooltip title='Remover membro' placement='bottom'>
+                                        <DeleteForeverIcon
+                                            className={classes.iconRemoveMember}
+                                        />
+                                    </Tooltip>
+                                </li>
+                                <li className={classes.itemListMember}>
+                                    <Typography
+                                        className={classes.itemListDescription}>
+                                        Teste
+                                    </Typography>
+                                    <Tooltip title='Remover membro' placement='bottom'>
+                                        <DeleteForeverIcon
+                                            className={classes.iconRemoveMember}
+                                        />
+                                    </Tooltip>
+                                </li>
+                                <li className={classes.itemListMember}>
+                                    <Typography
+                                        className={classes.itemListDescription}>
+                                        Teste
+                                    </Typography>
+                                    <Tooltip title='Remover membro' placement='bottom'>
+                                        <DeleteForeverIcon
+                                            className={classes.iconRemoveMember}
+                                        />
+                                    </Tooltip>
+                                </li>
+                            </ul>
                         </Box>
                         <Button
                             className={classes.saveButton}
