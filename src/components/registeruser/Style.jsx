@@ -5,11 +5,7 @@ export const useStyles = makeStyles(props => ({
         width: '400px',
         margin: '0 auto',
         padding: '5px',
-        textAlign: 'center',
-        '@media (max-width: 600px)': {
-            width: '97%',
-            height: props => props.topBar ? `calc(100vh - ${props.topBar})` : '100vh'
-        }
+        textAlign: 'center'
     },
 
     marginTopBottom: {

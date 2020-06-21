@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useStyles } from './Style';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { msgFormatDay } from '../../util/otherfunctions/Index';
+// import { decryptData } from '../../util/authentication/Index';
 import Toast from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
@@ -13,67 +15,74 @@ import ComponentCard from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 import ModalFilter from '../../components/filter/Index';
 import CloseProject from '../../components/closeproject/Index';
+import ComponentRegisterProject from '../../components/registerproject/Index';
+import ComponentRegisterTemplate from '../../components/registertemplate/Index';
+import ComponentRegisterUser from '../../components/registeruser/Index';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function Dashboard() {
 
-    let history = useHistory();
-
-    const name = useSelector(state => state.name);
-
-    const userId = useSelector(state => state.id);
-
+    const history = useHistory();
+    const dispatch = useDispatch();
     const [openDrawer, setOpenDrawer] = useState(false);
-
-    const [defaultDataProject, setDefaultDataProject] = useState([]);
-
-    const [dataProject, setDataProject] = useState([]);
-
-    const [openModalFilter, setOpenModalFilter] = useState(false);
-
-    const [openModalCloseProject, setOpenModalCloseProject] = useState(false);
-
     const [responseError, setResponseError] = useState('');
-
-    const msgFormat = msgFormatDay();
-
+    const userName = useSelector(state => state.name);
+    const userId = useSelector(state => state.id);
+    const [defaultDataProject, setDefaultDataProject] = useState([]);
+    const [dataProject, setDataProject] = useState([]);
+    const [openModalFilter, setOpenModalFilter] = useState(false);
+    const [openModalCloseProject, setOpenModalCloseProject] = useState(false);
     const classes = useStyles(dataProject.length);
-
+    const msgFormat = msgFormatDay(userName);
     const [valueFilter, setValueFilter] = useState(null);
-
     const [enumFilter, setEnumFilter] = useState(null);
-
     const [valueClose, setValueClose] = useState(null);
-
     const [enumClose, setEnumClose] = useState(null);
-
     const [errorCloseProject, setErrorCloseProject] = useState('');
-
     const [projectId, setProjectId] = useState(null);
-
     const [openDialog, setOpenDialog] = useState({
         isLogout: false,
         isRemoveProject: false,
         isAlert: false
     });
-
     const [removeProject, setRemoveProject] = useState({
         id: null,
         description: ''
     });
-
     const toggleDrawer = (open) => event => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
         setOpenDrawer(open);
     };
 
-    useEffect(() => {
-        executeRequestDataEnum();
-        executeRequestProject();
-    }, []);
+    // if (!userId) {
+    //     const dataUser = decryptData();
+    //     updateStoreDataUser(dataUser.email, dataUser.password);
+    //     return;
+    // }
 
-    function handleDrawerOpen() {
-        setOpenDrawer(true);
-    }
+    // function updateStoreDataUser(email, password) {
+    //     const url = '/usuario/login';
+    //     const data = {
+    //         email: email,
+    //         senha: password,
+    //         tokenConfirmacao: ''
+    //     };
+
+    //     Api.post(url, data)
+    //         .then(resp => {
+    //             dispatch({
+    //                 type: 'UPDATE_USER',
+    //                 name: data.nome ? data.nome : '',
+    //                 phone: data.foneContato ? data.foneContato : '',
+    //                 email: data.email ? data.email : '',
+    //                 id: data.id
+    //             });
+    //             localStorage.setItem('authenticad', true);
+    //         })
+    //         .catch(error => {
+    //             console.error(error.response.data.message);
+    //         });
+    // }
 
     function executeRequestDataEnum() {
         Api.get('/dados')
@@ -103,74 +112,79 @@ function Dashboard() {
         });
     }
 
-    return (
-        <React.Fragment>
-            <TopBar
-                textCenter={msgFormat}
-                iconMenu
-                iconHome linkHome='/dashboard'
-                iconFilter onClickFilter={() => setOpenModalFilter(true)}
-                iconRegisterTemplate linkRegisterTemplate='/register-template'
-                iconRegisterProject linkRegisterProject='/register-project'
-                iconMyData linkMyData='/mydata'
-                iconLogOut onClickLogout={() => setOpenDialog({ ...openDialog, isLogout: true })}
-                menuDrawer onDrawerOpen={handleDrawerOpen}
-            />
-            <Body topBar='65px' >
-                <Box className={classes.dashboardCenterCard}>
+    function getItemTopBar() {
+        return {
+            text: msgFormat,
+            iconHome: '/dashboard',
+            iconRegisterTemplate: '/register-template',
+            iconRegisterProject: '/register-project',
+            iconMyData: '/my-data',
+            iconMenu: true,
+            iconFilter: true,
+            iconLogOut: true,
+            menuDrawer: true
+        }
+    }
 
-                    {
-                        dataProject.map(function (project) {
-                            return (
-                                <ComponentCard
-                                    key={project.id}
-                                    title={project.tipoProjeto}
-                                    description={project.descricao}
-                                    isAdm={project.userAdmin}
-                                    percentual={project.percentualConclusao}
-                                    onClickRemove={() => handleRemoveProject(project)}
-                                    onClickClose={() => handleCloseProject(project)}
-                                    onClickEdit={() => handleEditProject(project)}
-                                    textButton='Abrir'
-                                />
-                            )
-                        })
-                    }
-                </Box>
-            </Body>
-            <ComponentDrawer
-                open={openDrawer}
-                toggleDrawer={toggleDrawer}
+    useEffect(() => {
+        executeRequestDataEnum();
+        executeRequestProject();
+    }, []);
+
+    function Dashboard() {
+        return (
+            <Box className={classes.dashboard}>
+                {
+                    dataProject.map(function (project) {
+                        return (
+                            <ComponentCard
+                                key={project.id}
+                                title={project.tipoProjeto}
+                                description={project.descricao}
+                                isAdm={project.userAdmin}
+                                percentual={project.percentualConclusao}
+                                onClickRemove={() => handleRemoveProject(project)}
+                                onClickClose={() => handleCloseProject(project)}
+                                onClickEdit={() => handleEditProject(project)}
+                                textButton='Abrir'
+                            />
+                        )
+                    })
+                }
+            </Box>
+        );
+    }
+
+    function handleLogoutSystem() {
+        setOpenDialog({ ...openDialog, isLogout: false });
+        localStorage.setItem('authenticad', false);
+        history.push('/login');
+    }
+
+    function getComponentDialog(type, message, fnClickYes) {
+        return (
+            <Dialog
+                type={type}
+                title={type === 'cofirm' ? 'Confirmação' : 'Atenção'}
+                text={message}
+                open={openDialog.isLogout || openDialog.isRemoveProject || openDialog.isAlert}
+                optionOk={resetData}
+                optionYes={() => fnClickYes()}
+                optionNo={resetData}
             />
-            {
-                openDialog.isLogout && getComponentDialog(
-                    'confirm',
-                    'Deseja sair do sistema?',
-                    handleLogoutSystem
-                )
-            }
-            {
-                openDialog.isRemoveProject && getComponentDialog(
-                    'confirm',
-                    `Deseja remover o projeto ${removeProject.description}?`,
-                    onRemoveProject
-                )
-            }
-            {
-                openDialog.isAlert && getComponentDialog(
-                    'alert',
-                    `${responseError}`,
-                    null
-                )
-            }
-            {
-                openModalFilter && getComponentFilter()
-            }
-            {
-                openModalCloseProject && getComponentCloseProject()
-            }
-        </React.Fragment>
-    );
+        );
+    }
+
+    function resetData() {
+        setRemoveProject({ id: null, description: '' });
+        setOpenDialog({
+            isLogout: false,
+            isRemoveProject: false,
+            isAlert: false,
+            isCloseProject: false
+        });
+        setResponseError('');
+    }
 
     function getComponentCloseProject() {
         return (
@@ -198,20 +212,6 @@ function Dashboard() {
                 value={valueFilter}
             />
         )
-    }
-
-    function getComponentDialog(type, message, fnClickYes) {
-        return (
-            <Dialog
-                type={type}
-                title={type === 'cofirm' ? 'Confirmação' : 'Atenção'}
-                text={message}
-                open={openDialog.isLogout || openDialog.isRemoveProject || openDialog.isAlert}
-                optionOk={resetData}
-                optionYes={() => fnClickYes()}
-                optionNo={resetData}
-            />
-        );
     }
 
     function handleEditProject(project) {
@@ -247,12 +247,6 @@ function Dashboard() {
         setDataProject(newDataProject);
         setValueFilter(null);
         setOpenModalFilter(false);
-    }
-
-    function handleLogoutSystem() {
-        setOpenDialog({ ...openDialog, isLogout: false });
-        localStorage.setItem('authenticad', false);
-        history.push('/login');
     }
 
     function handleCloseProject(project) {
@@ -303,44 +297,57 @@ function Dashboard() {
             });
     }
 
-    function resetData() {
-        setRemoveProject({ id: null, description: '' });
-        setOpenDialog({
-            isLogout: false,
-            isRemoveProject: false,
-            isAlert: false,
-            isCloseProject: false
-        });
-        setResponseError('');
-    }
-
-    function msgFormatDay() {
-        const msgDay = getMsgDay();
-        const arrayName = name.split(' ');
-
-        if (!arrayName.length || arrayName[0] === '') return msgDay;
-
-        return msgDay + ', ' + arrayName[0] + '.';
-    }
-
-    function getMsgDay() {
-        const date = new Date();
-        const hours = date.getHours();
-
-        if (hours >= 18 && hours < 24) {
-            return 'Boa noite';
-        }
-
-        if (hours >= 12 && hours < 18) {
-            return 'Boa tarde';
-        }
-
-        if (hours >= 0 && hours < 12) {
-            return 'Bom dia';
-        }
-
-        return '';
-    }
+    return (
+        <Router>
+            <Body>
+                <TopBar
+                    action={getItemTopBar()}
+                    onClickLogout={() => setOpenDialog({ ...openDialog, isLogout: true })}
+                    onClickDrawer={() => setOpenDrawer(!openDrawer)}
+                    onClickFilter={() => setOpenModalFilter(true)}
+                />
+                <Box className={classes.content}>
+                    <Switch>
+                        <Route exact path='/dashboard' component={Dashboard} />
+                        <Route exact path='/register-project' component={ComponentRegisterProject} />
+                        <Route exact path='/register-template' component={ComponentRegisterTemplate} />
+                        <Route exact path='/my-data' component={ComponentRegisterUser} />
+                    </Switch>
+                </Box>
+                <ComponentDrawer
+                    open={openDrawer}
+                    toggleDrawer={toggleDrawer}
+                />
+            </Body>
+            {
+                openDialog.isLogout && getComponentDialog(
+                    'confirm',
+                    'Deseja sair do sistema?',
+                    handleLogoutSystem
+                )
+            }
+            {
+                openDialog.isRemoveProject && getComponentDialog(
+                    'confirm',
+                    `Deseja remover o projeto ${removeProject.description}?`,
+                    onRemoveProject
+                )
+            }
+            {
+                openDialog.isAlert && getComponentDialog(
+                    'alert',
+                    `${responseError}`,
+                    null
+                )
+            }
+            {
+                openModalFilter && getComponentFilter()
+            }
+            {
+                openModalCloseProject && getComponentCloseProject()
+            }
+        </Router>
+    );
 }
 
 export default Dashboard;

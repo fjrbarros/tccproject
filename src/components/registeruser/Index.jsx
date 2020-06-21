@@ -8,7 +8,7 @@ import PasswordField from '../../core/input/password/Index';
 import SaveIcon from '@material-ui/icons/Save';
 
 
-function ComponentRegister(props) {
+function ComponentRegisterUser(props) {
 
     const classes = useStyles(props);
 
@@ -167,4 +167,4 @@ function ComponentRegister(props) {
     // }
 }
 
-export default ComponentRegister;
+export default ComponentRegisterUser;

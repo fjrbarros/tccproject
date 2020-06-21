@@ -131,8 +131,8 @@ function PageLogin() {
                     <Box>
                         <span> Management system for academic project control </span>
                     </Box>
-                    <a href="https://ararangua.ufsc.br" target="_blank" rel="noopener noreferrer">
-                        <img className={classes.logo} src={Logo} alt="" />
+                    <a href='https://ararangua.ufsc.br' target='_blank' rel='noopener noreferrer'>
+                        <img className={classes.logo} src={Logo} alt='' />
                     </a>
                 </Box>
                 <Box className={classes.formCenter}>
@@ -170,10 +170,10 @@ function PageLogin() {
                         InputProps={{
                             className: classes.inputProps,
                             endAdornment: (
-                                <InputAdornment position="end">
+                                <InputAdornment position='end'>
                                     <IconButton
                                         className={classes.inputProps}
-                                        aria-label="toggle password visibility"
+                                        aria-label='toggle password visibility'
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
                                     >
@@ -191,7 +191,7 @@ function PageLogin() {
                     </CustomButton>
                 </Box>
                 <Box className={classes.formBottom}>
-                    <Box><Link to="/register"> Não é cadastrado? </Link></Box>
+                    <Box><Link to='/register-user'> Não é cadastrado? </Link></Box>
                     <Box className={classes.boxRecPassword}>
                         <span onClick={handleOpenModal}
                             className={classes.RecPassword}

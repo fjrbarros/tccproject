@@ -2,8 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(props => ({
     body: {
-        height: props => props.topBar ? `calc(100vh - ${props.topBar})` : '100vh',
+        height: '100vh',
+        width: '100%',
         backgroundColor: props => props.backgroundColor ? props.backgroundColor : '#f0f0f0',
-        overflowY: 'auto'
+        overflow: 'auto'
     }
 }))

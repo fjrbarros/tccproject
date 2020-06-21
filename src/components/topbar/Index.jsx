@@ -3,7 +3,6 @@ import { useStyles } from './Style';
 import { AppBar, Toolbar, Typography, Box, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import Logo from '../../assets/logo.png';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import HomeIcon from '@material-ui/icons/Home';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -12,8 +11,9 @@ import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
-
 function TopBar(props) {
+
+  const { action } = props;
 
   const [isMenuActive, setMenuActive] = useState(false)
 
@@ -24,44 +24,35 @@ function TopBar(props) {
       <AppBar position='static'>
         <Toolbar variant='dense' className={classes.toolbar}>
           <Box className={classes.toolbarLeft}>
-            {
-              props.menuDrawer
-                ?
-                <Tooltip title='Drawer lateral' placement='right'>
-                  <IconButton
-                    color="inherit"
-                    onClick={props.onDrawerOpen}
-                  >
-                    <ArrowForwardIosIcon />
-                  </IconButton>
-                </Tooltip>
-                :
-                <img src={Logo}
-                  alt='Logo empresa'
-                  className={classes.logo}
-                />
-            }
+            <Tooltip title='Abrir projetos' placement='right'>
+              <IconButton
+                color='inherit'
+                onClick={props.onClickDrawer}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
           <Box className={classes.toolbarCenter}>
             <Typography
               variant='h6'
               color='inherit'
             >
-              {props.textCenter}
+              {action.text}
             </Typography>
           </Box>
           <Box className={classes.toolbarRight} >
             <Box className={classes.toolbarRightFlex} />
             {
-              props.iconHome &&
+              action.iconHome &&
               <Tooltip title='Home' placement='bottom'>
-                <Link to={props.linkHome}>
+                <Link to={action.iconHome}>
                   <HomeIcon className={classes.allIcon} />
                 </Link>
               </Tooltip>
             }
             {
-              props.iconFilter &&
+              action.iconFilter &&
               <Tooltip title='Filtrar por status' placement='bottom'>
                 <FilterListIcon
                   onClick={props.onClickFilter}
@@ -70,31 +61,31 @@ function TopBar(props) {
               </Tooltip>
             }
             {
-              props.iconRegisterTemplate &&
+              action.iconRegisterTemplate &&
               <Tooltip title='Cadastrar template' placement='bottom'>
-                <Link to={props.linkRegisterTemplate}>
+                <Link to={action.iconRegisterTemplate}>
                   <PostAddIcon className={classes.allIcon} />
                 </Link>
               </Tooltip>
             }
             {
-              props.iconRegisterProject &&
+              action.iconRegisterProject &&
               <Tooltip title='Cadastrar projeto' placement='bottom'>
-                <Link to={props.linkRegisterProject}>
+                <Link to={action.iconRegisterProject}>
                   <AddIcon className={classes.allIcon} />
                 </Link>
               </Tooltip>
             }
             {
-              props.iconMyData &&
+              action.iconMyData &&
               <Tooltip title='Meus dados' placement='bottom'>
-                <Link to={props.linkMyData}>
+                <Link to={action.iconMyData}>
                   <PersonIcon className={classes.allIcon} />
                 </Link>
               </Tooltip>
             }
             {
-              props.iconLogOut &&
+              action.iconLogOut &&
               <Tooltip title='Logout' placement='bottom'>
                 <PowerSettingsNewIcon
                   onClick={props.onClickLogout}
@@ -103,7 +94,7 @@ function TopBar(props) {
               </Tooltip>
             }
             {
-              props.iconMenu &&
+              action.iconMenu &&
               <Tooltip title='Menu' placement='left'>
                 <Box
                   className={classes.menuIcon}
@@ -118,15 +109,15 @@ function TopBar(props) {
       </AppBar>
       <Box className={classes.menuItems}>
         {
-          props.iconHome &&
+          action.iconHome &&
           <Tooltip title='Home' placement='left'>
-            <Link to={props.linkHome} >
+            <Link to={action.linkHome} >
               <HomeIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
         }
         {
-          props.iconFilter &&
+          action.iconFilter &&
           <Tooltip title='Filtrar por status' placement='left'>
             <FilterListIcon
               onClick={props.onClickFilter}
@@ -136,31 +127,31 @@ function TopBar(props) {
           </Tooltip>
         }
         {
-          props.iconRegisterTemplate &&
+          action.iconRegisterTemplate &&
           <Tooltip title='Cadastrar template' placement='left'>
-            <Link to={props.linkRegisterTemplate}>
+            <Link to={action.linkRegisterTemplate}>
               <PostAddIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
         }
         {
-          props.iconRegisterProject &&
+          action.iconRegisterProject &&
           <Tooltip title='Cadastrar projeto' placement='left'>
-            <Link to={props.linkRegisterProject}>
+            <Link to={action.linkRegisterProject}>
               <AddIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
         }
         {
-          props.iconMyData &&
+          action.iconMyData &&
           <Tooltip title='Meus dados' placement='left'>
-            <Link to={props.linkMyData}>
+            <Link to={action.linkMyData}>
               <PersonIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
         }
         {
-          props.iconLogOut &&
+          action.iconLogOut &&
           <Tooltip title='Logout' placement='left'>
             <PowerSettingsNewIcon
               onClick={props.onClickLogout}

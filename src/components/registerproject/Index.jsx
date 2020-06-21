@@ -8,9 +8,6 @@ import { Box, TextField, Button, Typography, Tooltip } from '@material-ui/core';
 import Toast from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
-import TopBar from '../../components/topbar/Index';
-import ComponentDrawer from '../../components/drawer/Index';
-import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import SaveIcon from '@material-ui/icons/Save';
 import ComponentDate from '../../core/input/date/Index';
@@ -20,7 +17,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import ComponentList from '../../components/list/Index';
 import ComponentRegisterMember from '../../components/registermember/Index';
 
-function PageRegisterProject(props) {
+function ComponentRegisterProject(props) {
     const propsLocation = props.history.location;
     const isEdit = propsLocation.state ? propsLocation.state.isEdit : null;
     const Project = propsLocation.state ? propsLocation.state.Project : null;
@@ -29,12 +26,12 @@ function PageRegisterProject(props) {
     const userId = useSelector(state => state.id);
     const [dataTypeProject, setDataTypeProject] = useState([]);
     const [disabledBaseModel, setDisabledBaseModel] = useState(true);
-    const [openDrawer, setOpenDrawer] = useState(false);
     const [dataModelBase, setDataModelBase] = useState(null);
     const [valueTypeProject, setValueTypeProject] = useState(null);
     const [valueModelBase, setValueModelBase] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [openRegisterMember, setOpenRegisterMember] = useState(false);
+    const [typeMember, setTypeMember] = useState(null);
     const [values, setValues] = useState({
         titleProject: '',
         dateInit: new Date(),
@@ -52,131 +49,10 @@ function PageRegisterProject(props) {
         dateInit: '',
         dateEnd: ''
     });
-    const toggleDrawer = (open) => event => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-
-        setOpenDrawer(open);
-    };
 
     useEffect(() => {
         executeRequestGetDataTypeProject();
     }, []);
-
-    return (
-        <React.Fragment>
-            <TopBar
-                textCenter='Castro de projeto'
-                iconMenu
-                iconHome linkHome='/dashboard'
-                iconRegisterTemplate linkRegisterTemplate='/register-template'
-                iconRegisterProject linkRegisterProject='/register-project'
-                iconMyData linkMyData='/mydata'
-                iconLogOut onClickLogout={handleClickLogout}
-                menuDrawer onDrawerOpen={handleDrawerOpen}
-            />
-            <Body topBar='65px' >
-                <form className={classes.container} onSubmit={subTeste}>
-                    <Box className={classes.containerCenter}>
-                        <TextField
-                            className={classes.containerInput}
-                            label='Título'
-                            name='titleProject'
-                            error={!!error.titleProject}
-                            helperText={error.titleProject}
-                            value={values.titleProject}
-                            onChange={handleChange}
-                        />
-                        <InputAutoComplete
-                            className={classes.containerInput}
-                            label='Tipo de projeto'
-                            name='typeProject'
-                            error={!!error.typeProject}
-                            helperText={error.typeProject}
-                            options={dataTypeProject}
-                            getOptionLabel={(option) => option.descricao}
-                            getOptionSelected={(option, value) => option.descricao === value.descricao}
-                            value={valueTypeProject}
-                            onChange={handleChageTypeProject}
-                        />
-                        <InputAutoComplete
-                            className={classes.containerInput}
-                            label='Modelo de base'
-                            name='baseModel'
-                            options={dataModelBase}
-                            getOptionLabel={(option) => option.descricao}
-                            getOptionSelected={(option, value) => option.descricao === value.descricao}
-                            disabled={disabledBaseModel}
-                            value={valueModelBase}
-                            onChange={handleChageModelBase}
-                        />
-                        <Box className={classes.containerDate}>
-                            <ComponentDate
-                                className={classes.dateStart}
-                                label='Data de início'
-                                name='dateInit'
-                                error={!!error.dateInit}
-                                helperText={error.dateInit}
-                                value={values.dateInit}
-                                onChange={date => setValues({ ...values, dateInit: date })}
-                            />
-                            <ComponentDate
-                                label='Data de término'
-                                name='dateEnd'
-                                error={!!error.dateEnd}
-                                helperText={error.dateEnd}
-                                value={values.dateEnd}
-                                onChange={date => setValues({ ...values, dateEnd: date })}
-                            />
-                        </Box>
-                        <Box className={classes.addMemberProject}>
-                            <Box className={classes.flex}></Box>
-                            <Typography className={classes.addMemberProjectTitle}>
-                                Adicionar membro
-                            </Typography>
-                            <Tooltip title='Adicionar membro' placement='bottom'>
-                                <AddBoxIcon
-                                    className={classes.iconAddMemberProject}
-                                    onClick={handleAddMemberProject}
-                                />
-                            </Tooltip>
-                        </Box>
-                        <Box className={classes.containerMemberProject}>
-                            <ComponentList />
-                        </Box>
-                        <Button
-                            className={classes.saveButton}
-                            variant='contained'
-                            color='primary'
-                            startIcon={<SaveIcon />}
-                            type='submit'
-                        >
-                            Salvar
-                        </Button>
-                    </Box>
-                </form>
-            </Body>
-            <ComponentDrawer
-                open={openDrawer}
-                toggleDrawer={toggleDrawer}
-            />
-            <Dialog
-                type={dialog.type}
-                title={dialog.title}
-                text={dialog.message}
-                open={dialog.open}
-                optionOk={handleCloseDialog}
-                optionYes={handleClickOptionYes}
-                optionNo={handleCloseDialog}
-            />
-            <ComponentRegisterMember 
-                open={openRegisterMember}
-                close={() => setOpenRegisterMember(false)}
-            />
-            {isLoading && <Loading />}
-        </React.Fragment>
-    );
 
     function handleAddMemberProject() {
         setOpenRegisterMember(true);
@@ -198,19 +74,12 @@ function PageRegisterProject(props) {
         history.push('/login');
     }
 
-    function handleClickLogout() {
-        openDialog('confirm', 'Deseja sair do sistema?');
-    }
-
-    function handleDrawerOpen() {
-        setOpenDrawer(true);
-    }
-
     function executeRequestGetDataTypeProject() {
         setIsLoading(true);
         Api.get('/dados')
             .then(resp => {
                 setDataTypeProject(resp.data[5].valores);
+                setTypeMember(resp.data[2].valores);
                 if (isEdit) {
                     setDataEditProject(resp.data[5].valores);
                     return;
@@ -345,6 +214,105 @@ function PageRegisterProject(props) {
             });
         }
     }
+
+    return (
+        <React.Fragment>
+            <form className={classes.container} onSubmit={subTeste}>
+                <Box className={classes.containerCenter}>
+                    <TextField
+                        className={classes.containerInput}
+                        label='Título'
+                        name='titleProject'
+                        error={!!error.titleProject}
+                        helperText={error.titleProject}
+                        value={values.titleProject}
+                        onChange={handleChange}
+                    />
+                    <InputAutoComplete
+                        className={classes.containerInput}
+                        label='Tipo de projeto'
+                        name='typeProject'
+                        error={!!error.typeProject}
+                        helperText={error.typeProject}
+                        options={dataTypeProject}
+                        getOptionLabel={(option) => option.descricao}
+                        getOptionSelected={(option, value) => option.descricao === value.descricao}
+                        value={valueTypeProject}
+                        onChange={handleChageTypeProject}
+                    />
+                    <InputAutoComplete
+                        className={classes.containerInput}
+                        label='Modelo de base'
+                        name='baseModel'
+                        options={dataModelBase}
+                        getOptionLabel={(option) => option.descricao}
+                        getOptionSelected={(option, value) => option.descricao === value.descricao}
+                        disabled={disabledBaseModel}
+                        value={valueModelBase}
+                        onChange={handleChageModelBase}
+                    />
+                    <Box className={classes.containerDate}>
+                        <ComponentDate
+                            className={classes.dateStart}
+                            label='Data de início'
+                            name='dateInit'
+                            error={!!error.dateInit}
+                            helperText={error.dateInit}
+                            value={values.dateInit}
+                            onChange={date => setValues({ ...values, dateInit: date })}
+                        />
+                        <ComponentDate
+                            label='Data de término'
+                            name='dateEnd'
+                            error={!!error.dateEnd}
+                            helperText={error.dateEnd}
+                            value={values.dateEnd}
+                            onChange={date => setValues({ ...values, dateEnd: date })}
+                        />
+                    </Box>
+                    <Box className={classes.addMemberProject}>
+                        <Box className={classes.flex}></Box>
+                        <Typography className={classes.addMemberProjectTitle}>
+                            Adicionar membro
+                            </Typography>
+                        <Tooltip title='Adicionar membro' placement='bottom'>
+                            <AddBoxIcon
+                                className={classes.iconAddMemberProject}
+                                onClick={handleAddMemberProject}
+                            />
+                        </Tooltip>
+                    </Box>
+                    <Box className={classes.containerMemberProject}>
+                        <ComponentList />
+                    </Box>
+                    <Button
+                        className={classes.saveButton}
+                        variant='contained'
+                        color='primary'
+                        startIcon={<SaveIcon />}
+                        type='submit'
+                    >
+                        Salvar
+                        </Button>
+                </Box>
+            </form>
+            <Dialog
+                type={dialog.type}
+                title={dialog.title}
+                text={dialog.message}
+                open={dialog.open}
+                optionOk={handleCloseDialog}
+                optionYes={handleClickOptionYes}
+                optionNo={handleCloseDialog}
+            />
+            <ComponentRegisterMember
+                open={openRegisterMember}
+                close={() => setOpenRegisterMember(false)}
+                typeMember={typeMember}
+            />
+            {isLoading && <Loading />}
+        </React.Fragment>
+    );
 }
 
-export default PageRegisterProject;
+export default ComponentRegisterProject;
