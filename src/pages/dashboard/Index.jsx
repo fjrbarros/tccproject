@@ -6,12 +6,14 @@ import Toast from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
-import Box from '@material-ui/core/Box';
+import { Box, Tooltip } from '@material-ui/core';
 import ComponentDrawer from '../../components/drawer/Index';
 import ComponentCard from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 import ModalFilter from '../../components/filter/Index';
 import CloseProject from '../../components/closeproject/Index';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import Loading from '../../components/loading/Index';
 
 function Dashboard() {
 
@@ -30,8 +32,8 @@ function Dashboard() {
     const [enumClose, setEnumClose] = useState(null);
     const [errorCloseProject, setErrorCloseProject] = useState('');
     const [projectId, setProjectId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [openDialog, setOpenDialog] = useState({
-        isLogout: false,
         isRemoveProject: false,
         isAlert: false
     });
@@ -59,6 +61,7 @@ function Dashboard() {
     }
 
     function executeRequestProject() {
+        setIsLoading(true);
         Api.get('/projeto', {
             params: {
                 usuario: userId
@@ -66,9 +69,11 @@ function Dashboard() {
         }).then(resp => {
             setDataProject(resp.data);
             setDefaultDataProject(resp.data);
+            setIsLoading(false);
         }).catch(error => {
             setResponseError(error.response.data.error);
             setOpenDialog({ ...openDialog, isAlert: true });
+            setIsLoading(false);
         });
     }
 
@@ -77,19 +82,13 @@ function Dashboard() {
         executeRequestProject();
     }, []);
 
-    function handleLogoutSystem() {
-        setOpenDialog({ ...openDialog, isLogout: false });
-        localStorage.setItem('authenticad', false);
-        history.push('/login');
-    }
-
     function getComponentDialog(type, message, fnClickYes) {
         return (
             <Dialog
                 type={type}
-                title={type === 'cofirm' ? 'Confirmação' : 'Atenção'}
+                title={type === 'confirm' ? 'Confirmação' : 'Atenção'}
                 text={message}
-                open={openDialog.isLogout || openDialog.isRemoveProject || openDialog.isAlert}
+                open={openDialog.isRemoveProject || openDialog.isAlert}
                 optionOk={resetData}
                 optionYes={() => fnClickYes()}
                 optionNo={resetData}
@@ -100,7 +99,6 @@ function Dashboard() {
     function resetData() {
         setRemoveProject({ id: null, description: '' });
         setOpenDialog({
-            isLogout: false,
             isRemoveProject: false,
             isAlert: false,
             isCloseProject: false
@@ -223,6 +221,15 @@ function Dashboard() {
         <React.Fragment>
             <Body>
                 <Box className={classes.dashboard}>
+                    <Box className={classes.containerFilter}>
+                        <Box className={classes.flex} />
+                        <Tooltip title='Filtrar por status' placement='left'>
+                            <FilterListIcon
+                                onClick={() => setOpenModalFilter(true)}
+                                className={classes.iconFilter}
+                            />
+                        </Tooltip>
+                    </Box>
                     {
                         dataProject.map(function (project) {
                             return (
@@ -247,13 +254,6 @@ function Dashboard() {
                 toggleDrawer={toggleDrawer}
             />
             {
-                openDialog.isLogout && getComponentDialog(
-                    'confirm',
-                    'Deseja sair do sistema?',
-                    handleLogoutSystem
-                )
-            }
-            {
                 openDialog.isRemoveProject && getComponentDialog(
                     'confirm',
                     `Deseja remover o projeto ${removeProject.description}?`,
@@ -272,6 +272,9 @@ function Dashboard() {
             }
             {
                 openModalCloseProject && getComponentCloseProject()
+            }
+            {
+                isLoading && <Loading />
             }
         </React.Fragment>
     );

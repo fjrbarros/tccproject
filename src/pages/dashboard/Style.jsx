@@ -1,10 +1,20 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(length => ({
-    content: {
-        maxHeight: 'calc(100vh - 65px)',
+    flex: {
+        flex: 1
+    },
+
+    containerFilter: {
         width: '100%',
-        overflow: 'auto'
+        margin: '0px 7px',
+        display: 'flex'
+    },
+
+    iconFilter: {
+        fontSize: '2rem',
+        cursor: 'pointer',
+        color: '#585858'
     },
 
     dashboard: {

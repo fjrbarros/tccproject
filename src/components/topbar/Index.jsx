@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
 import { AppBar, Toolbar, Typography, Box, Tooltip } from '@material-ui/core';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import HomeIcon from '@material-ui/icons/Home';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
@@ -13,11 +12,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 function TopBar(props) {
 
-  const location = useLocation();
-
   const { action } = props;
-
-  const showFilter = action.iconFilter && location.pathname === '/dashboard';
   
   const [isMenuActive, setMenuActive] = useState(false)
 
@@ -53,15 +48,6 @@ function TopBar(props) {
                 <Link to={action.iconHome}>
                   <HomeIcon className={classes.allIcon} />
                 </Link>
-              </Tooltip>
-            }
-            {
-              showFilter &&
-              <Tooltip title='Filtrar por status' placement='bottom'>
-                <FilterListIcon
-                  onClick={props.onClickFilter}
-                  className={classes.allIcon}
-                />
               </Tooltip>
             }
             {
@@ -118,15 +104,6 @@ function TopBar(props) {
             <Link to={action.iconHome}>
               <HomeIcon className={classes.allIconMenu} />
             </Link>
-          </Tooltip>
-        }
-        {
-          showFilter &&
-          <Tooltip title='Filtrar por status' placement='left'>
-            <FilterListIcon
-              onClick={props.onClickFilter}
-              className={classes.allIconMenu}
-            />
           </Tooltip>
         }
         {
