@@ -14,34 +14,23 @@ import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 
 function PageLogin() {
-
     const dispatch = useDispatch();
-
     const [openModal, setOpenModal] = useState(false);
-
     let history = useHistory();
-
     const [openDialog, setOpenDialog] = useState(false);
-
     const [textDialog, setTextDialog] = useState('');
-
     const [showPassword, setShowPassword] = useState(false);
-
     const [submited, setSubmited] = useState(false);
-
     const [isLoading, setIsloading] = useState(false);
-
+    const classes = useStyles();
     const [values, setValues] = useState({
         email: '',
         password: ''
     });
-
     const [error, setError] = useState({
         email: '',
         password: ''
     });
-
-    const classes = useStyles();
 
     function handleOpenModal() {
         setOpenModal(true);
@@ -62,7 +51,6 @@ function PageLogin() {
         validateForm(values, (campo, msg) => errors[campo] = msg);
         setError(errors);
         if (request && Object.keys(errors).length === 0) {
-            localStorage.removeItem('authenticad');
             executeRequest();
         }
     }
@@ -79,11 +67,10 @@ function PageLogin() {
 
         Api.post(url, data)
             .then(resp => {
-                setIsloading(false);
                 updateUserDataReducer(resp.data);
                 encryptData(data);
-                localStorage.setItem('authenticad', true);
                 history.push('/dashboard');
+                setIsloading(false);
             })
             .catch(error => {
                 setIsloading(false);
@@ -98,7 +85,8 @@ function PageLogin() {
             name: data.nome ? data.nome : '',
             phone: data.foneContato ? data.foneContato : '',
             email: data.email ? data.email : '',
-            id: data.id
+            id: data.id,
+            isAuthenticated: true
         });
     }
 

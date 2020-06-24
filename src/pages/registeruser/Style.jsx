@@ -22,11 +22,5 @@ export const useStyles = makeStyles(({
     toolbarCenter: {
         flex: '2',
         textAlign: 'center'
-    },
-
-    content: {
-        maxHeight: 'calc(100vh - 65px)',
-        width: '100%',
-        overflow: 'auto'
     }
 }));

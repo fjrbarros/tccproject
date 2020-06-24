@@ -2,7 +2,6 @@ import React from 'react';
 import { useStyles } from './Style';
 import { AppBar, Toolbar, Typography, Box } from '@material-ui/core';
 import Logo from '../../assets/logo.png';
-import Body from '../../components/body/Index';
 import ComponentRegisterUser from '../../components/registeruser/Index';
 
 function PageRegister() {
@@ -10,7 +9,7 @@ function PageRegister() {
   const classes = useStyles();
 
   return (
-    <Body>
+    <React.Fragment>
       <AppBar position='static'>
         <Toolbar variant='dense' className={classes.toolbar}>
           <Box className={classes.flex}>
@@ -24,10 +23,8 @@ function PageRegister() {
           <Box className={classes.flex} />
         </Toolbar>
       </AppBar>
-      <Box className={classes.content}>
-        <ComponentRegisterUser />
-      </Box>
-    </Body>
+      <ComponentRegisterUser />
+    </React.Fragment>
   );
 }
 

@@ -16,6 +16,7 @@ import Loading from '../../components/loading/Index';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ComponentList from '../../components/list/Index';
 import ComponentRegisterMember from '../../components/registermember/Index';
+import Body from '../../components/body/Index';
 
 function ComponentRegisterProject(props) {
     const propsLocation = props.history.location;
@@ -217,85 +218,87 @@ function ComponentRegisterProject(props) {
 
     return (
         <React.Fragment>
-            <form className={classes.container} onSubmit={subTeste}>
-                <Box className={classes.containerCenter}>
-                    <TextField
-                        className={classes.containerInput}
-                        label='Título'
-                        name='titleProject'
-                        error={!!error.titleProject}
-                        helperText={error.titleProject}
-                        value={values.titleProject}
-                        onChange={handleChange}
-                    />
-                    <InputAutoComplete
-                        className={classes.containerInput}
-                        label='Tipo de projeto'
-                        name='typeProject'
-                        error={!!error.typeProject}
-                        helperText={error.typeProject}
-                        options={dataTypeProject}
-                        getOptionLabel={(option) => option.descricao}
-                        getOptionSelected={(option, value) => option.descricao === value.descricao}
-                        value={valueTypeProject}
-                        onChange={handleChageTypeProject}
-                    />
-                    <InputAutoComplete
-                        className={classes.containerInput}
-                        label='Modelo de base'
-                        name='baseModel'
-                        options={dataModelBase}
-                        getOptionLabel={(option) => option.descricao}
-                        getOptionSelected={(option, value) => option.descricao === value.descricao}
-                        disabled={disabledBaseModel}
-                        value={valueModelBase}
-                        onChange={handleChageModelBase}
-                    />
-                    <Box className={classes.containerDate}>
-                        <ComponentDate
-                            className={classes.dateStart}
-                            label='Data de início'
-                            name='dateInit'
-                            error={!!error.dateInit}
-                            helperText={error.dateInit}
-                            value={values.dateInit}
-                            onChange={date => setValues({ ...values, dateInit: date })}
+            <Body>
+                <form className={classes.container} onSubmit={subTeste}>
+                    <Box className={classes.containerCenter}>
+                        <TextField
+                            className={classes.containerInput}
+                            label='Título'
+                            name='titleProject'
+                            error={!!error.titleProject}
+                            helperText={error.titleProject}
+                            value={values.titleProject}
+                            onChange={handleChange}
                         />
-                        <ComponentDate
-                            label='Data de término'
-                            name='dateEnd'
-                            error={!!error.dateEnd}
-                            helperText={error.dateEnd}
-                            value={values.dateEnd}
-                            onChange={date => setValues({ ...values, dateEnd: date })}
+                        <InputAutoComplete
+                            className={classes.containerInput}
+                            label='Tipo de projeto'
+                            name='typeProject'
+                            error={!!error.typeProject}
+                            helperText={error.typeProject}
+                            options={dataTypeProject}
+                            getOptionLabel={(option) => option.descricao}
+                            getOptionSelected={(option, value) => option.descricao === value.descricao}
+                            value={valueTypeProject}
+                            onChange={handleChageTypeProject}
                         />
-                    </Box>
-                    <Box className={classes.addMemberProject}>
-                        <Box className={classes.flex}></Box>
-                        <Typography className={classes.addMemberProjectTitle}>
-                            Adicionar membro
-                            </Typography>
-                        <Tooltip title='Adicionar membro' placement='bottom'>
-                            <AddBoxIcon
-                                className={classes.iconAddMemberProject}
-                                onClick={handleAddMemberProject}
+                        <InputAutoComplete
+                            className={classes.containerInput}
+                            label='Modelo de base'
+                            name='baseModel'
+                            options={dataModelBase}
+                            getOptionLabel={(option) => option.descricao}
+                            getOptionSelected={(option, value) => option.descricao === value.descricao}
+                            disabled={disabledBaseModel}
+                            value={valueModelBase}
+                            onChange={handleChageModelBase}
+                        />
+                        <Box className={classes.containerDate}>
+                            <ComponentDate
+                                className={classes.dateStart}
+                                label='Data de início'
+                                name='dateInit'
+                                error={!!error.dateInit}
+                                helperText={error.dateInit}
+                                value={values.dateInit}
+                                onChange={date => setValues({ ...values, dateInit: date })}
                             />
-                        </Tooltip>
-                    </Box>
-                    <Box className={classes.containerMemberProject}>
-                        <ComponentList />
-                    </Box>
-                    <Button
-                        className={classes.saveButton}
-                        variant='contained'
-                        color='primary'
-                        startIcon={<SaveIcon />}
-                        type='submit'
-                    >
-                        Salvar
+                            <ComponentDate
+                                label='Data de término'
+                                name='dateEnd'
+                                error={!!error.dateEnd}
+                                helperText={error.dateEnd}
+                                value={values.dateEnd}
+                                onChange={date => setValues({ ...values, dateEnd: date })}
+                            />
+                        </Box>
+                        <Box className={classes.addMemberProject}>
+                            <Box className={classes.flex}></Box>
+                            <Typography className={classes.addMemberProjectTitle}>
+                                Adicionar membro
+                            </Typography>
+                            <Tooltip title='Adicionar membro' placement='bottom'>
+                                <AddBoxIcon
+                                    className={classes.iconAddMemberProject}
+                                    onClick={handleAddMemberProject}
+                                />
+                            </Tooltip>
+                        </Box>
+                        <Box className={classes.containerMemberProject}>
+                            <ComponentList />
+                        </Box>
+                        <Button
+                            className={classes.saveButton}
+                            variant='contained'
+                            color='primary'
+                            startIcon={<SaveIcon />}
+                            type='submit'
+                        >
+                            Salvar
                         </Button>
-                </Box>
-            </form>
+                    </Box>
+                </form>
+            </Body>
             <Dialog
                 type={dialog.type}
                 title={dialog.title}

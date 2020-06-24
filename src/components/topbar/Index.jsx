@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
 import { AppBar, Toolbar, Typography, Box, Tooltip } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import HomeIcon from '@material-ui/icons/Home';
@@ -13,8 +13,12 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 function TopBar(props) {
 
+  const location = useLocation();
+
   const { action } = props;
 
+  const showFilter = action.iconFilter && location.pathname === '/dashboard';
+  
   const [isMenuActive, setMenuActive] = useState(false)
 
   const classes = useStyles(isMenuActive);
@@ -52,7 +56,7 @@ function TopBar(props) {
               </Tooltip>
             }
             {
-              action.iconFilter &&
+              showFilter &&
               <Tooltip title='Filtrar por status' placement='bottom'>
                 <FilterListIcon
                   onClick={props.onClickFilter}
@@ -111,17 +115,16 @@ function TopBar(props) {
         {
           action.iconHome &&
           <Tooltip title='Home' placement='left'>
-            <Link to={action.linkHome} >
+            <Link to={action.iconHome}>
               <HomeIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
         }
         {
-          action.iconFilter &&
+          showFilter &&
           <Tooltip title='Filtrar por status' placement='left'>
             <FilterListIcon
               onClick={props.onClickFilter}
-              // onClick={handleClickMenu}
               className={classes.allIconMenu}
             />
           </Tooltip>
@@ -129,7 +132,7 @@ function TopBar(props) {
         {
           action.iconRegisterTemplate &&
           <Tooltip title='Cadastrar template' placement='left'>
-            <Link to={action.linkRegisterTemplate}>
+            <Link to={action.iconRegisterTemplate}>
               <PostAddIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
@@ -137,7 +140,7 @@ function TopBar(props) {
         {
           action.iconRegisterProject &&
           <Tooltip title='Cadastrar projeto' placement='left'>
-            <Link to={action.linkRegisterProject}>
+            <Link to={action.iconRegisterProject}>
               <AddIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
@@ -145,7 +148,7 @@ function TopBar(props) {
         {
           action.iconMyData &&
           <Tooltip title='Meus dados' placement='left'>
-            <Link to={action.linkMyData}>
+            <Link to={action.iconMyData}>
               <PersonIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
