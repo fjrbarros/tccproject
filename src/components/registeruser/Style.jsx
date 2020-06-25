@@ -5,7 +5,10 @@ export const useStyles = makeStyles(props => ({
         width: '400px',
         margin: '0 auto',
         padding: '5px',
-        textAlign: 'center'
+        textAlign: 'center',
+        '@media (max-width: 400px)': {
+            width: '97%'
+        }
     },
 
     marginTopBottom: {

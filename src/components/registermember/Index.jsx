@@ -7,10 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-// import InputAutoComplete from '../../core/input/autocomplete/Index';
-
-import Combobox from 'react-widgets/lib/Combobox';
-import 'react-widgets/dist/css/react-widgets.css';
+import InputAutoComplete from '../../core/input/autocomplete/Index';
 
 function ComponentRegisterMember(props) {
     const classes = useStyles(props);
@@ -37,10 +34,10 @@ function ComponentRegisterMember(props) {
         const errors = {};
         validateValues(values, (campo, msg) => errors[campo] = msg);
         setError(errors);
-        // if (request && Object.keys(errors).length === 0) {
-        //     localStorage.removeItem('authenticad');
-        //     executeRequest();
-        // }
+        if (Object.keys(errors).length === 0) {
+            props.addMemberProject(values);
+            handleClose();
+        }
     }
 
     function validateValues(values, errorFn) {
@@ -84,8 +81,6 @@ function ComponentRegisterMember(props) {
         props.close();
     }
 
-    const colors = ['Azul', 'Preto', 'Branco'];
-
     return (
         <Box>
             <Dialog
@@ -102,12 +97,7 @@ function ComponentRegisterMember(props) {
                         value={values.email}
                         onChange={handleChange}
                     />
-                    <Combobox
-                        data={colors}
-                        // defaultValue={"orange"}
-                        // disabled={["red", "purple"]}
-                    />
-                    {/* <InputAutoComplete
+                    <InputAutoComplete
                         style={{ marginTop: '15px' }}
                         label='Tipo de membro'
                         name='typeMember'
@@ -118,7 +108,7 @@ function ComponentRegisterMember(props) {
                         getOptionSelected={(option, value) => option.descricao === value.descricao}
                         value={values.typeMember}
                         onChange={handleChange}
-                    /> */}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button

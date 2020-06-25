@@ -33,6 +33,7 @@ function ComponentRegisterProject(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [openRegisterMember, setOpenRegisterMember] = useState(false);
     const [typeMember, setTypeMember] = useState(null);
+    const [dataMemberProject, setDataMemberProject] = useState([]);
     const [values, setValues] = useState({
         titleProject: '',
         dateInit: new Date(),
@@ -54,10 +55,6 @@ function ComponentRegisterProject(props) {
     useEffect(() => {
         executeRequestGetDataTypeProject();
     }, []);
-
-    function handleAddMemberProject() {
-        setOpenRegisterMember(true);
-    }
 
     function handleCloseDialog() {
         setDialog({
@@ -280,12 +277,12 @@ function ComponentRegisterProject(props) {
                             <Tooltip title='Adicionar membro' placement='bottom'>
                                 <AddBoxIcon
                                     className={classes.iconAddMemberProject}
-                                    onClick={handleAddMemberProject}
+                                    onClick={() => setOpenRegisterMember(true)}
                                 />
                             </Tooltip>
                         </Box>
                         <Box className={classes.containerMemberProject}>
-                            <ComponentList />
+                            <ComponentList data={dataMemberProject} />
                         </Box>
                         <Button
                             className={classes.saveButton}
@@ -312,10 +309,17 @@ function ComponentRegisterProject(props) {
                 open={openRegisterMember}
                 close={() => setOpenRegisterMember(false)}
                 typeMember={typeMember}
+                addMemberProject={values => handleAddMemberProject(values)}
             />
             {isLoading && <Loading />}
         </React.Fragment>
     );
+
+    function handleAddMemberProject(values) {
+        const copyDataMembemProject = Object.assign([], dataMemberProject);
+        copyDataMembemProject.push({ email: values.email, value: values.typeMember.valor });
+        setDataMemberProject(copyDataMembemProject);
+    }
 }
 
 export default ComponentRegisterProject;

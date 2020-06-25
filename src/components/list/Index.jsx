@@ -3,53 +3,30 @@ import { useStyles } from './Style';
 import { Typography, Tooltip } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-function ComponentList() {
+function ComponentList(props) {
+
+    const { data } = props;
 
     const classes = useStyles();
 
     return (
         <ul className={classes.listMember}>
-            <li className={classes.itemListMember}>
-                <Typography className={classes.itemListDescription}>
-                    Teste
-                </Typography>
-                <Tooltip title='Remover membro' placement='bottom'>
-                    <DeleteForeverIcon
-                        className={classes.iconRemoveMember}
-                    />
-                </Tooltip>
-            </li>
-            <li className={classes.itemListMember}>
-                <Typography className={classes.itemListDescription}>
-                    Teste
-                </Typography>
-                <Tooltip title='Remover membro' placement='bottom'>
-                    <DeleteForeverIcon
-                        className={classes.iconRemoveMember}
-                    />
-                </Tooltip>
-            </li>
-            <li className={classes.itemListMember}>
-                <Typography className={classes.itemListDescription}>
-                    Teste
-                </Typography>
-                <Tooltip title='Remover membro' placement='bottom'>
-                    <DeleteForeverIcon
-                        className={classes.iconRemoveMember}
-                    />
-                </Tooltip>
-            </li>
-            <li className={classes.itemListMember}>
-                <Typography
-                    className={classes.itemListDescription}>
-                    Teste
-                </Typography>
-                <Tooltip title='Remover membro' placement='bottom'>
-                    <DeleteForeverIcon
-                        className={classes.iconRemoveMember}
-                    />
-                </Tooltip>
-            </li>
+            {
+                data.map(item => {
+                    return (
+                        <li className={classes.itemListMember}>
+                            <Typography className={classes.itemListDescription}>
+                                {item.email}
+                            </Typography>
+                            <Tooltip title='Remover membro' placement='bottom'>
+                                <DeleteForeverIcon
+                                    className={classes.iconRemoveMember}
+                                />
+                            </Tooltip>
+                        </li>
+                    );
+                })
+            }
         </ul>
     );
 }
