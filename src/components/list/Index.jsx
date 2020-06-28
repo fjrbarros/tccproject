@@ -14,12 +14,19 @@ function ComponentList(props) {
             {
                 data.map(item => {
                     return (
-                        <li className={classes.itemListMember}>
-                            <Typography className={classes.itemListDescription}>
+                        <li
+                            className={classes.itemListMember}
+                            key={item.id}
+                        >
+                            <Typography className={classes.itemListEmail}>
                                 {item.email}
+                            </Typography>
+                            <Typography className={classes.itemListDescription}>
+                                {item.description}
                             </Typography>
                             <Tooltip title='Remover membro' placement='bottom'>
                                 <DeleteForeverIcon
+                                    onClick={() => props.removeMemberProject(item.id)}
                                     className={classes.iconRemoveMember}
                                 />
                             </Tooltip>

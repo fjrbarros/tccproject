@@ -10,7 +10,6 @@ export const useStyles = makeStyles(({
 
     itemListMember: {
         display: 'flex',
-        padding: '0px 5px',
         marginBottom: '3px',
         height: '20px',
         '&:hover': {
@@ -18,8 +17,15 @@ export const useStyles = makeStyles(({
         }
     },
 
+    itemListEmail: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: '0.9rem'
+    },
+
     itemListDescription: {
-        width: '100%',
+        flex: 0.5,
+        textAlign: 'center',
         fontSize: '0.9rem'
     },
 

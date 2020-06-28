@@ -7,14 +7,19 @@ export const useStyles = makeStyles(props => ({
         maxHeight: '132px',
         margin: '5px 5px',
         borderRadius: '8px',
-        backgroundImage: 'linear-gradient(135deg, #5a4fa9, #2f9aee)',
+        backgroundImage: props => {
+            if (props.concluded) {
+                return 'linear-gradient(135deg, #03f900, #0a4c00)';
+            }
+
+            return 'linear-gradient(135deg, #5a4fa9, #2f9aee)';
+        },
         color: '#ffffff',
         transition: 'box-shadow .3s',
         border: '1px solid transparent',
         boxShadow: '0px 0px 0px grey',
         '&:hover': {
-            boxShadow: '1px 6px 10px #3c3c3c',
-            backgroundColor: 'rgb(0,0,0,0.7)'
+            boxShadow: '1px 6px 10px #3c3c3c'
         },
         '@media (max-width: 499px)': {
             flex: '1'
@@ -66,10 +71,10 @@ export const useStyles = makeStyles(props => ({
     progressBarColor: {
         height: '100%',
         width: props => `${props.percentual}%`,
-        background: props => props.percentual <= 40 ? 'rgb(255, 0, 0)' : 
-        props.percentual <= 70 ? 
-        'linear-gradient(90deg, rgb(255, 0, 0) 25%, rgb(255, 231, 0) 70%)' : 
-        'linear-gradient(90deg, rgb(255, 0, 0) 12%, rgb(255, 231, 0) 55%, rgb(0, 250, 25) 90%)'
+        background: props => props.percentual <= 40 ? 'rgb(255, 0, 0)' :
+            props.percentual <= 70 ?
+                'linear-gradient(90deg, rgb(255, 0, 0) 25%, rgb(255, 231, 0) 70%)' :
+                'linear-gradient(90deg, rgb(255, 0, 0) 12%, rgb(255, 231, 0) 55%, rgb(0, 250, 25) 90%)'
     },
 
     progressBarRadius: {

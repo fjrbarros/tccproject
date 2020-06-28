@@ -58,11 +58,39 @@ export const useStyles = makeStyles(({
     },
 
     containerMemberProject: {
-        height: '70px',
         width: '100%',
+        height: '92px',
         border: '1px solid #b7b4b4',
-        borderRadius: '5px',
+        borderRadius: '5px'
+    },
+
+    headerContainerMemberProject: {
+        borderBottom: '1px solid #b7b4b4',
+        borderTopLeftRadius: '5px',
+        borderTopRightRadius: '5px',
+        display: 'flex'
+    },
+
+    textHeaderContainerMember: {
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
+        color: '#464545',
+        fontSize: '1rem',
+        fontStyle: 'italic'
+    },
+
+    textHeaderContainerFunction: {
+        display: 'flex',
+        flex: 0.5,
+        justifyContent: 'center',
+        color: '#464545',
+        fontSize: '1rem',
+        fontStyle: 'italic'
+    },
+
+    containerCenterMemberProject: {
         overflowY: 'auto',
-        padding: '3px 0px 0px 0px'
+        maxHeight: '70px'
     }
 }));

@@ -14,11 +14,19 @@ function ComponentCard(props) {
 
     const [hiddenCardEdit, setHiddenCardEdit] = useState(true);
 
-    const { percentual } = props;
+    const { project } = props;
 
-    const objStyle = { percentual: percentual, hiddenCardEdit: hiddenCardEdit };
+    const objStyle = { 
+        percentual: project.percentualConclusao, 
+        hiddenCardEdit: hiddenCardEdit,         
+        concluded: project.status === 'CONCLUIDO' ? true : false
+    };
 
     const classes = useStyles(objStyle);
+
+    function showMoreOptions() {
+        return project.userAdmin && project.status !== 'CONCLUIDO';
+    }
 
     return (
         <React.Fragment>
@@ -59,23 +67,23 @@ function ComponentCard(props) {
                         color="textSecondary"
                         className={classes.title}
                     >
-                        {props.title}
+                        {project.tipoProjeto}
                     </Typography>
                 </Box>
                 <Box className={classes.cardCenter}>
-                    <Typography> {props.description} </Typography>
+                    <Typography> {project.descricao} </Typography>
                 </Box>
                 <Box className={classes.progressBar}>
                     <Box className={classes.progressBarContent}>
                         <Box className={classes.progressBarColor}></Box>
                     </Box>
                     <Box className={classes.progressBarRadius}>
-                        <strong>{percentual}%</strong>
+                        <strong>{project.percentualConclusao}%</strong>
                     </Box>
                 </Box>
                 <Box className={classes.cardBottom}>
                     {
-                        props.isAdm &&
+                        showMoreOptions() &&
                         <Tooltip title='Mais opções' placement='right'>
                             <MoreVertIcon
                                 className={classes.cardMore}

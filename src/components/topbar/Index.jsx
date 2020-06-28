@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useStyles } from './Style';
 import { AppBar, Toolbar, Typography, Box, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import HomeIcon from '@material-ui/icons/Home';
@@ -9,14 +10,39 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import Modal from '../../core/dialog/Index';
 
 function TopBar(props) {
-
   const { action } = props;
-  
   const [isMenuActive, setMenuActive] = useState(false)
-
   const classes = useStyles(isMenuActive);
+  const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState(false);
+
+  function fnClickYes() {
+    setOpenModal(false);
+    dispatch({
+      type: 'UPDATE_USER',
+      name: '',
+      phone: '',
+      email: '',
+      id: null,
+      isAuthenticated: false
+    });
+  }
+
+  function getModal() {
+    return (
+      <Modal
+        type='confirm'
+        title='Confirmação'
+        text='Deseja sair do sistema?'
+        open={openModal}
+        optionYes={() => fnClickYes()}
+        optionNo={() => setOpenModal(false)}
+      />
+    );
+  }
 
   return (
     <Box className={classes.root}>
@@ -78,7 +104,7 @@ function TopBar(props) {
               action.iconLogOut &&
               <Tooltip title='Logout' placement='bottom'>
                 <PowerSettingsNewIcon
-                  onClick={props.onClickLogout}
+                  onClick={() => setOpenModal(true)}
                   className={classes.allIcon}
                 />
               </Tooltip>
@@ -134,12 +160,13 @@ function TopBar(props) {
           action.iconLogOut &&
           <Tooltip title='Logout' placement='left'>
             <PowerSettingsNewIcon
-              onClick={props.onClickLogout}
+              onClick={() => setOpenModal(true)}
               className={classes.allIconMenu}
             />
           </Tooltip>
         }
       </Box>
+      {openModal && getModal()}
     </Box>
   );
 }

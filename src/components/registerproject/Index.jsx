@@ -34,6 +34,7 @@ function ComponentRegisterProject(props) {
     const [openRegisterMember, setOpenRegisterMember] = useState(false);
     const [typeMember, setTypeMember] = useState(null);
     const [dataMemberProject, setDataMemberProject] = useState([]);
+    const widthHeaderContainer = dataMemberProject.length > 3 ? 30 : 20;
     const [values, setValues] = useState({
         titleProject: '',
         dateInit: new Date(),
@@ -72,16 +73,25 @@ function ComponentRegisterProject(props) {
         history.push('/login');
     }
 
+    function getDataProjectEdit(dataTypeProject, typeMember) {
+        setIsLoading(true);
+        Api.get(`/projeto/${Project.id}`)
+            .then(resp => {
+                setDataEditProject(resp.data, dataTypeProject, typeMember);
+            })
+            .catch(error => {
+                setIsLoading(false);
+                openDialog('alert', error.response.data.message);
+            });
+    }
+
     function executeRequestGetDataTypeProject() {
         setIsLoading(true);
         Api.get('/dados')
             .then(resp => {
                 setDataTypeProject(resp.data[5].valores);
                 setTypeMember(resp.data[2].valores);
-                if (isEdit) {
-                    setDataEditProject(resp.data[5].valores);
-                    return;
-                }
+                if (isEdit) getDataProjectEdit(resp.data[5].valores, resp.data[2].valores);
                 setIsLoading(false);
             })
             .catch(error => {
@@ -116,25 +126,40 @@ function ComponentRegisterProject(props) {
         setValueModelBase(newValue);
     }
 
-    function setDataEditProject(data) {
-        const newTypeProject = data.filter(item => item.valor === Project.tipoProjeto);
-        const dateInitProject = Project.dataInicio.split('/');
-        const dateEndProject = Project.dataPrevistaTermino.split('/');
+    function setDataEditProject(data, dataTypeProject, typeMember) {
+        const newTypeProject = dataTypeProject.filter(item => item.valor === data.tipoProjeto);
+        const dateInitProject = data.dataInicio.split('/');
+        const dateEndProject = data.dataPrevistaTermino.split('/');
         const newDateInit = new Date(`${dateInitProject[2]}/${dateInitProject[1]}/${dateInitProject[0]}`);
         const newDateEnd = new Date(`${dateEndProject[2]}/${dateEndProject[1]}/${dateEndProject[0]}`);
+        const members = data.membros;
+        const arrayMembers = [];
 
         setValues({
             ...values,
-            titleProject: Project.descricao,
+            titleProject: data.descricao,
             dateInit: newDateInit,
             dateEnd: newDateEnd
         });
 
         setValueTypeProject(newTypeProject[0]);
+
+        if (members.length) {
+            for (var i = 0; i < members.length; i++) {
+                const typeMemberFilter = typeMember.filter(item => item.valor === members[i].perfilMembro);
+                arrayMembers.push({
+                    id: members[i].id,
+                    email: members[i].emailMembro,
+                    value: members[i].perfilMembro,
+                    description: typeMemberFilter[0].descricao
+                })
+            }
+        }
+        setDataMemberProject(arrayMembers);
         setIsLoading(false);
     }
 
-    function subTeste(event) {
+    function handleSubmit(event) {
         event.preventDefault();
         validateFormRegisterProject();
     }
@@ -158,15 +183,29 @@ function ComponentRegisterProject(props) {
     }
 
     function saveNewProject() {
-        const url = '/projeto';
+        const url = isEdit ? `/projeto/${Project.id}` : '/projeto';
         const data = {
             descricao: values.titleProject,
             idTemplateProjeto: valueModelBase ? valueModelBase.valor : null,
             tipoProjeto: valueTypeProject ? valueTypeProject.valor : null,
             dataInicio: getDateFormat(values.dateInit),
             dataPrevistaTermino: getDateFormat(values.dateEnd),
-            idUsuario: userId
+            idUsuario: userId,
+            membros: getArrayMemberProject()
         };
+
+        if (isEdit) {
+            Api.put(url, data)
+                .then(resp => {
+                    Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
+                    resetForm();
+                })
+                .catch(error => {
+                    openDialog('alert', error.response.data.message);
+                });
+
+            return;
+        }
 
         Api.post(url, data)
             .then(resp => {
@@ -178,6 +217,26 @@ function ComponentRegisterProject(props) {
             });
     }
 
+    function getArrayMemberProject() {
+        const array = [];
+        if (!dataMemberProject.length) return array;
+
+        for (var i = 0; i < dataMemberProject.length; i++) {
+            array.push({
+                emailMembro: dataMemberProject[i].email,
+                perfilMembro: dataMemberProject[i].value
+            });
+
+            if (isEdit) {
+                if (dataMemberProject[i].id) {
+                    array.id = dataMemberProject[i].id;
+                }
+            }
+        }
+
+        return array;
+    }
+
     function getDateFormat(date) {
         return format(date, 'dd/MM/yyyy');
     }
@@ -185,6 +244,7 @@ function ComponentRegisterProject(props) {
     function resetForm() {
         setValueTypeProject(null);
         setValueModelBase(null);
+        setDataMemberProject([]);
         setValues({
             ...values,
             titleProject: '',
@@ -213,10 +273,28 @@ function ComponentRegisterProject(props) {
         }
     }
 
+
+    function handleAddMemberProject(values) {
+        const copyDataMembemProject = Object.assign([], dataMemberProject);
+        const id = copyDataMembemProject.length;
+        copyDataMembemProject.push({
+            id: id,
+            email: values.email,
+            value: values.typeMember.valor,
+            description: values.typeMember.descricao
+        });
+        setDataMemberProject(copyDataMembemProject);
+    }
+
+    function handleRemoveMemberProject(id) {
+        const dataMemberProjectFilter = dataMemberProject.filter(item => item.id !== id);
+        setDataMemberProject(dataMemberProjectFilter);
+    }
+
     return (
         <React.Fragment>
             <Body>
-                <form className={classes.container} onSubmit={subTeste}>
+                <form className={classes.container} onSubmit={handleSubmit}>
                     <Box className={classes.containerCenter}>
                         <TextField
                             className={classes.containerInput}
@@ -282,7 +360,28 @@ function ComponentRegisterProject(props) {
                             </Tooltip>
                         </Box>
                         <Box className={classes.containerMemberProject}>
-                            <ComponentList data={dataMemberProject} />
+                            {
+                                dataMemberProject.length > 0 &&
+                                <Box className={classes.headerContainerMemberProject}>
+                                    <Typography
+                                        className={classes.textHeaderContainerMember}
+                                    > Membro
+                                    </Typography>
+                                    <Typography
+                                        className={classes.textHeaderContainerFunction}
+                                    > Função
+                                    </Typography>
+                                    <Box
+                                        style={{ width: `${widthHeaderContainer}px` }}
+                                    />
+                                </Box>
+                            }
+                            <Box className={classes.containerCenterMemberProject}>
+                                <ComponentList
+                                    data={dataMemberProject}
+                                    removeMemberProject={handleRemoveMemberProject}
+                                />
+                            </Box>
                         </Box>
                         <Button
                             className={classes.saveButton}
@@ -314,12 +413,6 @@ function ComponentRegisterProject(props) {
             {isLoading && <Loading />}
         </React.Fragment>
     );
-
-    function handleAddMemberProject(values) {
-        const copyDataMembemProject = Object.assign([], dataMemberProject);
-        copyDataMembemProject.push({ email: values.email, value: values.typeMember.valor });
-        setDataMemberProject(copyDataMembemProject);
-    }
 }
 
 export default ComponentRegisterProject;

@@ -33,6 +33,7 @@ function Dashboard() {
     const [errorCloseProject, setErrorCloseProject] = useState('');
     const [projectId, setProjectId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [showIconFilter, setShowIconFilter] = useState(false);
     const [openDialog, setOpenDialog] = useState({
         isRemoveProject: false,
         isAlert: false
@@ -69,10 +70,12 @@ function Dashboard() {
         }).then(resp => {
             setDataProject(resp.data);
             setDefaultDataProject(resp.data);
+            setShowIconFilter(true);
             setIsLoading(false);
         }).catch(error => {
             setResponseError(error.response.data.error);
             setOpenDialog({ ...openDialog, isAlert: true });
+            setShowIconFilter(false);
             setIsLoading(false);
         });
     }
@@ -221,24 +224,28 @@ function Dashboard() {
         <React.Fragment>
             <Body>
                 <Box className={classes.dashboard}>
-                    <Box className={classes.containerFilter}>
-                        <Box className={classes.flex} />
-                        <Tooltip title='Filtrar por status' placement='left'>
-                            <FilterListIcon
-                                onClick={() => setOpenModalFilter(true)}
-                                className={classes.iconFilter}
-                            />
-                        </Tooltip>
-                    </Box>
+                    {
+                        showIconFilter &&
+                        <Box className={classes.containerFilter}>
+                            <Box className={classes.flex} />
+                            <Tooltip title='Filtrar por status' placement='left'>
+                                <FilterListIcon
+                                    onClick={() => setOpenModalFilter(true)}
+                                    className={classes.iconFilter}
+                                />
+                            </Tooltip>
+                        </Box>
+                    }
                     {
                         dataProject.map(function (project) {
                             return (
                                 <ComponentCard
                                     key={project.id}
-                                    title={project.tipoProjeto}
-                                    description={project.descricao}
-                                    isAdm={project.userAdmin}
-                                    percentual={project.percentualConclusao}
+                                    project={project}
+                                    // title={project.tipoProjeto}
+                                    // description={project.descricao}
+                                    // isAdm={project.userAdmin}
+                                    // percentual={project.percentualConclusao}
                                     onClickRemove={() => handleRemoveProject(project)}
                                     onClickClose={() => handleCloseProject(project)}
                                     onClickEdit={() => handleEditProject(project)}
