@@ -111,7 +111,7 @@ export const useStyles = makeStyles(isMenuActive => ({
     },
 
     menuItems: {
-        height: isMenuActive => isMenuActive ? '260px' : '0px',
+        height: isMenuActive => isMenuActive ? '200px' : '0px',
         width: '70px',
         position: 'absolute',
         marginLeft: 'calc(100% - 70px)',

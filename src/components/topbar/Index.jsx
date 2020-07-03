@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
 import { AppBar, Toolbar, Typography, Box, Tooltip } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { msgFormatDay } from '../../util/otherfunctions/Index';
+import { useDispatch, useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import HomeIcon from '@material-ui/icons/Home';
@@ -14,10 +15,12 @@ import Modal from '../../core/dialog/Index';
 
 function TopBar(props) {
   const { action } = props;
+  const location = useLocation();
   const [isMenuActive, setMenuActive] = useState(false)
   const classes = useStyles(isMenuActive);
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
+  const userName = useSelector(state => state.name);
 
   function fnClickYes() {
     setOpenModal(false);
@@ -44,6 +47,19 @@ function TopBar(props) {
     );
   }
 
+  function getTextTopBar() {
+    switch (location.pathname) {
+      case '/register-template':
+        return 'Cadastrar template';
+      case '/register-project':
+        return 'Cadastrar projeto';
+      case '/my-data':
+        return 'Meus dados';
+      default:
+        return msgFormatDay(userName);
+    }
+  }
+
   return (
     <Box className={classes.root}>
       <AppBar position='static'>
@@ -63,7 +79,7 @@ function TopBar(props) {
               variant='h6'
               color='inherit'
             >
-              {action.text}
+              {getTextTopBar()}
             </Typography>
           </Box>
           <Box className={classes.toolbarRight} >
@@ -95,7 +111,12 @@ function TopBar(props) {
             {
               action.iconMyData &&
               <Tooltip title='Meus dados' placement='bottom'>
-                <Link to={action.iconMyData}>
+                <Link to={{
+                  pathname: action.iconMyData,
+                  state: {
+                    isEdit: true
+                  }
+                }}>
                   <PersonIcon className={classes.allIcon} />
                 </Link>
               </Tooltip>
@@ -151,7 +172,12 @@ function TopBar(props) {
         {
           action.iconMyData &&
           <Tooltip title='Meus dados' placement='left'>
-            <Link to={action.iconMyData}>
+            <Link to={{
+              pathname: action.iconMyData,
+              state: {
+                isEdit: true
+              }
+            }}>
               <PersonIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>

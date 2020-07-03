@@ -74,7 +74,9 @@ function PageLogin() {
             })
             .catch(error => {
                 setIsloading(false);
-                setTextDialog(error.response.data.error);
+                setTextDialog(
+                    error.response ? error.response.data.message : error.message
+                );
                 setOpenDialog(true);
             });
     }

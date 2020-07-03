@@ -70,7 +70,7 @@ function Dashboard() {
         }).then(resp => {
             setDataProject(resp.data);
             setDefaultDataProject(resp.data);
-            setShowIconFilter(true);
+            setShowIconFilter(resp.data.length > 0);
             setIsLoading(false);
         }).catch(error => {
             setResponseError(error.response.data.error);

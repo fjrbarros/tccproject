@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { msgFormatDay } from '../util/otherfunctions/Index';
 import Login from '../pages/login/Index';
 import PageRegisterUser from '../pages/registeruser/Index';
 import PageDashboard from '../pages/dashboard/Index';
@@ -29,12 +28,10 @@ function PrivateRoute({ component: Component, ...rest }) {
 }
 
 function Routes() {
-    const userName = useSelector(state => state.name);
     const isAuthenticated = useSelector(state => state.isAuthenticated);
 
     function getItemTopBar() {
         return {
-            text: msgFormatDay(userName),
             iconHome: '/dashboard',
             iconRegisterTemplate: '/register-template',
             iconRegisterProject: '/register-project',

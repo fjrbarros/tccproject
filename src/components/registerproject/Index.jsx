@@ -254,23 +254,13 @@ function ComponentRegisterProject(props) {
     }
 
     function openDialog(type, message) {
-        if (type === 'alert') {
-            setDialog({
-                ...dialog,
-                message: message,
-                type: type,
-                open: true,
-                title: 'Atenção'
-            });
-        } else if (type === 'confirm') {
-            setDialog({
-                ...dialog,
-                message: message,
-                type: type,
-                open: true,
-                title: 'Confirmação'
-            });
-        }
+        setDialog({
+            ...dialog,
+            message: message,
+            type: type,
+            open: true,
+            title: type === 'alert' ? 'Atenção' : 'Confirmação'
+        });
     }
 
 
@@ -286,8 +276,23 @@ function ComponentRegisterProject(props) {
         setDataMemberProject(copyDataMembemProject);
     }
 
-    function handleRemoveMemberProject(id) {
-        const dataMemberProjectFilter = dataMemberProject.filter(item => item.id !== id);
+    function handleRemoveMemberProject(idMember) {
+        if(isEdit) {
+            Api.delete(`/projeto/${Project.id}/membro/${idMember}`)
+            .then(resp => {
+                Toast.notify('Membro removido com sucesso.', { duration: 2000 });
+                setFilterMember(idMember);
+            }).catch(error => {
+                openDialog('alert', error.response.data.message);
+            });
+            return;
+        }
+
+        setFilterMember(idMember);
+    }
+
+    function setFilterMember(idMember) {
+        const dataMemberProjectFilter = dataMemberProject.filter(item => item.id !== idMember);
         setDataMemberProject(dataMemberProjectFilter);
     }
 

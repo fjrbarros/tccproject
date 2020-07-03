@@ -8,16 +8,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import SendIcon from '@material-ui/icons/Send';
 import CloseIcon from '@material-ui/icons/Close';
+import DialogNotification from '../../core/dialog/Index';
 
 function ModalRecuverPassword(props) {
-
     const classes = useStyles(props);
-
     const [valueEmail, setValueEmail] = useState('');
-
     const [error, setError] = useState('');
-
     const [submited, setSubmited] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [textDialog, setTextDialog] = useState('');
 
     function handleChange(event) {
         setValueEmail(event.target.value);
@@ -38,7 +37,7 @@ function ModalRecuverPassword(props) {
     function validateFormRecPassword() {
         const error = validateEmail(valueEmail)
         setError(error);
-        if(!error) executeRequest()
+        if (!error) executeRequest()
     }
 
     function executeRequest() {
@@ -53,6 +52,8 @@ function ModalRecuverPassword(props) {
             })
             .catch(error => {
                 handleClose();
+                setOpenDialog(true);
+                setTextDialog(error.response ? error.response.data.message : error.message);
             });
     }
 
@@ -61,6 +62,26 @@ function ModalRecuverPassword(props) {
         setError('');
         setValueEmail('');
         props.closeModal();
+    }
+
+    function handleClickOptionOk() {
+        setOpenDialog(false);
+        setTextDialog('');
+        setValueEmail('');
+    }
+
+    function validateEmail(email) {
+        if (!email) {
+            return 'E-mail é obrigatório!';
+        }
+
+        const regex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
+
+        if (!regex.test(email)) {
+            return 'E-mail inválido';
+        }
+
+        return '';
     }
 
     return (
@@ -89,7 +110,7 @@ function ModalRecuverPassword(props) {
                         size='small'
                         onClick={handleSubmit}
                     >
-                    <SendIcon className={classes.iconButton} />
+                        <SendIcon className={classes.iconButton} />
                         Enviar
                     </Button>
                     <Button
@@ -104,22 +125,16 @@ function ModalRecuverPassword(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
+            {openDialog &&
+                <DialogNotification
+                    type='error'
+                    title='Erro'
+                    text={textDialog}
+                    open={openDialog}
+                    optionOk={handleClickOptionOk}
+                />}
         </Box>
     );
-
-    function validateEmail(email) {
-        if (!email) {
-            return 'E-mail é obrigatório!';
-        }
-
-        const regex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
-
-        if (!regex.test(email)) {
-            return 'E-mail inválido';
-        }
-
-        return '';
-    }
 }
 
 export default ModalRecuverPassword;
