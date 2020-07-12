@@ -242,10 +242,6 @@ function Dashboard() {
                                 <ComponentCard
                                     key={project.id}
                                     project={project}
-                                    // title={project.tipoProjeto}
-                                    // description={project.descricao}
-                                    // isAdm={project.userAdmin}
-                                    // percentual={project.percentualConclusao}
                                     onClickRemove={() => handleRemoveProject(project)}
                                     onClickClose={() => handleCloseProject(project)}
                                     onClickEdit={() => handleEditProject(project)}
