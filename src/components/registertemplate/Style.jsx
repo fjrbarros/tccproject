@@ -26,7 +26,8 @@ export const useStyles = makeStyles(theme => ({
     activities: {
         display: 'flex',
         alignItems: 'center',
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        marginTop: '10px'
     },
 
     addBoxIcon: {
@@ -49,7 +50,7 @@ export const useStyles = makeStyles(theme => ({
     },
 
     activity: {
-        width: '300px',
+        width: '94%',
         padding: '10px',
         margin: '10px auto',
         border: '1px solid #cfcfcf',
@@ -60,7 +61,7 @@ export const useStyles = makeStyles(theme => ({
     removeActivity: {
         fontSize: '30px',
         cursor: 'pointer',
-        margin: '20px 0px 0px 15px',
+        margin: '-10px -11px 0px 0px',
         color: '#e41313'
     },
 

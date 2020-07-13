@@ -7,7 +7,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import SaveButton from '../../core/buttons/savebutton/Index';
 import Body from '../../components/body/Index';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Dialog from '../../core/dialog/Index';
@@ -75,46 +75,63 @@ function ComponentRegisterTamplate() {
         });
     }
 
-    function handleChangeTask(event, index) {
-        const copyTask = Object.assign([], task);
-        copyTask[index].value = event.target.value;
-        setTask(copyTask);
+    function handleChangeTask(event, containerId, taskId) {
+        const copyActivity = Object.assign([], activity);
+        const container = copyActivity.filter(activity => activity.id === containerId);
+        const task = container[0].tasks.filter(task => task.id === taskId);
+
+        task[0].valueTask = event.target.value;
+        setActivity(copyActivity);
     }
 
-    function handleClickAddTask() {
-        for (var i = 0; i < task.length; i++) {
-            task[i].id = i;
-        }
-        setTask(task.concat({ id: task.length, value: '' }));
+    function handleClickAddTask(containerId) {
+        const copyActivity = Object.assign([], activity);
+        const container = copyActivity.filter(activity => activity.id === containerId);
+
+        if (!container[0]) return;
+
+        container[0].tasks.push({
+            id: uniqid(),
+            valueTask: ''
+        });
+
+        setActivity(copyActivity);
     }
 
-    function onRemoveTask(index) {
-        const copyTask = Object.assign([], task);
-        copyTask.splice(index, 1);
-        setTask(copyTask);
+    function onRemoveTask(containerId, taskId) {
+        const copyActivity = Object.assign([], activity);
+        const container = copyActivity.filter(activity => activity.id === containerId);
+        const taskFilter = container[0].tasks.filter(task => task.id !== taskId);
+
+        container[0].tasks = [];
+        container[0].tasks = taskFilter;
+        setActivity(copyActivity);
     }
 
     function handleClickAddActivity() {
         setActivity(activity.concat([{
             id: uniqid(),
-            valueActivity: 'asdfasfsa',
-            tasks: [{
-                id: '',
-                valueTask: 'aaaaaaaaaa'
-            }]
+            valueActivity: '',
+            tasks: []
         }]));
     }
 
-    function handleClickRemoveActivity(index) {
-        const copyActivity = Object.assign([], activity);
-        copyActivity.splice(index, 1);
-        setActivity(copyActivity)
+    function handleClickRemoveActivity(containerId) {
+        setActivity(activity.filter(activity => activity.id !== containerId));
     }
 
+    function handleChangeDescriptionActivity(event, containerId) {
+        const copyActivity = Object.assign([], activity);
+        const container = copyActivity.filter(activity => activity.id === containerId);
+
+        container[0].valueActivity = event.target.value;
+        setActivity(copyActivity);
+    }
     function handleSubmit(event) {
         event.preventDefault();
         console.log('Descrição: ', valueDescription);
         console.log('Tipo projeto: ', valueTypeProject);
+        console.log('Atividades: ', activity);
     }
 
     return (
@@ -152,44 +169,55 @@ function ComponentRegisterTamplate() {
                     </Box>
                     <Box>
                         {
-                            activity.map(function (container, index) {
+                            activity.map(function (container) {
                                 return (
                                     <Box key={container.id} className={classes.activity}>
-                                        <TextField
-                                            label='Descrição da atividade'
-                                            style={{ width: '85%' }}
-                                            value={container.valueActivity}
-                                        />
-                                        <Tooltip title='Remover atividade' placement='right'>
-                                            <RemoveCircleIcon
-                                                className={classes.removeActivity}
-                                                onClick={() => handleClickRemoveActivity(index)}
+                                        <Box style={{ display: 'flex' }}>
+                                            <Box className={classes.flex} />
+                                            <Tooltip title='Remover atividade' placement='right'>
+                                                <CloseIcon
+                                                    className={classes.removeActivity}
+                                                    onClick={() => handleClickRemoveActivity(container.id)}
+                                                />
+                                            </Tooltip>
+                                        </Box>
+                                        <Box style={{ display: 'flex', marginTop: '-15px' }}>
+                                            <TextField
+                                                label='Descrição da atividade'
+                                                fullWidth
+                                                onChange={event => handleChangeDescriptionActivity(event, container.id)}
+                                                value={container.valueActivity}
                                             />
-                                        </Tooltip>
+                                            <Box style={{ width: '47px', height: '0px' }} />
+                                        </Box>
                                         <Box className={classes.tasks}>
                                             <Box className={classes.flex} />
                                             <Typography variant='h6'>Tarefas</Typography>
                                             <Tooltip title='Adicionar tarefa' placement='right'>
                                                 <AddCircleOutlineIcon
                                                     className={classes.addBoxIconTask}
-                                                    onClick={handleClickAddTask}
+                                                    onClick={() => handleClickAddTask(container.id)}
                                                 />
                                             </Tooltip>
                                         </Box>
-                                        <Box className={classes.inputTask}>
-                                            <TextField
-                                                fullWidth
-                                                value={container.tasks[index].valueTask}
-                                                onChange={(e) => handleChangeTask(e, index)}
-                                                label='Descrição tarefa'
-                                            />
-                                            <Tooltip title='Remover tarefa' placement='right'>
-                                                <DeleteForeverIcon
-                                                    className={classes.deleteTaskIcon}
-                                                    onClick={() => onRemoveTask(index)}
-                                                />
-                                            </Tooltip>
-                                        </Box>
+                                        {
+                                            container.tasks.map((task) => (
+                                                <Box className={classes.inputTask} key={task.id}>
+                                                    <TextField
+                                                        fullWidth
+                                                        value={task.valueTask}
+                                                        onChange={(event) => handleChangeTask(event, container.id, task.id)}
+                                                        label='Descrição tarefa'
+                                                    />
+                                                    <Tooltip title='Remover tarefa' placement='right'>
+                                                        <DeleteForeverIcon
+                                                            className={classes.deleteTaskIcon}
+                                                            onClick={() => onRemoveTask(container.id, task.id)}
+                                                        />
+                                                    </Tooltip>
+                                                </Box>
+                                            ))
+                                        }
                                     </Box>
                                 )
                             })
