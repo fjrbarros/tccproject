@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useStyles } from './Style';
 import { TextField, Box, Typography, Tooltip } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import Toast from 'toasted-notes';
+import 'toasted-notes/src/styles.css';
 import uniqid from 'uniqid';
 import Api from '../../util/api/Index';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '../../core/input/autocomplete/Index';
 import SaveButton from '../../core/buttons/savebutton/Index';
 import Body from '../../components/body/Index';
 import CloseIcon from '@material-ui/icons/Close';
@@ -16,19 +19,26 @@ import Loading from '../../components/loading/Index';
 function ComponentRegisterTamplate() {
 
     const classes = useStyles();
-    const [task, setTask] = useState([]);
     const [enumTypeProject, setEnumTypeProject] = useState([]);
     const [valueTypeProject, setValueTypeProject] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [valueDescription, setValueDescription] = useState('');
+    const [activity, setActivity] = useState([]);
+    const userId = useSelector(state => state.id);
     const [dialog, setDialog] = useState({
         open: false,
         message: '',
         type: '',
         title: ''
     });
-    const [valueDescription, setValueDescription] = useState('');
+    const [error, setError] = useState({
+        description: '',
+        typeProject: ''
+    });
 
-    const [activity, setActivity] = useState([]);
+    useEffect(() => {
+        getDataEnumTypeProject();
+    }, []);
 
     function handleChange(event) {
         setValueDescription(event.target.value);
@@ -37,10 +47,6 @@ function ComponentRegisterTamplate() {
     function handleChageTypeProject(event, newValue) {
         setValueTypeProject(newValue);
     }
-
-    useEffect(() => {
-        getDataEnumTypeProject();
-    }, []);
 
     function getDataEnumTypeProject() {
         setIsLoading(true);
@@ -129,9 +135,77 @@ function ComponentRegisterTamplate() {
     }
     function handleSubmit(event) {
         event.preventDefault();
-        console.log('Descrição: ', valueDescription);
-        console.log('Tipo projeto: ', valueTypeProject);
-        console.log('Atividades: ', activity);
+        const errors = {};
+        const values = {
+            description: valueDescription,
+            typeProject: valueTypeProject ? valueTypeProject.valor : null
+        };
+
+        validateValues(values, (campo, msg) => errors[campo] = msg);
+        setError(errors);
+
+        if (Object.keys(errors).length === 0) {
+            saveNewTemplate();
+        }
+    }
+
+    function validateValues(values, errorFn) {
+        let msg;
+        if (values.hasOwnProperty('description')) {
+            if(!values.description) {
+                msg = 'A descrição é obrigatória.'
+                errorFn('description', msg);
+            }
+        }
+
+        if (values.hasOwnProperty('typeProject')) {
+            if(!values.typeProject) {
+                msg = 'Tipo de projeto é obrigatório.'
+                errorFn('typeProject', msg)
+            }
+        }
+    }
+
+    function resetData() {
+        setValueDescription('');
+        setValueTypeProject('');
+        setActivity([]);
+    }
+
+    function saveNewTemplate() {
+        const data = {
+            tipoProjeto: valueTypeProject.valor,
+            idUsuario: userId,
+            descricao: valueDescription,
+            atividades: getActivities()
+        };
+
+        setIsLoading(true);
+        Api.post('/templateProjeto', data)
+            .then(resp => {
+                setIsLoading(false);
+                resetData();
+                Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
+            })
+            .catch(error => {
+                setIsLoading(false);
+                openDialog('alert', error.response.data.message);
+            });
+    }
+
+    function getActivities() {
+        const activities = [];
+
+        activity.forEach(item => {
+            activities.push({
+                descricaoAtividade: item.valueActivity,
+                tarefas: item.tasks.map(item => {
+                    return {descricao: item.valueTask}
+                })
+            })
+        });
+
+        return activities; 
     }
 
     return (
@@ -140,6 +214,8 @@ function ComponentRegisterTamplate() {
                 <Box className={classes.containerCenter}>
                     <TextField
                         fullWidth
+                        error={!!error.description}
+                        helperText={error.description}
                         value={valueDescription}
                         onChange={handleChange}
                         name='description'
@@ -149,8 +225,8 @@ function ComponentRegisterTamplate() {
                         className={classes.containerInput}
                         renderInput={params => <TextField {...params} label="Tipo de projeto" />}
                         name='typeProject'
-                        // error={!!error.typeProject}
-                        // helperText={error.typeProject}
+                        error={!!error.typeProject}
+                        helperText={error.typeProject}
                         options={enumTypeProject}
                         getOptionLabel={(option) => option.descricao}
                         getOptionSelected={(option, value) => option.descricao === value.descricao}
