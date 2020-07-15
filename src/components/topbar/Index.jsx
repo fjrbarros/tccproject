@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import Modal from '../../core/dialog/Index';
+import ComponentDrawer from '../../components/drawer/Index';
 
 function TopBar(props) {
   const { action } = props;
@@ -21,6 +22,7 @@ function TopBar(props) {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(state => state.name);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   function fnClickYes() {
     setOpenModal(false);
@@ -55,12 +57,17 @@ function TopBar(props) {
         return 'Cadastrar projeto';
       case '/my-data':
         return 'Meus dados';
-        case '/project':
+      case '/project':
         return 'Projeto ' + location.state.Project.descricao;
       default:
         return msgFormatDay(userName);
     }
   }
+
+  const toggleDrawer = (open) => event => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
+    setOpenDrawer(open);
+  };
 
   return (
     <Box className={classes.root}>
@@ -70,7 +77,7 @@ function TopBar(props) {
             <Tooltip title='Abrir projetos' placement='right'>
               <IconButton
                 color='inherit'
-                onClick={props.onClickDrawer}
+                onClick={() => setOpenDrawer(true)}
               >
                 <ArrowForwardIosIcon />
               </IconButton>
@@ -194,6 +201,10 @@ function TopBar(props) {
           </Tooltip>
         }
       </Box>
+      <ComponentDrawer
+        open={openDrawer}
+        toggleDrawer={toggleDrawer}
+      />
       {openModal && getModal()}
     </Box>
   );

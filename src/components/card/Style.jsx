@@ -90,6 +90,7 @@ export const useStyles = makeStyles(props => ({
     },
 
     cardBottom: {
+        height: '37px',
         display: 'flex',
         borderTop: '1px solid #cfcfcf',
         padding: '3px 10px'

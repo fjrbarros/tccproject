@@ -7,5 +7,10 @@ export const useStyles = makeStyles(({
 
     iconLeftFlex: {
         flex: 1
+    },
+
+    listProject: {
+        paddingTop: '0',
+        paddingBottom: '0'
     }
 }))

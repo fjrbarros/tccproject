@@ -7,19 +7,16 @@ import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import { Box, Tooltip } from '@material-ui/core';
-import ComponentDrawer from '../../components/drawer/Index';
 import ComponentCard from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 import ModalFilter from '../../components/filter/Index';
 import CloseProject from '../../components/closeproject/Index';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Loading from '../../components/loading/Index';
-import ComponentOpenProject from '../../components/draganddrop/container/Index';
 
 function Dashboard() {
 
     const history = useHistory();
-    const [openDrawer, setOpenDrawer] = useState(false);
     const [responseError, setResponseError] = useState('');
     const userId = useSelector(state => state.id);
     const [defaultDataProject, setDefaultDataProject] = useState([]);
@@ -43,10 +40,7 @@ function Dashboard() {
         id: null,
         description: ''
     });
-    const toggleDrawer = (open) => event => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
-        setOpenDrawer(open);
-    };
+    
 
     function executeRequestDataEnum() {
         Api.get('/dados')
@@ -263,10 +257,6 @@ function Dashboard() {
                     }
                 </Box>
             </Body>
-            <ComponentDrawer
-                open={openDrawer}
-                toggleDrawer={toggleDrawer}
-            />
             {
                 openDialog.isRemoveProject && getComponentDialog(
                     'confirm',
