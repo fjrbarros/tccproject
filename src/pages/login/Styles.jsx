@@ -68,10 +68,7 @@ export const useStyles = makeStyles(({
     },
 
     inputProps: {
-        color: '#ffffff!important',
-        "&:-webkit-autofill": {
-            WebkitBoxShadow: "0 0 0 1000px white inset"
-        }
+        color: '#ffffff!important'
     },
 
     inputLabelPropsEmail: {
@@ -82,19 +79,7 @@ export const useStyles = makeStyles(({
         color: '#ffffff!important'
     },
 
-    textFieldEmail: {
-        '& label.Mui-focused': {
-            color: '#ffffff!important'
-        },
-        '& .MuiInput-underline:after': {
-            borderBottomColor: '#ffffff!important'
-        },
-        '& .MuiInput-underline:before': {
-            borderBottomColor: '#ffffff!important',
-        }
-    },
-
-    textFieldPassword: {
+    textField: {
         '& label.Mui-focused': {
             color: '#ffffff!important'
         },

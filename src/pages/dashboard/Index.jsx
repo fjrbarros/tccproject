@@ -14,6 +14,7 @@ import ModalFilter from '../../components/filter/Index';
 import CloseProject from '../../components/closeproject/Index';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Loading from '../../components/loading/Index';
+import ComponentOpenProject from '../../components/draganddrop/container/Index';
 
 function Dashboard() {
 
@@ -220,6 +221,15 @@ function Dashboard() {
             });
     }
 
+    function handleOpenProject(project) {
+        history.push({
+            pathname: '/project',
+            state: {
+                Project: project
+            }
+        });
+    }
+
     return (
         <React.Fragment>
             <Body>
@@ -245,6 +255,7 @@ function Dashboard() {
                                     onClickRemove={() => handleRemoveProject(project)}
                                     onClickClose={() => handleCloseProject(project)}
                                     onClickEdit={() => handleEditProject(project)}
+                                    onClick={() => handleOpenProject(project)}
                                     textButton='Abrir'
                                 />
                             )

@@ -8,6 +8,7 @@ import TopBar from '../components/topbar/Index';
 import ComponentRegisterProject from '../components/registerproject/Index';
 import ComponentRegisterTemplate from '../components/registertemplate/Index';
 import ComponentRegisterUser from '../components/registeruser/Index';
+import PageProject from '../pages/project/Index';
 
 function PrivateRoute({ component: Component, ...rest }) {
 
@@ -54,6 +55,7 @@ function Routes() {
                     <PrivateRoute path='/register-project' Auth={isAuthenticated} component={ComponentRegisterProject} />
                     <PrivateRoute path='/register-template' Auth={isAuthenticated} component={ComponentRegisterTemplate} />
                     <PrivateRoute path='/my-data' Auth={isAuthenticated} component={ComponentRegisterUser} />
+                    <PrivateRoute path='/project' Auth={isAuthenticated} component={PageProject} />
                     <Route exact path='*' component={() => <Redirect to={{ pathname: '/login' }} />} />
                 </Switch>
             </BrowserRouter>

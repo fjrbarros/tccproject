@@ -127,7 +127,7 @@ function PageLogin() {
                 </Box>
                 <Box className={classes.formCenter}>
                     <TextField
-                        className={classes.textFieldEmail}
+                        className={classes.textField}
                         label='E-mail'
                         fullWidth
                         name='email'
@@ -144,7 +144,7 @@ function PageLogin() {
                         }}
                     />
                     <TextField
-                        className={classes.textFieldPassword}
+                        className={classes.textField}
                         label='Senha'
                         fullWidth
                         name='password'

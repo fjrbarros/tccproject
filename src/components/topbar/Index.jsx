@@ -55,6 +55,8 @@ function TopBar(props) {
         return 'Cadastrar projeto';
       case '/my-data':
         return 'Meus dados';
+        case '/project':
+        return 'Projeto ' + location.state.Project.descricao;
       default:
         return msgFormatDay(userName);
     }
