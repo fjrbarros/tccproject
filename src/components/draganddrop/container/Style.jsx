@@ -4,8 +4,8 @@ export const useStyles = makeStyles( props => ({
     container: {
         flex: '1',
         width: '100%',
-        minWidth: '325px',
-        minHeight: '553px',
+        minWidth: '320px',
+        minHeight: '550px',
         border: '1px solid #cfcfcf',
         margin: props => props.margin || '0px',
         backgroundColor: 'rgb(0,0,0,0.8)',
@@ -30,8 +30,7 @@ export const useStyles = makeStyles( props => ({
     },
 
     containerCenter: {
-        height: 'calc(100% - 82px)',
-        minHeight: '470px',
+        height: 'calc(100% - 80px)',
         overflowY: 'auto',
         padding: '10px'
     }

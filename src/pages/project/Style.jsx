@@ -4,9 +4,8 @@ export const useStyles = makeStyles(({
     content: {
         display: 'flex',
         justifyContent: 'space-between',
-        width: '100%',
-        maxWidth: '1000px',
-        padding: '10px',
+        padding: '10px 10px 0px 10px',
+        maxWidth: '988px',
         margin: '0px auto',
         height: 'calc(100% - 20px)'
     }
