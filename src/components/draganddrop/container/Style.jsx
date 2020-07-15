@@ -5,7 +5,7 @@ export const useStyles = makeStyles( props => ({
         flex: '1',
         width: '100%',
         minWidth: '320px',
-        minHeight: '550px',
+        minHeight: '500px',
         border: '1px solid #cfcfcf',
         margin: props => props.margin || '0px',
         backgroundColor: 'rgb(0,0,0,0.8)',
