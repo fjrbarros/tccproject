@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Typography, Box, Tooltip } from '@material-ui/core';
 import { Link, useLocation } from 'react-router-dom';
 import { msgFormatDay } from '../../util/otherfunctions/Index';
 import { useDispatch, useSelector } from 'react-redux';
+import { removeCookie } from '../../util/authentication/Index';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import HomeIcon from '@material-ui/icons/Home';
@@ -34,6 +35,7 @@ function TopBar(props) {
       id: null,
       isAuthenticated: false
     });
+    removeCookie();
   }
 
   function getModal() {

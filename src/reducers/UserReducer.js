@@ -3,7 +3,8 @@ const intialState = {
     email:'',
     phone: '',
     id: null,
-    isAuthenticated: false
+    isAuthenticated: false, 
+    isLoading: false
 }
 
 function rootReducer(state = intialState, actions) {
@@ -15,7 +16,8 @@ function rootReducer(state = intialState, actions) {
                 email: actions.email,
                 phone: actions.phone,
                 id: actions.id,
-                isAuthenticated: actions.isAuthenticated
+                isAuthenticated: actions.isAuthenticated,
+                isLoading: actions.isLoading
             }
         default:
             return state;

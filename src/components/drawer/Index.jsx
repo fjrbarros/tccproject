@@ -12,7 +12,6 @@ import ComponentCard from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 
 function ComponentDrawer(props) {
-
     const classes = useStyles();
     const history = useHistory();
     const userId = useSelector(state => state.id);
@@ -23,6 +22,10 @@ function ComponentDrawer(props) {
         type: '',
         title: ''
     });
+
+    useEffect(() => {
+        executeRequestProject();
+    }, []);
 
     function executeRequestProject() {
         Api.get('/projeto', {
@@ -35,10 +38,6 @@ function ComponentDrawer(props) {
             openDialog('alert', error.response.data.message);
         });
     }
-
-    useEffect(() => {
-        executeRequestProject();
-    }, []);
 
     function openDialog(type, message) {
         setDialog({

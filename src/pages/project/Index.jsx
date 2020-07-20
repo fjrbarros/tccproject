@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useStyles } from './Style';
 import { Box } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import Container from '../../components/draganddrop/container/Index';
@@ -11,7 +10,6 @@ import Loading from '../../components/loading/Index';
 
 function Dashboard(props) {
     const classes = useStyles();
-    const history = useHistory();
     const propsLocation = props.history.location;
     const Project = propsLocation.state ? propsLocation.state.Project : null;
     const propRefresh = propsLocation.state ? propsLocation.state.Refresh : false;

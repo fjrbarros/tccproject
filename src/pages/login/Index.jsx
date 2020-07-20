@@ -68,8 +68,9 @@ function PageLogin() {
         Api.post(url, data)
             .then(resp => {
                 updateUserDataReducer(resp.data);
+                // history.push('/dashboard');
                 encryptData(data);
-                history.push('/dashboard');
+                window.location.pathname = '/dashboard';
                 setIsloading(false);
             })
             .catch(error => {
@@ -88,7 +89,8 @@ function PageLogin() {
             phone: data.foneContato ? data.foneContato : '',
             email: data.email ? data.email : '',
             id: data.id,
-            isAuthenticated: true
+            isAuthenticated: true,
+            isLoading: false
         });
     }
 

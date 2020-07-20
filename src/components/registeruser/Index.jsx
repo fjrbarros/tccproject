@@ -58,7 +58,11 @@ function ComponentRegisterUser(props) {
     }, []);
 
     function loadUserData() {
-        if (history && !history.location.state.isEdit) return;
+        const registerUser = window.location.pathname === '/register-user';
+        if (registerUser || (history && !history.location.state.isEdit)) {
+            return
+        };
+
         setValues({
             ...values,
             name: _name,

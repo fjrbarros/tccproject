@@ -9,6 +9,7 @@ import ComponentRegisterProject from '../components/registerproject/Index';
 import ComponentRegisterTemplate from '../components/registertemplate/Index';
 import ComponentRegisterUser from '../components/registeruser/Index';
 import PageProject from '../pages/project/Index';
+import Loading from '../components/loading/Index';
 
 function PrivateRoute({ component: Component, ...rest }) {
 
@@ -30,6 +31,11 @@ function PrivateRoute({ component: Component, ...rest }) {
 
 function Routes() {
     const isAuthenticated = useSelector(state => state.isAuthenticated);
+    const isLoading = useSelector(state => state.isLoading);
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     function getItemTopBar() {
         return {
@@ -44,10 +50,20 @@ function Routes() {
         }
     }
 
+    function showTopBar() {
+        const pathname = window.location.pathname;
+
+        if (pathname === '/login') {
+            return false;
+        }
+
+        return isAuthenticated;
+    }
+
     return (
         <React.Fragment>
             <BrowserRouter>
-                {isAuthenticated && <TopBar action={getItemTopBar()} />}
+                {showTopBar() && <TopBar action={getItemTopBar()} />}
                 <Switch>
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/register-user' component={PageRegisterUser} />
@@ -60,7 +76,7 @@ function Routes() {
                 </Switch>
             </BrowserRouter>
         </React.Fragment>
-    );
+    )
 }
 
 export default Routes;

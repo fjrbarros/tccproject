@@ -34,5 +34,4 @@ export const useStyles = makeStyles( props => ({
         overflowY: 'auto',
         padding: '10px'
     }
-    
 }));

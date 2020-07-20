@@ -1,5 +1,15 @@
+import Api from '../api/Index';
+
 export function isAuthenticated() {
     return localStorage.getItem('authenticad') === 'true';
+}
+
+export function removeCookie() {
+    const cookies = document.cookie.split(';');
+
+    cookies.forEach(c => {
+        document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+    });
 }
 
 export function encryptData(data) {
@@ -9,14 +19,14 @@ export function encryptData(data) {
     const cipherTextPassword = CryptoJS.AES.encrypt(data.senha, 'password');
 
     document.cookie = `info-E = ${cipherTextEmail}`;
-    document.cookie = `info-S = ${cipherTextPassword}`;
+    document.cookie = `info-P = ${cipherTextPassword}`;
 }
 
 export function decryptData() {
     const CryptoJS = require('crypto-js');
 
     const cookieEmail = getCookie('info-E');
-    const cookiePassword = getCookie('info-S');
+    const cookiePassword = getCookie('info-P');
 
     const bytesEmail = CryptoJS.AES.decrypt(cookieEmail, 'email');
     const bytesPassword = CryptoJS.AES.decrypt(cookiePassword, 'password');
@@ -41,4 +51,45 @@ function getCookie(cname) {
         }
     }
     return '';
+}
+
+export function validateLoggedUser(store) {
+    const dataUser = decryptData();
+
+    if (!dataUser || !dataUser.email) {
+        store.dispatch({
+            type: 'UPDATE_USER',
+            isLoading: false
+        });
+        return;
+    } 
+
+    const url = '/usuario/login';
+    const data = {
+        email: dataUser.email,
+        senha: dataUser.password,
+        tokenConfirmacao: ''
+    };
+
+    Api.post(url, data)
+        .then(resp => {
+            const respData = resp.data;
+            encryptData(data);
+            store.dispatch({
+                type: 'UPDATE_USER',
+                name: respData.nome || '',
+                phone: respData.foneContato || '',
+                email: respData.email || '',
+                id: respData.id || null,
+                isAuthenticated: true,
+                isLoading: false
+            });
+        })
+        .catch(error => {
+            console.log(error);
+            store.dispatch({
+                type: 'UPDATE_USER',
+                isLoading: false
+            });
+        })
 }
