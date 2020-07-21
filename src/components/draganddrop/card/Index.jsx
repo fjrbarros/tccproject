@@ -13,7 +13,9 @@ function ComponentCardDragDrop(props) {
         event.dataTransfer.setData('cardId', target.id);
 
         setTimeout(() => {
-            target.style.display = 'none';
+            // target.style.display = 'none';
+            target.style.opacity = '0.1';
+            target.style.borderStyle = 'dashed';
         },0);
     }
 
