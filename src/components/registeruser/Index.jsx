@@ -46,11 +46,11 @@ function ComponentRegisterUser(props) {
     function handleChange(event) {
         setValues({ ...values, [event.target.name]: event.target.value });
 
-        if (submited) validateFormCadastro();
+        validateFormCadastro();
     }
 
     function handleBlur() {
-        if (submited) validateFormCadastro();
+        validateFormCadastro();
     }
 
     useEffect(() => {
@@ -81,14 +81,14 @@ function ComponentRegisterUser(props) {
         const errors = {};
         validateForm(values, (campo, msg) => errors[campo] = msg);
         setError(errors);
-        if (Object.keys(errors).length === 0) {
+        if (Object.keys(errors).length === 0 && submited) {
             if (history && history.location.state.isEdit) {
                 updateUser();
             } else {
                 registerNewUser();
             }
-            setSubmited(false);
         }
+        setSubmited(false);
     }
 
     function updateUser() {
