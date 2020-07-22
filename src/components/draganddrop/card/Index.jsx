@@ -23,6 +23,10 @@ function ComponentCardDragDrop(props) {
         event.stopPropagation();
     }
 
+    function dragEnd(event) {
+        console.log('Drag end')
+    }
+
     return (
         <Box 
             className={classes.card}
@@ -30,6 +34,7 @@ function ComponentCardDragDrop(props) {
             draggable={props.draggable}
             onDragStart={dragStart}
             onDragOver={dragOver}
+            onDragEnd={dragEnd}
         >
             {props.children}
         </Box>

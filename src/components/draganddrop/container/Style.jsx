@@ -6,12 +6,11 @@ export const useStyles = makeStyles( props => ({
         width: '100%',
         minWidth: '320px',
         minHeight: '500px',
-        // border: '1px solid #cfcfcf',
         margin: props => props.margin || '0px',
-        // backgroundColor: 'rgb(0,0,0,0.8)',
-        boxShadow: '0px 0px 7px 1px #676767',
+        boxShadow: '0px 0px 7px 1px #b3b3b3',
         borderTopLeftRadius: '10px',
-        borderTopRightRadius: '10px'
+        borderTopRightRadius: '10px',
+        border: props => props.border || 'none'
     },
 
     header: {

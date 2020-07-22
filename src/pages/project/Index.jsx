@@ -92,6 +92,7 @@ function Dashboard(props) {
                         title='To do'
                         containerId='cont1'
                         headerContainerBackgroun='#00aacc'
+                        border='1.2px solid #00d4ff'
                     >
                         {
                             activities.to_do.map(activity => {
@@ -112,6 +113,7 @@ function Dashboard(props) {
                         margin='0 10px'
                         containerId='cont2'
                         headerContainerBackgroun='#efc100'
+                        border='1.2px solid #fbcb00'
                     >
                         {
                             activities.doing.map(activity => {
@@ -131,6 +133,7 @@ function Dashboard(props) {
                         title='Done'
                         containerId='cont3'
                         headerContainerBackgroun='#00bb00'
+                        border='1.2px solid #00bb00'
                     >
                         {
                             activities.done.map(activity => {
