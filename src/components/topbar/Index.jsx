@@ -66,6 +66,11 @@ function TopBar(props) {
     }
   }
 
+  function handleToggleMenu(event, openModal) {
+    setOpenModal(openModal);
+    setMenuActive(!isMenuActive);
+  }
+
   const toggleDrawer = (open) => event => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
     setOpenDrawer(open);
@@ -146,7 +151,7 @@ function TopBar(props) {
               <Tooltip title='Menu' placement='left'>
                 <Box
                   className={classes.menuIcon}
-                  onClick={() => setMenuActive(!isMenuActive)}
+                  onClick={handleToggleMenu}
                 >
                   <Box />
                 </Box>
@@ -159,7 +164,7 @@ function TopBar(props) {
         {
           action.iconHome &&
           <Tooltip title='Home' placement='left'>
-            <Link to={action.iconHome}>
+            <Link to={action.iconHome} onClick={handleToggleMenu}>
               <HomeIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
@@ -167,7 +172,7 @@ function TopBar(props) {
         {
           action.iconRegisterTemplate &&
           <Tooltip title='Cadastrar template' placement='left'>
-            <Link to={action.iconRegisterTemplate}>
+            <Link to={action.iconRegisterTemplate} onClick={handleToggleMenu}>
               <PostAddIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
@@ -175,7 +180,7 @@ function TopBar(props) {
         {
           action.iconRegisterProject &&
           <Tooltip title='Cadastrar projeto' placement='left'>
-            <Link to={action.iconRegisterProject}>
+            <Link to={action.iconRegisterProject} onClick={handleToggleMenu}>
               <AddIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
@@ -188,7 +193,9 @@ function TopBar(props) {
               state: {
                 isEdit: true
               }
-            }}>
+            }}
+              onClick={handleToggleMenu}
+            >
               <PersonIcon className={classes.allIconMenu} />
             </Link>
           </Tooltip>
@@ -197,7 +204,7 @@ function TopBar(props) {
           action.iconLogOut &&
           <Tooltip title='Logout' placement='left'>
             <PowerSettingsNewIcon
-              onClick={() => setOpenModal(true)}
+              onClick={(event) => handleToggleMenu(event, true)}
               className={classes.allIconMenu}
             />
           </Tooltip>

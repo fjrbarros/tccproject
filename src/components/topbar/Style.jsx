@@ -96,9 +96,6 @@ export const useStyles = makeStyles(isMenuActive => ({
         '@media (max-width: 705px)': {
             display: 'block'
         },
-        '&:hover': {
-            backgroundColor: 'rgb(0,0,0,0.8)'
-        },
         '& div': {
             transform: isMenuActive => isMenuActive ? 'scale(0)' : 'scale(1)'
         },
