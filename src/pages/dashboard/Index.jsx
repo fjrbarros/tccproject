@@ -220,7 +220,7 @@ function Dashboard() {
             pathname: '/project',
             state: {
                 Project: project
-            }
+            } 
         });
     }
 
