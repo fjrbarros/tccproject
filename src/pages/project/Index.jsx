@@ -8,6 +8,9 @@ import Card from '../../components/draganddrop/card/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 
+
+import Teste from '../../components/draganddrop/container/Index';
+
 function Dashboard(props) {
     const classes = useStyles();
     const propsLocation = props.history.location;
@@ -88,7 +91,8 @@ function Dashboard(props) {
         <React.Fragment>
             <Body>
                 <Box className={classes.content}>
-                    <Container
+                <Teste />
+                {/*     <Container
                         title='To do'
                         containerId='cont1'
                         headerContainerBackgroun='#00aacc'
@@ -148,8 +152,8 @@ function Dashboard(props) {
                                 )
                             })
                         }
-                    </Container>
-                </Box>
+                    </Container>*/}
+                </Box> 
             </Body>
             <Dialog
                 type={dialog.type}

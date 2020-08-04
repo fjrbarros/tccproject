@@ -6,6 +6,7 @@ export const useStyles = makeStyles(({
         justifyContent: 'space-between',
         padding: '10px 10px 0px 10px',
         maxWidth: '988px',
+        backgroundColor: 'tomato',
         margin: '0px auto',
         height: 'calc(100% - 20px)'
     }
