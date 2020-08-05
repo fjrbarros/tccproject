@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useStyles } from './Style';
-import { Box } from '@material-ui/core';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
-import Container from '../../components/draganddrop/Index';
-import Card from '../../components/draganddrop/card/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 
