@@ -1,0 +1,56 @@
+.react-kanban-board {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10px 0px 10px;
+    max-width: 988px;
+    margin: 0px auto;
+    height: calc(100% - 20px);
+}
+
+.react-kanban-column {
+    width: 320px;
+    box-shadow: 0px 0px 7px 1px #b3b3b3;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: none
+}
+
+.react-kanban-column-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid #cfcfcf;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.react-kanban-column:nth-child(1) {
+    border: 1.2px solid #00d4ff;
+}
+
+.react-kanban-column:nth-child(2) {
+    margin: 0 10px;
+    border: 1.2px solid #fbcb00;
+}
+
+.react-kanban-column:nth-child(3) {
+    border: 1.2px solid #00bb00;
+}
+
+.react-kanban-column:nth-child(1) .react-kanban-column-header {
+    background-color: #00aacc;
+}
+
+.react-kanban-column:nth-child(2) .react-kanban-column-header {
+    background-color: #efc100;
+}
+
+.react-kanban-column:nth-child(3) .react-kanban-column-header {
+    background-color: #00bb00;
+}
+
+.react-kanban-card {
+    background-color: orange;
+}

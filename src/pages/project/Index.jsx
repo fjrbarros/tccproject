@@ -3,13 +3,13 @@ import { useStyles } from './Style';
 import { Box } from '@material-ui/core';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
-import Container from '../../components/draganddrop/container/Index';
+import Container from '../../components/draganddrop/Index';
 import Card from '../../components/draganddrop/card/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 
 
-import Teste from '../../components/draganddrop/container/Index';
+import Teste from '../../components/draganddrop/Index';
 
 function Dashboard(props) {
     const classes = useStyles();
@@ -33,7 +33,7 @@ function Dashboard(props) {
         getActivitiesProject();
     }, []);
 
-    if(propRefresh) getActivitiesProject();
+    if (propRefresh) getActivitiesProject();
 
     function getActivitiesProject() {
         if (!Project) return;
@@ -52,7 +52,7 @@ function Dashboard(props) {
                 if (!resp.data.length) {
                     setIsLoading(false);
                     return;
-                } 
+                }
                 setActivities({
                     ...activities,
                     to_do: resp.data.filter(item => item.estagio === 'TO_DO'),
@@ -90,9 +90,9 @@ function Dashboard(props) {
     return (
         <React.Fragment>
             <Body>
-                <Box className={classes.content}>
-                <Teste />
-                {/*     <Container
+                {/* <Box className={classes.content}> */}
+                    <Teste />
+                    {/*     <Container
                         title='To do'
                         containerId='cont1'
                         headerContainerBackgroun='#00aacc'
@@ -153,7 +153,7 @@ function Dashboard(props) {
                             })
                         }
                     </Container>*/}
-                </Box> 
+                {/* </Box> */}
             </Body>
             <Dialog
                 type={dialog.type}
