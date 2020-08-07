@@ -21,8 +21,14 @@ export const useStyles = makeStyles(props => ({
         '&:hover': {
             boxShadow: '1px 6px 10px #3c3c3c'
         },
-        '@media (max-width: 499px)': {
-            flex: '1'
+        '@media (max-width: 705px)': {
+            maxWidth: 'none',
+            minWidth: '210px',
+            width: '47%'
+        },
+        '@media (max-width: 483px)': {
+            maxWidth: 'none',
+            width: '100%'
         }
     },
 
