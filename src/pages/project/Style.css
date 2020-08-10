@@ -5,6 +5,7 @@
     max-width: 988px;
     margin: 0px auto;
     height: calc(100% - 20px);
+    overflow: auto;
 }
 
 .react-kanban-column {
@@ -66,9 +67,9 @@
 }
 
 .react-kanban-card {
-    margin: 2.5px 5px;
+    margin: 5px;
     color: #696969;
-    padding: 5px;
+    padding: 15px;
     flex-direction: column;
     border-radius: 5px;
     box-shadow: 1px 1px 4px #9e9e9e;

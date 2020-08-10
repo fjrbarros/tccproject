@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useStyles } from './Style';
+import './Style.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
-
-
-import Teste from '../../components/draganddrop/Index';
+import Board, { moveCard } from '@lourenci/react-kanban';
 
 function Dashboard(props) {
-    const classes = useStyles();
     const propsLocation = props.history.location;
     const Project = propsLocation.state ? propsLocation.state.Project : null;
     const propRefresh = propsLocation.state ? propsLocation.state.Refresh : false;
     const [isLoading, setIsLoading] = useState(false);
-    const [activities, setActivities] = useState({
-        to_do: [],
-        doing: [],
-        done: []
+    const [columns, setColumns] = useState({
+        columns: [{
+            id: 'column-1',
+            title: 'to do',
+            cards: []
+        }, {
+            id: 'column-2',
+            title: 'doing',
+            cards: []
+        }, {
+            id: 'column-3',
+            title: 'done',
+            cards: []
+        }]
     });
     const [dialog, setDialog] = useState({
         open: false,
@@ -37,31 +44,52 @@ function Dashboard(props) {
         setIsLoading(true);
         propsLocation.state.Refresh = false;
 
-        setActivities({
-            ...activities,
-            to_do: [],
-            doing: [],
-            done: []
-        });
-
         Api.get(`/projeto/${Project.id}/atividades`)
             .then(resp => {
-                if (!resp.data.length) {
-                    setIsLoading(false);
-                    return;
-                }
-                setActivities({
-                    ...activities,
-                    to_do: resp.data.filter(item => item.estagio === 'TO_DO'),
-                    doing: resp.data.filter(item => item.estagio === 'DOING'),
-                    done: resp.data.filter(item => item.estagio === 'DONE')
-                });
-                setIsLoading(false);
+                setDataActivities(resp.data);
             })
             .catch(error => {
                 setIsLoading(false);
                 openDialog('alert', error.response.data.message);
             });
+    }
+
+    function setDataActivities(dados) {
+        const todo = [];
+        const doing = [];
+        const done = [];
+
+        dados.map(item => {
+            switch (item.estagio) {
+                case 'TO_DO':
+                    todo.push({ id: item.id, description: item.descricao });
+                    break;
+                case 'DOING':
+                    doing.push({ id: item.id, description: item.descricao });
+                    break;
+                case 'DONE':
+                    done.push({ id: item.id, description: item.descricao });
+                    break;
+            }
+        });
+
+        setColumns({
+            columns: [{
+                id: 'column-1',
+                title: 'to do',
+                cards: todo
+            }, {
+                id: 'column-2',
+                title: 'doing',
+                cards: doing
+            }, {
+                id: 'column-3',
+                title: 'done',
+                cards: done
+            }]
+        });
+
+        setIsLoading(false);
     }
 
     function openDialog(type, message) {
@@ -84,73 +112,18 @@ function Dashboard(props) {
         });
     }
 
+    function handleCardMove(_card, source, destination) {
+        const updatedBoard = moveCard(columns, source, destination);
+        setColumns(updatedBoard);
+    }
+
     return (
         <React.Fragment>
             <Body>
-                {/* <Box className={classes.content}> */}
-                    <Teste />
-                    {/*     <Container
-                        title='To do'
-                        containerId='cont1'
-                        headerContainerBackgroun='#00aacc'
-                        border='1.2px solid #00d4ff'
-                    >
-                        {
-                            activities.to_do.map(activity => {
-                                return (
-                                    <Card
-                                        key={activity.id}
-                                        draggable='true'
-                                        cardId={activity.id}
-                                    >
-                                        <h3 style={{ margin: '0' }}>{activity.descricao}</h3>
-                                    </Card>
-                                )
-                            })
-                        }
-                    </Container>
-                    <Container
-                        title='Doing'
-                        margin='0 10px'
-                        containerId='cont2'
-                        headerContainerBackgroun='#efc100'
-                        border='1.2px solid #fbcb00'
-                    >
-                        {
-                            activities.doing.map(activity => {
-                                return (
-                                    <Card
-                                        key={activity.id}
-                                        draggable='true'
-                                        cardId={activity.id}
-                                    >
-                                        <h3 style={{ margin: '0' }}>{activity.descricao}</h3>
-                                    </Card>
-                                )
-                            })
-                        }
-                    </Container>
-                    <Container
-                        title='Done'
-                        containerId='cont3'
-                        headerContainerBackgroun='#00bb00'
-                        border='1.2px solid #00bb00'
-                    >
-                        {
-                            activities.done.map(activity => {
-                                return (
-                                    <Card
-                                        key={activity.id}
-                                        draggable='true'
-                                        cardId={activity.id}
-                                    >
-                                        <h3 style={{ margin: '0' }}>{activity.descricao}</h3>
-                                    </Card>
-                                )
-                            })
-                        }
-                    </Container>*/}
-                {/* </Box> */}
+                {/* {columns.columns && <BoardDragAndDrop columns={columns} />} */}
+                <Board onCardDragEnd={handleCardMove} disableColumnDrag>
+                    {columns}
+                </Board>
             </Body>
             <Dialog
                 type={dialog.type}
