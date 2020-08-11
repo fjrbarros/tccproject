@@ -120,7 +120,6 @@ function Dashboard(props) {
     return (
         <React.Fragment>
             <Body>
-                {/* {columns.columns && <BoardDragAndDrop columns={columns} />} */}
                 <Board onCardDragEnd={handleCardMove} disableColumnDrag>
                     {columns}
                 </Board>
