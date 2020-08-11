@@ -106,7 +106,7 @@ function ComponentRegisterProject(props) {
 
         Api.get(url)
             .then(resp => {
-                if (resp.data.length > 0) setDisabledBaseModel(false);
+                setDisabledBaseModel(!resp.data.length > 0);
                 setDataModelBase(resp.data);
             }).catch(error => {
                 openDialog('alert', error.response.data.message);
