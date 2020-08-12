@@ -142,6 +142,7 @@ function Dashboard(props) {
     }
 
     function updateCard(_card, source, destination) {
+        _card.state = destination.toColumnId;
         const updatedBoard = moveCard(columns, source, destination);
         setColumns(updatedBoard);
     }
