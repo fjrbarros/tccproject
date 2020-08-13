@@ -53,7 +53,7 @@ function Routes() {
     function showTopBar() {
         const pathname = window.location.pathname;
 
-        if (pathname === '/login') {
+        if (pathname === '/login' || pathname === '/register-user') {
             return false;
         }
 
