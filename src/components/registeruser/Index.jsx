@@ -14,9 +14,8 @@ import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 
 function ComponentRegisterUser(props) {
-    const history = props.history;
     const classes = useStyles(props);
-    const [submited, setSubmited] = useState(false);
+    const isNewUser = props.isNewUser;
     const _id = useSelector(state => state.id);
     const _name = useSelector(state => state.name);
     const _email = useSelector(state => state.email);
@@ -45,35 +44,19 @@ function ComponentRegisterUser(props) {
 
     function handleChange(event) {
         setValues({ ...values, [event.target.name]: event.target.value });
-
-        validateFormCadastro();
-    }
-
-    function handleBlur() {
-        validateFormCadastro();
     }
 
     useEffect(() => {
-        loadUserData();
-    }, []);
-
-    function loadUserData() {
-        const registerUser = window.location.pathname === '/register-user';
-        if (registerUser || (history && !history.location.state.isEdit)) {
-            return
-        };
-
         setValues({
             ...values,
             name: _name,
             email: _email,
             phone: _phone
         });
-    }
+    }, []);
 
     function handleSubmit(event) {
         event.preventDefault();
-        setSubmited(true);
         validateFormCadastro();
     }
 
@@ -81,14 +64,13 @@ function ComponentRegisterUser(props) {
         const errors = {};
         validateForm(values, (campo, msg) => errors[campo] = msg);
         setError(errors);
-        if (Object.keys(errors).length === 0 && submited) {
-            if (history && history.location.state.isEdit) {
-                updateUser();
-            } else {
+        if (Object.keys(errors).length === 0) {
+            if (isNewUser) {
                 registerNewUser();
+            } else {
+                updateUser();
             }
         }
-        setSubmited(false);
     }
 
     function updateUser() {
@@ -202,7 +184,6 @@ function ComponentRegisterUser(props) {
                     helperText={error.name}
                     value={values.name}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                 />
                 <PhoneField
                     label='Fone'
@@ -214,7 +195,6 @@ function ComponentRegisterUser(props) {
                     helperText={error.phone}
                     value={values.phone}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                 />
                 <TextField
                     label='E-mail'
@@ -225,7 +205,6 @@ function ComponentRegisterUser(props) {
                     error={!!error.email}
                     helperText={error.email}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                 />
                 <PasswordField
                     label='Senha'
@@ -236,7 +215,6 @@ function ComponentRegisterUser(props) {
                     error={!!error.password}
                     helperText={error.password}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                 />
                 <PasswordField
                     label='Confirmação senha'
@@ -247,7 +225,6 @@ function ComponentRegisterUser(props) {
                     error={!!error.confPassword}
                     helperText={error.confPassword}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                 />
                 <Button
                     className={classes.saveButton}

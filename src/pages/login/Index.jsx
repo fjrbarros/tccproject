@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { validateForm } from '../../util/validate/Index';
 import { encryptData } from '../../util/authentication/Index';
-import { useHistory } from 'react-router-dom';
 import { IconButton, InputAdornment, TextField, Box } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import Api from '../../util/api/Index';
@@ -16,7 +15,6 @@ import Loading from '../../components/loading/Index';
 function PageLogin() {
     const dispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false);
-    let history = useHistory();
     const [openDialog, setOpenDialog] = useState(false);
     const [textDialog, setTextDialog] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -68,7 +66,6 @@ function PageLogin() {
         Api.post(url, data)
             .then(resp => {
                 updateUserDataReducer(resp.data);
-                // history.push('/dashboard');
                 encryptData(data);
                 window.location.pathname = '/dashboard';
                 setIsloading(false);
