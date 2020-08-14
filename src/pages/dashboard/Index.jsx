@@ -7,7 +7,7 @@ import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import { Box, Tooltip } from '@material-ui/core';
-import ComponentCard from '../../components/card/Index';
+import Card from '../../components/card/Index';
 import Dialog from '../../core/dialog/Index';
 import ModalFilter from '../../components/filter/Index';
 import CloseProject from '../../components/closeproject/Index';
@@ -228,7 +228,14 @@ function Dashboard() {
         <React.Fragment>
             <Body>
                 <Box className={classes.dashboard}>
-                    {
+                    <Card />
+                    <Card />
+                    <Card />
+
+
+
+
+                    {/* {
                         showIconFilter &&
                         <Box className={classes.containerFilter}>
                             <Box className={classes.flex} />
@@ -254,7 +261,7 @@ function Dashboard() {
                                 />
                             )
                         })
-                    }
+                    } */}
                 </Box>
             </Body>
             {

@@ -18,22 +18,37 @@ export const useStyles = makeStyles(length => ({
     },
 
     dashboard: {
-        maxWidth: function (length) {
-            switch (length) {
-                case 1:
-                    return '222px';
-                case 2:
-                    return '444px';
-                default:
-                    return '666px';
-            }
-        },
-        margin: '0px auto',
+        height: '100%',
+        maxHeight: 'calc(100% - 20px)',
+        maxWidth: '690px',
+        marginTop: '10px',
+        borderRadius: '10px',
         display: 'flex',
         flexWrap: 'wrap',
-        padding: '20px',
-        '@media (max-width: 280px)': {
-            width: '100%'
-        }
+        boxShadow: '0px 0px 5px grey',
+        margin: 'auto',
+        padding: '2px',
+        alignContent: 'flex-start',
+        backgroundColor: '#dad8d8'
     }
+
+    // dashboard: {
+    //     maxWidth: function (length) {
+    //         switch (length) {
+    //             case 1:
+    //                 return '222px';
+    //             case 2:
+    //                 return '444px';
+    //             default:
+    //                 return '666px';
+    //         }
+    //     },
+    //     margin: '0px auto',
+    //     display: 'flex',
+    //     flexWrap: 'wrap',
+    //     padding: '20px',
+    //     '@media (max-width: 280px)': {
+    //         width: '100%'
+    //     }
+// }
 }))

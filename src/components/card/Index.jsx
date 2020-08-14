@@ -14,24 +14,39 @@ function ComponentCard(props) {
 
     const [hiddenCardEdit, setHiddenCardEdit] = useState(true);
 
-    const { project } = props;
+    // const { project } = props;
 
-    const objStyle = { 
-        percentual: project.percentualConclusao, 
-        hiddenCardEdit: hiddenCardEdit,         
-        concluded: project.status === 'CONCLUIDO' ? true : false
-    };
+    // const objStyle = { 
+    //     percentual: project.percentualConclusao, 
+    //     hiddenCardEdit: hiddenCardEdit,         
+    //     concluded: project.status === 'CONCLUIDO' ? true : false
+    // };
 
-    const classes = useStyles(objStyle);
+    // const classes = useStyles(objStyle);
+    const classes = useStyles();
 
-    function showMoreOptions() {
-        return project.userAdmin && project.status !== 'CONCLUIDO';
-    }
+    // function showMoreOptions() {
+    //     return project.userAdmin && project.status !== 'CONCLUIDO';
+    // }
 
     return (
         <React.Fragment>
-            <Box className={classes.root}>
-                <Box className={classes.rootEdit}>
+            <Box className={classes.card}>
+
+                <Box className={classes.cardInfo}>
+                    <Box>outras coisas</Box>
+                </Box>
+                <Box className={classes.cardDescription}>
+                    <Box className={classes.headerCard}>dsafsafsafsa</Box>
+                    <Box className={classes.bodyCard}>dsafsafsafsa</Box>
+                    <Box className={classes.bottomCard}>dsafsafsafsa</Box>
+                </Box>
+
+
+
+
+
+                {/* <Box className={classes.rootEdit}>
                     <Typography 
                         className={classes.typCardMoreOpt} 
                         onClick={props.onClickEdit}
@@ -99,7 +114,7 @@ function ComponentCard(props) {
                     >
                         {props.textButton}
                     </Button>
-                </Box>
+                </Box> */}
             </Box>
         </React.Fragment>
     );
