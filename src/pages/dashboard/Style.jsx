@@ -20,7 +20,8 @@ export const useStyles = makeStyles(length => ({
     dashboard: {
         height: '100%',
         maxHeight: 'calc(100% - 20px)',
-        maxWidth: '690px',
+        overflow: 'auto',
+        maxWidth: '770px',
         marginTop: '10px',
         borderRadius: '10px',
         display: 'flex',
@@ -50,5 +51,5 @@ export const useStyles = makeStyles(length => ({
     //     '@media (max-width: 280px)': {
     //         width: '100%'
     //     }
-// }
+    // }
 }))

@@ -1,30 +1,38 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(props => ({
+export const useStyles = makeStyles(hiddenCardEdit => ({
 
     card: {
-        width: '220px',
-        backgroundColor: '#ffffff',
-        margin: '5px',
+        minWidth: '246px',
+        backgroundColor: '#f0f0f0',
+        height: '150px',
+        margin: '5px auto',
         borderRadius: '5px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)',
         transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
         '&:hover': {
             boxShadow: '0 10px 20px rgba(0, 0, 0, 0.19), 0 5px 5px rgba(0, 0, 0, 0.23)'
+        },
+        '@media (max-width: 771px)': {
+            width: '48.8%'
         }
     },
 
     cardInfo: {
-        display: 'none',
-        width: '100%',
+        // display: hiddenCardEdit => hiddenCardEdit ? 'none' : 'block',
+        // opacity: hiddenCardEdit => hiddenCardEdit ? 0 : 1,
+        width: hiddenCardEdit => hiddenCardEdit ? '0%' : '100%',
+        transition: 'width 0.4s',
+        // transition: 'opacity 1s ease-out',
+        // width: '100%',
         height: '100%',
         backgroundColor: 'tomato',
         position: 'relative',
-        borderRadius: '5px',
+        borderRadius: '5px'
     },
 
     cardDescription: {
-        display: 'block'
+        display: hiddenCardEdit => hiddenCardEdit ? 'block' : 'none'
     },
 
     headerCard: {

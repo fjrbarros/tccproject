@@ -23,7 +23,7 @@ function ComponentCard(props) {
     // };
 
     // const classes = useStyles(objStyle);
-    const classes = useStyles();
+    const classes = useStyles(hiddenCardEdit);
 
     // function showMoreOptions() {
     //     return project.userAdmin && project.status !== 'CONCLUIDO';
@@ -35,11 +35,13 @@ function ComponentCard(props) {
 
                 <Box className={classes.cardInfo}>
                     <Box>outras coisas</Box>
+                    <Button onClick={() => setHiddenCardEdit(!hiddenCardEdit)}>teste</Button>
                 </Box>
                 <Box className={classes.cardDescription}>
                     <Box className={classes.headerCard}>dsafsafsafsa</Box>
                     <Box className={classes.bodyCard}>dsafsafsafsa</Box>
                     <Box className={classes.bottomCard}>dsafsafsafsa</Box>
+                    <Button onClick={() => setHiddenCardEdit(!hiddenCardEdit)}>teste</Button>
                 </Box>
 
 
