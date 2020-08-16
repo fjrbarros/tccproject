@@ -228,12 +228,21 @@ function Dashboard() {
         <React.Fragment>
             <Body>
                 <Box className={classes.dashboard}>
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
+                {
+                    dataProject.map(function (project) {
+                        return (
+                            <Card
+                                key={project.id}
+                                project={project}
+                                onClickRemove={() => handleRemoveProject(project)}
+                                onClickClose={() => handleCloseProject(project)}
+                                onClickEdit={() => handleEditProject(project)}
+                                onClick={() => handleOpenProject(project)}
+                                textButton='Abrir'
+                            />
+                        )
+                    })
+                }
 
 
 

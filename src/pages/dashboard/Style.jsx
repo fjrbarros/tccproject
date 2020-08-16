@@ -23,14 +23,14 @@ export const useStyles = makeStyles(length => ({
         overflow: 'auto',
         maxWidth: '770px',
         marginTop: '10px',
-        borderRadius: '10px',
+        // borderRadius: '10px',
         display: 'flex',
         flexWrap: 'wrap',
-        boxShadow: '0px 0px 5px grey',
+        // boxShadow: '0px 0px 5px grey',
         margin: 'auto',
         padding: '2px',
         alignContent: 'flex-start',
-        backgroundColor: '#dad8d8'
+        // backgroundColor: '#ffffff'
     }
 
     // dashboard: {

@@ -1,13 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(hiddenCardEdit => ({
+export const useStyles = makeStyles(props => ({
 
     card: {
         minWidth: '246px',
         backgroundColor: '#f0f0f0',
+        color: '#ffffff',
         height: '150px',
-        margin: '5px auto',
-        borderRadius: '5px',
+        margin: '3px auto',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)',
         transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
         '&:hover': {
@@ -15,40 +15,69 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
         },
         '@media (max-width: 771px)': {
             width: '48.8%'
+        },
+        '@media (max-width: 500px)': {
+            width: '100%'
         }
     },
 
-    cardInfo: {
-        // display: hiddenCardEdit => hiddenCardEdit ? 'none' : 'block',
-        // opacity: hiddenCardEdit => hiddenCardEdit ? 0 : 1,
-        width: hiddenCardEdit => hiddenCardEdit ? '0%' : '100%',
-        transition: 'width 0.4s',
-        // transition: 'opacity 1s ease-out',
-        // width: '100%',
-        height: '100%',
-        backgroundColor: 'tomato',
-        position: 'relative',
+    cardProject: {
+        width: props => props.hiddenCard ? '100%' : '0%',
+        height: props => props.hiddenCard ? '100%' : '0%',
+        backgroundColor: '#8e8e8e',
+        overflow: 'hidden',
+        transition: 'width 0.3s',
+    },
+    
+    cardProjectOptions: {
+        width: props => props.hiddenCard ? '0%' : '100%',
+        height: props => props.hiddenCard ? '0%' : '100%',
+        backgroundColor: '#cfcfcf',
+        overflow: 'hidden',
+        transition: 'width 0.3s',
+    },
+
+    borderRadius: {
         borderRadius: '5px'
     },
 
-    cardDescription: {
-        display: hiddenCardEdit => hiddenCardEdit ? 'block' : 'none'
+    cardProjectHeader: {
+        borderBottom: '1px solid #cfcfcf',
+        padding: '5px',
+        display: 'flex',
+        alignItems: 'center',
+        '& p': {
+            marginLeft: '5px',
+            whiteSpace: 'nowrap',
+            textOverflow: 'Ellipsis',
+            maxWidth: '212px',
+            overflow: 'hidden'
+        }
     },
 
-    headerCard: {
+    cardProjectCenter: {
+        padding: '10px 5px',
         borderBottom: '1px solid #cfcfcf',
-        padding: '5px'
+        '& p': {
+            whiteSpace: 'nowrap',
+            textOverflow: 'Ellipsis',
+            maxWidth: '236px',
+            overflow: 'hidden'
+        }
     },
 
-    bodyCard: {
-        borderBottom: '1px solid #cfcfcf',
-        padding: '5px'
-    },
-
-    bottomCard: {
-        borderBottom: '1px solid #cfcfcf',
-        padding: '5px'
+    cardProjectBottom: {
+        padding: '5px',
+        '& div': {
+            float: 'left'
+        },
+        '& button': {
+            float: 'right',
+            color: '#ffffff',
+            textTransform: 'none'
+        }
     }
+  
 
 
 
@@ -183,8 +212,8 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
 
     // typCardMoreOpt: {
     //     height: '25px',
-    //     width: props => props.hiddenCardEdit ? '0px' : '100%',
-    //     display: props => props.hiddenCardEdit ? 'none' : 'flex',
+    //     width: props => props.hiddenCard ? '0px' : '100%',
+    //     display: props => props.hiddenCard ? 'none' : 'flex',
     //     fontSize: '0.85rem',
     //     alignItems: 'center',
     //     justifyContent: 'center',
@@ -198,7 +227,7 @@ export const useStyles = makeStyles(hiddenCardEdit => ({
 
     // rootEdit: {
     //     height: '132px',
-    //     width: props => props.hiddenCardEdit ? '0px' : '212px',
+    //     width: props => props.hiddenCard ? '0px' : '212px',
     //     textAlign: 'center',
     //     margin: '-1px 0px 0px -1px',
     //     backgroundImage: 'linear-gradient(135deg, #2f9aee, #5a4fa9)',

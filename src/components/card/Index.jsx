@@ -12,18 +12,21 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 function ComponentCard(props) {
 
-    const [hiddenCardEdit, setHiddenCardEdit] = useState(true);
+    const [hiddenCard, setHiddenCard] = useState(true);
 
-    // const { project } = props;
+    const { project } = props;
 
     // const objStyle = { 
     //     percentual: project.percentualConclusao, 
-    //     hiddenCardEdit: hiddenCardEdit,         
+    //     hiddenCard: hiddenCard,         
     //     concluded: project.status === 'CONCLUIDO' ? true : false
     // };
 
     // const classes = useStyles(objStyle);
-    const classes = useStyles(hiddenCardEdit);
+    const obj = {
+        hiddenCard: hiddenCard
+    };
+    const classes = useStyles(obj);
 
     // function showMoreOptions() {
     //     return project.userAdmin && project.status !== 'CONCLUIDO';
@@ -31,17 +34,32 @@ function ComponentCard(props) {
 
     return (
         <React.Fragment>
-            <Box className={classes.card}>
+            <Box className={`${classes.card} ${classes.borderRadius}`}>
 
-                <Box className={classes.cardInfo}>
-                    <Box>outras coisas</Box>
-                    <Button onClick={() => setHiddenCardEdit(!hiddenCardEdit)}>teste</Button>
+                <Box className={`${classes.cardProject} ${classes.borderRadius}`}>
+                    <Box className={classes.cardProjectHeader}>
+                        <StorageIcon/>
+                        <Typography>{project.tipoProjeto}</Typography>
+                    </Box>
+                    <Box className={classes.cardProjectCenter}>
+                        <Typography>{project.descricao}</Typography>
+                        <Typography>Status: {project.status}</Typography>
+                    </Box>
+                    <Box className={classes.cardProjectBottom}>
+                        <Box>
+                            asdfsafsa
+                        </Box>
+                        <Button 
+                            size='small'
+                            onClick={() => setHiddenCard(!hiddenCard)}>
+                            Abrir
+                            </Button>
+                    </Box>
                 </Box>
-                <Box className={classes.cardDescription}>
-                    <Box className={classes.headerCard}>dsafsafsafsa</Box>
-                    <Box className={classes.bodyCard}>dsafsafsafsa</Box>
-                    <Box className={classes.bottomCard}>dsafsafsafsa</Box>
-                    <Button onClick={() => setHiddenCardEdit(!hiddenCardEdit)}>teste</Button>
+
+                <Box className={`${classes.cardProjectOptions} ${classes.borderRadius}`}>
+                    <h1>Verde</h1>
+                    <Button onClick={() => setHiddenCard(!hiddenCard)}>Verde</Button>
                 </Box>
 
 
@@ -72,7 +90,7 @@ function ComponentCard(props) {
                     </Typography>
                     <Typography
                         className={classes.typCardMoreOpt}
-                        onClick={() => setHiddenCardEdit(true)}
+                        onClick={() => setHiddenCard(true)}
                     >
                         <KeyboardBackspaceIcon className={classes.iconCardMoreOption} /> 
                         Voltar
@@ -104,7 +122,7 @@ function ComponentCard(props) {
                         <Tooltip title='Mais opções' placement='right'>
                             <MoreVertIcon
                                 className={classes.cardMore}
-                                onClick={() => setHiddenCardEdit(false)}
+                                onClick={() => setHiddenCard(false)}
                             />
                         </Tooltip>
                     }
