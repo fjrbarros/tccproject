@@ -6,8 +6,8 @@ export const useStyles = makeStyles(props => ({
         minWidth: '246px',
         backgroundColor: '#f0f0f0',
         color: '#ffffff',
-        height: '150px',
-        margin: '3px auto',
+        height: '164px',
+        margin: '5px auto',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)',
         transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
         '&:hover': {
@@ -24,17 +24,16 @@ export const useStyles = makeStyles(props => ({
     cardProject: {
         width: props => props.hiddenCard ? '100%' : '0%',
         height: props => props.hiddenCard ? '100%' : '0%',
-        backgroundColor: '#8e8e8e',
         overflow: 'hidden',
-        transition: 'width 0.3s',
+        transition: 'width 0.3s'
     },
     
     cardProjectOptions: {
         width: props => props.hiddenCard ? '0%' : '100%',
         height: props => props.hiddenCard ? '0%' : '100%',
-        backgroundColor: '#cfcfcf',
+        backgroundImage: 'linear-gradient(to right, rgb(0, 34, 109) -2%, rgb(8, 51, 187) 0%, rgb(0, 120, 171) 83%, rgb(0, 255, 247) 165%)',
         overflow: 'hidden',
-        transition: 'width 0.3s',
+        transition: 'width 0.3s'
     },
 
     borderRadius: {
@@ -43,7 +42,8 @@ export const useStyles = makeStyles(props => ({
 
     cardProjectHeader: {
         borderBottom: '1px solid #cfcfcf',
-        padding: '5px',
+        backgroundImage: 'linear-gradient(to right, rgb(0, 34, 109) -2%, rgb(8, 51, 187) 0%, rgb(0, 120, 171) 83%, rgb(0, 255, 247) 165%)',
+        padding: '10px 5px',
         display: 'flex',
         alignItems: 'center',
         '& p': {
@@ -57,6 +57,7 @@ export const useStyles = makeStyles(props => ({
 
     cardProjectCenter: {
         padding: '10px 5px',
+        color: '#565656',
         borderBottom: '1px solid #cfcfcf',
         '& p': {
             whiteSpace: 'nowrap',
@@ -67,15 +68,54 @@ export const useStyles = makeStyles(props => ({
     },
 
     cardProjectBottom: {
-        padding: '5px',
+        display: 'flex',
+        padding: '10px 5px',
+        alignItems: 'center',
+        borderBottomRightRadius: '5px',
+        borderBottomLeftRadius: '5px',
+        backgroundImage: 'linear-gradient(to right, rgb(0, 34, 109) -2%, rgb(8, 51, 187) 0%, rgb(0, 120, 171) 83%, rgb(0, 255, 247) 165%)',
         '& div': {
             float: 'left'
         },
         '& button': {
             float: 'right',
             color: '#ffffff',
-            textTransform: 'none'
+            textTransform: 'none',
+            '&:hover': {
+                backgroundColor: 'rgb(0,0,0,0.2)'
+            }
         }
+    },
+
+    cardMoreOption: {
+        margin: '5px 0px 0px 5px',
+        cursor: 'pointer',
+        borderRadius: '5px',
+        '&:hover': {
+            backgroundColor: 'rgb(0,0,0,0.2)'
+        }
+    },
+
+    flex: {
+        flex: 1
+    },
+
+    defaultOptionCard: {
+        display: 'flex',
+        padding: '5px',
+        margin: '8px 0px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        fontSize: '0.9rem',
+        '&:hover': {
+            backgroundColor: 'rgb(0,0,0,0.2)' 
+        }
+    },
+
+    iconCardMoreOption: {
+        fontSize: '1.2rem',
+        marginRight: '5px'
     }
   
 
@@ -194,15 +234,6 @@ export const useStyles = makeStyles(props => ({
 
     // cardBottomFlex: {
     //     flex: 1
-    // },
-
-    // cardMore: {
-    //     margin: '3px 0px 0px -10px',
-    //     cursor: 'pointer',
-    //     borderRadius: '5px',
-    //     '&:hover': {
-    //         backgroundColor: 'rgb(0,0,0,0.2)'
-    //     }
     // },
 
     // iconCardMoreOption: {

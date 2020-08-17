@@ -188,12 +188,7 @@ function TopBar(props) {
         {
           action.iconMyData &&
           <Tooltip title='Meus dados' placement='left'>
-            <Link to={{
-              pathname: action.iconMyData,
-              state: {
-                isEdit: true
-              }
-            }}
+            <Link to={action.iconMyData}
               onClick={handleToggleMenu}
             >
               <PersonIcon className={classes.allIconMenu} />

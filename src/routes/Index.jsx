@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Login from '../pages/login/Index';
 import PageRegisterUser from '../pages/registeruser/Index';
 import PageDashboard from '../pages/dashboard/Index';
+import PageSchedule from '../pages/schedule/Index';
 import TopBar from '../components/topbar/Index';
 import ComponentRegisterProject from '../components/registerproject/Index';
 import ComponentRegisterTemplate from '../components/registertemplate/Index';
@@ -72,6 +73,7 @@ function Routes() {
                     <PrivateRoute path='/register-template' Auth={isAuthenticated} component={ComponentRegisterTemplate} />
                     <PrivateRoute path='/my-data' Auth={isAuthenticated} component={ComponentRegisterUser} />
                     <PrivateRoute path='/project' Auth={isAuthenticated} component={PageProject} />
+                    <PrivateRoute path='/schedule' Auth={isAuthenticated} component={PageSchedule} />
                     <Route exact path='*' component={() => <Redirect to={{ pathname: '/login' }} />} />
                 </Switch>
             </BrowserRouter>

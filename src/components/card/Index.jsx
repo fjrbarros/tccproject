@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import StorageIcon from '@material-ui/icons/Storage';
@@ -9,6 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 function ComponentCard(props) {
 
@@ -28,9 +30,9 @@ function ComponentCard(props) {
     };
     const classes = useStyles(obj);
 
-    // function showMoreOptions() {
-    //     return project.userAdmin && project.status !== 'CONCLUIDO';
-    // }
+    function showMoreOptions() {
+        return project.userAdmin && project.status !== 'CONCLUIDO';
+    }
 
     return (
         <React.Fragment>
@@ -46,27 +48,75 @@ function ComponentCard(props) {
                         <Typography>Status: {project.status}</Typography>
                     </Box>
                     <Box className={classes.cardProjectBottom}>
-                        <Box>
-                            asdfsafsa
+                       <Box>
+                            {
+                                showMoreOptions() &&
+                                <Tooltip title='Mais opções' placement='right'>
+                                    <MoreVertIcon
+                                        className={classes.cardMoreOption}
+                                        onClick={() => setHiddenCard(!hiddenCard)}
+                                    />
+                                </Tooltip>
+                            }
+                            <Tooltip title='Cronograma' placement='right'>
+                                <Link 
+                                    to={{
+                                      pathname: '/schedule',
+                                      state: { Project: project }
+                                    }}
+                                    style={{color:'#ffffff'}}
+                                >
+                                    <TimelineIcon className={classes.cardMoreOption} />
+                                </Link>
+                            </Tooltip>
                         </Box>
+                        <Box className={classes.flex}/>
                         <Button 
                             size='small'
-                            onClick={() => setHiddenCard(!hiddenCard)}>
+                            onClick={props.onClick}
+                        >
                             Abrir
-                            </Button>
+                        </Button>
                     </Box>
                 </Box>
 
                 <Box className={`${classes.cardProjectOptions} ${classes.borderRadius}`}>
-                    <h1>Verde</h1>
-                    <Button onClick={() => setHiddenCard(!hiddenCard)}>Verde</Button>
+                   <Typography 
+                        className={classes.defaultOptionCard} 
+                        onClick={props.onClickEdit}
+                    >
+                        <EditIcon className={classes.iconCardMoreOption} />
+                        Editar projeto
+                    </Typography>
+
+                    <Typography
+                        className={classes.defaultOptionCard}
+                        onClick={props.onClickRemove}
+                    >
+                        <DeleteForeverIcon className={classes.iconCardMoreOption} />
+                        Excluir projeto
+                    </Typography>
+                    <Typography 
+                        className={classes.defaultOptionCard} 
+                        onClick={props.onClickClose}
+                    >
+                        <DoneAllIcon className={classes.iconCardMoreOption} /> 
+                        Encerrar projeto
+                    </Typography>
+                    <Typography
+                        className={classes.defaultOptionCard}
+                        onClick={() => setHiddenCard(!hiddenCard)}
+                    >
+                        <KeyboardBackspaceIcon className={classes.iconCardMoreOption} /> 
+                        Voltar
+                    </Typography>
                 </Box>
 
 
 
 
 
-                {/* <Box className={classes.rootEdit}>
+                {/*<Box className={classes.rootEdit}>
                     <Typography 
                         className={classes.typCardMoreOpt} 
                         onClick={props.onClickEdit}
@@ -134,7 +184,7 @@ function ComponentCard(props) {
                     >
                         {props.textButton}
                     </Button>
-                </Box> */}
+                </Box>*/}
             </Box>
         </React.Fragment>
     );
