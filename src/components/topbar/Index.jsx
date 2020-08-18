@@ -61,6 +61,8 @@ function TopBar(props) {
         return 'Meus dados';
       case '/project':
         return 'Projeto ' + location.state.Project.descricao;
+      case '/schedule':
+        return 'Cronograma';
       default:
         return msgFormatDay(userName);
     }
