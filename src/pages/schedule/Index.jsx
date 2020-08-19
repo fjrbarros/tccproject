@@ -42,12 +42,12 @@ function PageSchedule(props) {
 
 		resp.data.atividades.map(item => {
 			item.atividades.map(item => {
-				var splitStartDate = null; 
+				var splitStartDate = null;
 				var splitEndDate = null;
-				var startDate = null; 
+				var startDate = null;
 				var endDate = null;
 
-				if(item.dataInicio && item.dataTermino) {
+				if (item.dataInicio && item.dataTermino) {
 					splitStartDate = item.dataInicio.split('/');
 					splitEndDate = item.dataTermino.split('/');
 					startDate = new Date(`${splitStartDate[2]}/${splitStartDate[1]}/${splitStartDate[0]}`);
@@ -77,21 +77,21 @@ function PageSchedule(props) {
 
 	return (
 		<Body>
-		{ data.length && <Chart
-			width={'100%'}
-			height={'100%'}
-			chartType='Gantt'
-			loader={<Loading />}
-			data={data}
-			options={{
-				height: '100%',
-				gantt: {
-					trackHeight: 30,
-				},
-			}}
-			rootProps={{ 'data-testid': '2' }}
-		/>}
-		{isLoading && <Loading />}
+			<Chart
+				width={'100%'}
+				height={'100%'}
+				chartType='Gantt'
+				loader={<Loading />}
+				data={data}
+				options={{
+					height: '100%',
+					gantt: {
+						trackHeight: 30,
+					},
+				}}
+				rootProps={{ 'data-testid': '2' }}
+			/>
+			{isLoading && <Loading />}
 		</Body>
 	);
 }

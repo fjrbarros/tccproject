@@ -11,7 +11,7 @@ export const useStyles = makeStyles(props => ({
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)',
         transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
         '&:hover': {
-            boxShadow: '0 10px 20px rgba(0, 0, 0, 0.19), 0 5px 5px rgba(0, 0, 0, 0.23)'
+            boxShadow: '1px 4px 10px #3c3c3c'
         },
         '@media (max-width: 771px)': {
             width: '48.8%'
@@ -27,7 +27,7 @@ export const useStyles = makeStyles(props => ({
         overflow: 'hidden',
         transition: 'width 0.3s'
     },
-    
+
     cardProjectOptions: {
         width: props => props.hiddenCard ? '0%' : '100%',
         height: props => props.hiddenCard ? '0%' : '100%',
@@ -109,7 +109,7 @@ export const useStyles = makeStyles(props => ({
         cursor: 'pointer',
         fontSize: '0.9rem',
         '&:hover': {
-            backgroundColor: 'rgb(0,0,0,0.2)' 
+            backgroundColor: 'rgb(0,0,0,0.2)'
         }
     },
 
@@ -117,7 +117,7 @@ export const useStyles = makeStyles(props => ({
         fontSize: '1.2rem',
         marginRight: '5px'
     }
-  
+
 
 
 

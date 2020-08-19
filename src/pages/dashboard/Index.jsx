@@ -40,7 +40,7 @@ function Dashboard() {
         id: null,
         description: ''
     });
-    
+
 
     function executeRequestDataEnum() {
         Api.get('/dados')
@@ -220,7 +220,7 @@ function Dashboard() {
             pathname: '/project',
             state: {
                 Project: project
-            } 
+            }
         });
     }
 
@@ -228,21 +228,33 @@ function Dashboard() {
         <React.Fragment>
             <Body>
                 <Box className={classes.dashboard}>
-                {
-                    dataProject.map(function (project) {
-                        return (
-                            <Card
-                                key={project.id}
-                                project={project}
-                                onClickRemove={() => handleRemoveProject(project)}
-                                onClickClose={() => handleCloseProject(project)}
-                                onClickEdit={() => handleEditProject(project)}
-                                onClick={() => handleOpenProject(project)}
-                                textButton='Abrir'
-                            />
-                        )
-                    })
-                }
+                    {
+                        showIconFilter &&
+                        <Box className={classes.containerFilter}>
+                            <Box className={classes.flex} />
+                            <Tooltip title='Filtrar por status' placement='left'>
+                                <FilterListIcon
+                                    onClick={() => setOpenModalFilter(true)}
+                                    className={classes.iconFilter}
+                                />
+                            </Tooltip>
+                        </Box>
+                    }
+                    {
+                        dataProject.map(function (project) {
+                            return (
+                                <Card
+                                    key={project.id}
+                                    project={project}
+                                    onClickRemove={() => handleRemoveProject(project)}
+                                    onClickClose={() => handleCloseProject(project)}
+                                    onClickEdit={() => handleEditProject(project)}
+                                    onClick={() => handleOpenProject(project)}
+                                    textButton='Abrir'
+                                />
+                            )
+                        })
+                    }
 
 
 

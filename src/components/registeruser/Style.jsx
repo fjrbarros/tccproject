@@ -1,14 +1,20 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(props => ({
-    cadastro: {
+    container: {
         width: '400px',
+        display: 'flex',
         margin: '0 auto',
-        padding: '5px',
-        textAlign: 'center',
+        justifyContent:  'center',
         '@media (max-width: 400px)': {
-            width: '97%'
+            width: '100%'
         }
+    },
+
+    form: {
+        textAlign: 'center',
+        marginTop: '10px',
+        width: '94%'
     },
 
     marginTopBottom: {

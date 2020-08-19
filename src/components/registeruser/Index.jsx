@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStyles } from './Style';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Box } from '@material-ui/core';
 import { validateForm } from '../../util/validate/Index';
 import { useSelector } from 'react-redux';
 import Toast from 'toasted-notes';
@@ -174,68 +174,70 @@ function ComponentRegisterUser(props) {
 
     return (
         <Body>
-            <form className={classes.cadastro} onSubmit={handleSubmit}>
-                <TextField
-                    label='Nome completo'
-                    name='name'
-                    fullWidth
-                    className={classes.marginTopBottom}
-                    error={!!error.name}
-                    helperText={error.name}
-                    value={values.name}
-                    onChange={handleChange}
-                />
-                <PhoneField
-                    label='Fone'
-                    name='phone'
-                    mask='(99) 99999-9999'
-                    fullWidth
-                    className={classes.marginBottom}
-                    error={!!error.phone}
-                    helperText={error.phone}
-                    value={values.phone}
-                    onChange={handleChange}
-                />
-                <TextField
-                    label='E-mail'
-                    fullWidth
-                    className={classes.marginBottom}
-                    name='email'
-                    value={values.email}
-                    error={!!error.email}
-                    helperText={error.email}
-                    onChange={handleChange}
-                />
-                <PasswordField
-                    label='Senha'
-                    fullWidth
-                    className={classes.marginBottom}
-                    name='password'
-                    value={values.password}
-                    error={!!error.password}
-                    helperText={error.password}
-                    onChange={handleChange}
-                />
-                <PasswordField
-                    label='Confirmação senha'
-                    fullWidth
-                    className={classes.marginBottom}
-                    name='confPassword'
-                    value={values.confPassword}
-                    error={!!error.confPassword}
-                    helperText={error.confPassword}
-                    onChange={handleChange}
-                />
-                <Button
-                    className={classes.saveButton}
-                    variant='contained'
-                    color='primary'
-                    startIcon={<SaveIcon />}
-                    type='submit'
-                >
-                    Salvar
-            </Button>
-            </form>
+            <Box className={classes.container}>
+                <form className={classes.form} onSubmit={handleSubmit}>
+                    <TextField
+                        label='Nome completo'
+                        name='name'
+                        fullWidth
+                        className={classes.marginTopBottom}
+                        error={!!error.name}
+                        helperText={error.name}
+                        value={values.name}
+                        onChange={handleChange}
+                    />
+                    <PhoneField
+                        label='Fone'
+                        name='phone'
+                        mask='(99) 99999-9999'
+                        fullWidth
+                        className={classes.marginBottom}
+                        error={!!error.phone}
+                        helperText={error.phone}
+                        value={values.phone}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        label='E-mail'
+                        fullWidth
+                        className={classes.marginBottom}
+                        name='email'
+                        value={values.email}
+                        error={!!error.email}
+                        helperText={error.email}
+                        onChange={handleChange}
+                    />
+                    <PasswordField
+                        label='Senha'
+                        fullWidth
+                        className={classes.marginBottom}
+                        name='password'
+                        value={values.password}
+                        error={!!error.password}
+                        helperText={error.password}
+                        onChange={handleChange}
+                    />
+                    <PasswordField
+                        label='Confirmação senha'
+                        fullWidth
+                        className={classes.marginBottom}
+                        name='confPassword'
+                        value={values.confPassword}
+                        error={!!error.confPassword}
+                        helperText={error.confPassword}
+                        onChange={handleChange}
+                    />
+                    <Button
+                        className={classes.saveButton}
+                        variant='contained'
+                        color='primary'
+                        startIcon={<SaveIcon />}
+                        type='submit'
+                    >
+                        Salvar
+                    </Button>
+                </form>
+            </Box>
             <Dialog
                 type={dialog.type}
                 title={dialog.title}
