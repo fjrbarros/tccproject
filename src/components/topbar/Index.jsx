@@ -35,6 +35,10 @@ function TopBar(props) {
       id: null,
       isAuthenticated: false
     });
+    dispatch({
+      type: 'UPDATE_AUTHENTICATED',
+      isAuthenticated: false
+    });
     removeCookie();
   }
 
@@ -61,7 +65,7 @@ function TopBar(props) {
         return 'Meus dados';
       case '/project':
         return 'Projeto ' + location.state.Project.descricao;
-      case '/schedule':
+      case '/graphic':
         return 'Cronograma';
       default:
         return msgFormatDay(userName);

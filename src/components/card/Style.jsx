@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(props => ({
+export const useStyles = makeStyles(hiddenCard => ({
 
     card: {
         minWidth: '246px',
@@ -22,15 +22,15 @@ export const useStyles = makeStyles(props => ({
     },
 
     cardProject: {
-        width: props => props.hiddenCard ? '100%' : '0%',
-        height: props => props.hiddenCard ? '100%' : '0%',
+        width: hiddenCard => hiddenCard ? '100%' : '0%',
+        height: hiddenCard => hiddenCard ? '100%' : '0%',
         overflow: 'hidden',
         transition: 'width 0.3s'
     },
 
     cardProjectOptions: {
-        width: props => props.hiddenCard ? '0%' : '100%',
-        height: props => props.hiddenCard ? '0%' : '100%',
+        width: hiddenCard => hiddenCard ? '0%' : '100%',
+        height: hiddenCard => hiddenCard ? '0%' : '100%',
         backgroundImage: 'linear-gradient(to right, rgb(0, 34, 109) -2%, rgb(8, 51, 187) 0%, rgb(0, 120, 171) 83%, rgb(0, 255, 247) 165%)',
         overflow: 'hidden',
         transition: 'width 0.3s'

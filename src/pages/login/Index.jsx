@@ -89,6 +89,10 @@ function PageLogin() {
             isAuthenticated: true,
             isLoading: false
         });
+        dispatch({
+            type: 'UPDATE_AUTHENTICATED',
+            isAuthenticated: true
+        });
     }
 
     function handleChange(event) {

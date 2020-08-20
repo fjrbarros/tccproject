@@ -13,22 +13,9 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import TimelineIcon from '@material-ui/icons/Timeline';
 
 function ComponentCard(props) {
-
     const [hiddenCard, setHiddenCard] = useState(true);
-
     const { project } = props;
-
-    // const objStyle = { 
-    //     percentual: project.percentualConclusao, 
-    //     hiddenCard: hiddenCard,         
-    //     concluded: project.status === 'CONCLUIDO' ? true : false
-    // };
-
-    // const classes = useStyles(objStyle);
-    const obj = {
-        hiddenCard: hiddenCard
-    };
-    const classes = useStyles(obj);
+    const classes = useStyles(hiddenCard);
 
     function showMoreOptions() {
         return project.userAdmin && project.status !== 'CONCLUIDO';
@@ -61,7 +48,7 @@ function ComponentCard(props) {
                             <Tooltip title='Cronograma' placement='right'>
                                 <Link 
                                     to={{
-                                      pathname: '/schedule',
+                                      pathname: '/graphic',
                                       state: { Project: project }
                                     }}
                                     style={{color:'#ffffff'}}

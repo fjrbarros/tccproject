@@ -4,12 +4,18 @@ import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import Loading from '../../components/loading/Index';
 import Chart from 'react-google-charts';
+import Dialog from '../../core/dialog/Index';
 
-function PageSchedule(props) {
+function PageGraphic(props) {
 	const classes = useStyles();
 	const Project = props.location.state ? props.location.state.Project : null;
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState([]);
+	const [showGraphic, setShowGraphic] = useState(false);
+	const [openDialog, setOpenDialog] = useState({ 
+		message: '',
+		isAlert: false 
+	});
 
 	useEffect(() => {
 		getSchedule();
@@ -23,7 +29,12 @@ function PageSchedule(props) {
 			.then(resp => {
 				assembleGraphic(resp);
 			})
-			.catch(error => {
+			.catch(error => {				
+				setOpenDialog({ 
+					...openDialog,
+					message: error.response.data.message, 
+					isAlert: true
+				});
 				setIsLoading(false);
 			});
 	}
@@ -75,6 +86,25 @@ function PageSchedule(props) {
 		setIsLoading(false);
 	}
 
+	function getComponentDialog(type, message, fnClickYes) {
+        return (
+            <Dialog
+                type={type}
+                title={type === 'confirm' ? 'Confirmação' : 'Atenção'}
+                text={openDialog.message}
+                open={openDialog.isAlert}
+                optionOk={resetData}
+            />
+        );
+    }
+
+    function resetData() {
+        setOpenDialog({
+            message: '',
+            isAlert: false,
+        });
+    }
+
 	return (
 		<Body>
 			<Chart
@@ -92,8 +122,9 @@ function PageSchedule(props) {
 				rootProps={{ 'data-testid': '2' }}
 			/>
 			{isLoading && <Loading />}
+			{ openDialog.isAlert && getComponentDialog('alert') }
 		</Body>
 	);
 }
 
-export default PageSchedule;
+export default PageGraphic;

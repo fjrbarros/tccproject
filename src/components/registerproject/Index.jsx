@@ -25,6 +25,8 @@ function ComponentRegisterProject(props) {
     const history = useHistory();
     const classes = useStyles();
     const userId = useSelector(state => state.id);
+    const _projectMemberProfile = useSelector(state => state.projectMemberProfile);
+    const _typeProject = useSelector(state => state.typeProject);
     const [dataTypeProject, setDataTypeProject] = useState([]);
     const [disabledBaseModel, setDisabledBaseModel] = useState(true);
     const [dataModelBase, setDataModelBase] = useState(null);
@@ -54,8 +56,14 @@ function ComponentRegisterProject(props) {
     });
 
     useEffect(() => {
-        executeRequestGetDataTypeProject();
+        setDataEnum();
     }, []);
+
+    function setDataEnum() {
+        setTypeMember(_projectMemberProfile);
+        setDataTypeProject(_typeProject);
+        if (isEdit) getDataProjectEdit();
+    }
 
     function handleCloseDialog() {
         setDialog({
@@ -73,26 +81,11 @@ function ComponentRegisterProject(props) {
         history.push('/login');
     }
 
-    function getDataProjectEdit(dataTypeProject, typeMember) {
+    function getDataProjectEdit() {
         setIsLoading(true);
         Api.get(`/projeto/${Project.id}`)
             .then(resp => {
-                setDataEditProject(resp.data, dataTypeProject, typeMember);
-            })
-            .catch(error => {
-                setIsLoading(false);
-                openDialog('alert', error.response.data.message);
-            });
-    }
-
-    function executeRequestGetDataTypeProject() {
-        setIsLoading(true);
-        Api.get('/dados')
-            .then(resp => {
-                setDataTypeProject(resp.data[5].valores);
-                setTypeMember(resp.data[2].valores);
-                if (isEdit) getDataProjectEdit(resp.data[5].valores, resp.data[2].valores);
-                setIsLoading(false);
+                setDataEditProject(resp.data);
             })
             .catch(error => {
                 setIsLoading(false);
@@ -126,8 +119,8 @@ function ComponentRegisterProject(props) {
         setValueModelBase(newValue);
     }
 
-    function setDataEditProject(data, dataTypeProject, typeMember) {
-        const newTypeProject = dataTypeProject.filter(item => item.valor === data.tipoProjeto);
+    function setDataEditProject(data) {
+        const newTypeProject =  _typeProject.filter(item => item.valor === data.tipoProjeto);
         const dateInitProject = data.dataInicio.split('/');
         const dateEndProject = data.dataPrevistaTermino.split('/');
         const newDateInit = new Date(`${dateInitProject[2]}/${dateInitProject[1]}/${dateInitProject[0]}`);
@@ -146,7 +139,7 @@ function ComponentRegisterProject(props) {
 
         if (members.length) {
             for (var i = 0; i < members.length; i++) {
-                const typeMemberFilter = typeMember.filter(item => item.valor === members[i].perfilMembro);
+                const typeMemberFilter = _projectMemberProfile.filter(item => item.valor === members[i].perfilMembro);
                 arrayMembers.push({
                     id: members[i].id,
                     email: members[i].emailMembro,

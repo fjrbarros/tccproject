@@ -15,6 +15,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
+import InputAutoComplete from '../../core/input/autocomplete/Index';
 
 function ComponentRegisterTamplate() {
 
@@ -25,6 +26,7 @@ function ComponentRegisterTamplate() {
     const [valueDescription, setValueDescription] = useState('');
     const [activity, setActivity] = useState([]);
     const userId = useSelector(state => state.id);
+    const _typeProject = useSelector(state => state.typeProject);
     const [dialog, setDialog] = useState({
         open: false,
         message: '',
@@ -37,7 +39,7 @@ function ComponentRegisterTamplate() {
     });
 
     useEffect(() => {
-        getDataEnumTypeProject();
+        setEnumTypeProject(_typeProject);
     }, []);
 
     function handleChange(event) {
@@ -46,19 +48,6 @@ function ComponentRegisterTamplate() {
 
     function handleChageTypeProject(event, newValue) {
         setValueTypeProject(newValue);
-    }
-
-    function getDataEnumTypeProject() {
-        setIsLoading(true);
-        Api.get('/dados')
-            .then(resp => {
-                setEnumTypeProject(resp.data[5].valores);
-                setIsLoading(false);
-            })
-            .catch(error => {
-                setIsLoading(false);
-                openDialog('alert', error.response.data.message);
-            });
     }
 
     function openDialog(type, message) {
@@ -221,9 +210,9 @@ function ComponentRegisterTamplate() {
                         name='description'
                         label='Descrição'
                     />
-                    <Autocomplete
+                     <InputAutoComplete
                         className={classes.containerInput}
-                        renderInput={params => <TextField {...params} label="Tipo de projeto" />}
+                        label='Tipo de projeto'
                         name='typeProject'
                         error={!!error.typeProject}
                         helperText={error.typeProject}

@@ -15,10 +15,11 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import Loading from '../../components/loading/Index';
 
 function Dashboard() {
-
     const history = useHistory();
     const [responseError, setResponseError] = useState('');
     const userId = useSelector(state => state.id);
+    const _projectStatus = useSelector(state => state.projectStatus);
+    const _projectClosureReason = useSelector(state => state.projectClosureReason);
     const [defaultDataProject, setDefaultDataProject] = useState([]);
     const [dataProject, setDataProject] = useState([]);
     const [openModalFilter, setOpenModalFilter] = useState(false);
@@ -41,19 +42,16 @@ function Dashboard() {
         description: ''
     });
 
+    useEffect(() => {
+        setDataEnum();
+        executeRequestProject();
+    }, []);
 
-    function executeRequestDataEnum() {
-        Api.get('/dados')
-            .then(resp => {
-                const all = [{ valor: 'TODOS', descricao: 'Todos' }];
-                const allValuesFilter = all.concat(resp.data[4].valores);
-                setEnumFilter(allValuesFilter);
-                setEnumClose(resp.data[1].valores);
-            })
-            .catch(error => {
-                setResponseError(error.response.data.error);
-                setOpenDialog({ ...openDialog, isAlert: true });
-            });
+    function setDataEnum() {
+        const all = [{ valor: 'TODOS', descricao: 'Todos' }];
+        const allValuesFilter = all.concat(_projectStatus);
+        setEnumFilter(allValuesFilter);
+        setEnumClose(_projectClosureReason);
     }
 
     function executeRequestProject() {
@@ -74,11 +72,6 @@ function Dashboard() {
             setIsLoading(false);
         });
     }
-
-    useEffect(() => {
-        executeRequestDataEnum();
-        executeRequestProject();
-    }, []);
 
     function getComponentDialog(type, message, fnClickYes) {
         return (
@@ -255,37 +248,6 @@ function Dashboard() {
                             )
                         })
                     }
-
-
-
-
-                    {/* {
-                        showIconFilter &&
-                        <Box className={classes.containerFilter}>
-                            <Box className={classes.flex} />
-                            <Tooltip title='Filtrar por status' placement='left'>
-                                <FilterListIcon
-                                    onClick={() => setOpenModalFilter(true)}
-                                    className={classes.iconFilter}
-                                />
-                            </Tooltip>
-                        </Box>
-                    }
-                    {
-                        dataProject.map(function (project) {
-                            return (
-                                <ComponentCard
-                                    key={project.id}
-                                    project={project}
-                                    onClickRemove={() => handleRemoveProject(project)}
-                                    onClickClose={() => handleCloseProject(project)}
-                                    onClickEdit={() => handleEditProject(project)}
-                                    onClick={() => handleOpenProject(project)}
-                                    textButton='Abrir'
-                                />
-                            )
-                        })
-                    } */}
                 </Box>
             </Body>
             {

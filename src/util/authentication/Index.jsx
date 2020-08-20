@@ -58,7 +58,7 @@ export function validateLoggedUser(store) {
 
     if (!dataUser || !dataUser.email) {
         store.dispatch({
-            type: 'UPDATE_USER',
+            type: 'UPDATE_LOADING',
             isLoading: false
         });
         return;
@@ -80,15 +80,21 @@ export function validateLoggedUser(store) {
                 name: respData.nome || '',
                 phone: respData.foneContato || '',
                 email: respData.email || '',
-                id: respData.id || null,
-                isAuthenticated: true,
+                id: respData.id || null
+            });
+            store.dispatch({
+                type: 'UPDATE_AUTHENTICATED',
+                isAuthenticated: true
+            });
+             store.dispatch({
+                type: 'UPDATE_LOADING',
                 isLoading: false
             });
         })
         .catch(error => {
             console.log(error);
             store.dispatch({
-                type: 'UPDATE_USER',
+                type: 'UPDATE_LOADING',
                 isLoading: false
             });
         })
