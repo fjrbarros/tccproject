@@ -7,14 +7,15 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { Box, Tooltip } from '@material-ui/core';
-import ComponentCard from '../../components/card/Index';
+import { Box, Tooltip, Typography } from '@material-ui/core';
 import Dialog from '../../core/dialog/Index';
+import StorageIcon from '@material-ui/icons/Storage';
 
 function ComponentDrawer(props) {
     const classes = useStyles();
     const history = useHistory();
     const userId = useSelector(state => state.id);
+    const _projectStatus = useSelector(state => state.projectStatus);
     const [dataProject, setDataProject] = useState([]);
     const [dialog, setDialog] = useState({
         open: false,
@@ -69,6 +70,18 @@ function ComponentDrawer(props) {
         });
     }
 
+    function ListItemProject(project) {
+        return (
+            <Box className={classes.listItemProject}>
+                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <StorageIcon />
+                    <Typography>{project.descricao}</Typography>
+                </Box>
+                <Typography>{_projectStatus.filter(item => item.valor === project.status)[0].descricao}</Typography>
+            </Box>
+        );
+    }
+
     return (
         <Box>
             <SwipeableDrawer
@@ -95,16 +108,13 @@ function ComponentDrawer(props) {
                             project.userAdmin = false;
                             return (
                                 <List key={project.id} className={classes.listProject}>
-                                    <ListItem 
-                                        key={project.id} 
-                                        button 
+                                    <ListItem
+                                        key={project.id}
+                                        button
                                         onClick={() => handleOpenProject(project)}
                                         className={classes.listProject}
                                     >
-                                        <ComponentCard
-                                            key={project.id}
-                                            project={project}
-                                        />
+                                        {ListItemProject(project)}
                                     </ListItem>
                                 </List>
                             )
