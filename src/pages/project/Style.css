@@ -1,20 +1,21 @@
 .react-kanban-board {
     display: flex;
     justify-content: space-between;
-    padding: 10px 10px 0px 10px;
-    max-width: 988px;
+    padding: 15px 10px 0px 0px;
     margin: 0px auto;
-    height: calc(100% - 20px);
-    overflow: auto;
+}
+
+.react-kanban-board>div {
+    margin: 0px auto;
 }
 
 .react-kanban-column {
     width: 320px;
+    margin: 0px 10px;
     box-shadow: 0px 0px 7px 1px #b3b3b3;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border: none;
-    height: calc(100vh - 20px);
 }
 
 .react-kanban-column-header {
@@ -28,11 +29,6 @@
     border-top-right-radius: 7px;
     color: #ffffff;
     text-transform: uppercase;
-}
-
-.react-kanban-column>div:nth-child(2) {
-    max-height: calc(100vh - 150px)!important;
-    overflow-y: auto;
 }
 
 .react-kanban-column>div:nth-child(2) div * {

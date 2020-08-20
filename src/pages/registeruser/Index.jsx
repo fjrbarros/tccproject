@@ -16,14 +16,12 @@ function PageRegister() {
             <img src={Logo} alt='Logo empresa' className={classes.logo} />
           </Box>
           <Box className={classes.toolbarCenter}>
-            <Typography variant='h6' color='inherit' >
-              Cadastro de usuário
-            </Typography>
+            <Typography> Cadastro de usuário </Typography>
           </Box>
           <Box className={classes.flex} />
         </Toolbar>
       </AppBar>
-      <ComponentRegisterUser isNewUser={true}/>
+      <ComponentRegisterUser isNewUser={true} />
     </React.Fragment>
   );
 }

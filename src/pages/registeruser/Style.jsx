@@ -21,6 +21,12 @@ export const useStyles = makeStyles(({
 
     toolbarCenter: {
         flex: '2',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: '1.25rem',
+        '& p': {
+            '@media (max-width: 400px)': {
+                fontSize: '1.07rem'
+            }
+        }
     }
 }));

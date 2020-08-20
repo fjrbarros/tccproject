@@ -3,6 +3,7 @@ import { useStyles } from './Style';
 import { Button, TextField, Box } from '@material-ui/core';
 import { validateForm } from '../../util/validate/Index';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import Toast from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import Api from '../../util/api/Index';
@@ -15,6 +16,7 @@ import Loading from '../../components/loading/Index';
 
 function ComponentRegisterUser(props) {
     const classes = useStyles(props);
+    const location = useLocation();
     const isNewUser = props.isNewUser;
     const _id = useSelector(state => state.id);
     const _name = useSelector(state => state.name);
@@ -47,6 +49,7 @@ function ComponentRegisterUser(props) {
     }
 
     useEffect(() => {
+        if(location.pathname === '/register-user') return;
         setValues({
             ...values,
             name: _name,
@@ -95,29 +98,6 @@ function ComponentRegisterUser(props) {
             setIsLoading(false);
             openDialog('alert', error.response.data.message);
         });
-
-        // setIsLoading(true);
-        // Api.put(urlInfo, dataInfo)
-        //     .then(resp => {
-        //         setIsLoading(false);
-        //         resetData();
-        //         Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
-        //     })
-        //     .catch(error => {
-        //         setIsLoading(false);
-        //         openDialog('alert', error.response.data.message);
-        //     });
-
-        // Api.post(urlPassword, newPassword)
-        //     .then(resp => {
-        //         setIsLoading(false);
-        //         resetData();
-        //         Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
-        //     })
-        //     .catch(error => {
-        //         setIsLoading(false);
-        //         openDialog('alert', error.response.data.message);
-        //     });
     }
 
     function registerNewUser() {
