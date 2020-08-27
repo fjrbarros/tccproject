@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Typography, Box, AppBar, Tabs, Tab } from '@material-ui/core';
 import './Style.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 import Board, { moveCard } from '@lourenci/react-kanban';
+
+import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 function Dashboard(props) {
     const userId = useSelector(state => state.id);
@@ -147,12 +151,81 @@ function Dashboard(props) {
         setColumns(updatedBoard);
     }
 
+    function TabPanel(props) {
+      const { children, value, index, ...other } = props;
+
+      return (
+        <div
+            role='tabpanel'
+            hidden={value !== index}
+            id={`scrollable-auto-tabpanel-${index}`}
+            aria-labelledby={`scrollable-auto-tab-${index}`}
+            {...other}
+        >
+        {value === index && (
+            <Box p={3}>
+                <Typography>{children}</Typography>
+            </Box>
+            )}
+        </div>
+        );
+    }
+
+  TabPanel.propTypes = {
+      children: PropTypes.node,
+      index: PropTypes.any.isRequired,
+      value: PropTypes.any.isRequired,
+  };
+
+  function a11yProps(index) {
+      return {
+        id: `scrollable-auto-tab-${index}`,
+        'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    };
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
+const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
     return (
         <React.Fragment>
             <Body>
-                <Board onCardDragEnd={handleCardMove} disableColumnDrag>
-                    {columns}
-                </Board>
+                <div className={classes.root}>
+                  <AppBar position='static' color='default'>
+                    <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      indicatorColor='primary'
+                      textColor='primary'
+                      variant='scrollable'
+                      scrollButtons='auto'
+                      aria-label='scrollable auto tabs example'
+                    >
+                      <Tab label='Atividades' {...a11yProps(0)} />
+                      <Tab label='Cronograma' {...a11yProps(1)} />
+                    </Tabs>
+                  </AppBar>
+                  <TabPanel value={value} index={0}>
+                     <Board onCardDragEnd={handleCardMove} disableColumnDrag>
+                         {columns}
+                     </Board>
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    Item Two
+                  </TabPanel>
+                </div>
             </Body>
             <Dialog
                 type={dialog.type}
