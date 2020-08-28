@@ -1,7 +1,8 @@
+
 .react-kanban-board {
     display: flex;
     justify-content: space-between;
-    padding: 15px 10px 0px 0px;
+    padding: 5px;
     margin: 0px auto;
 }
 
@@ -16,6 +17,7 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border: none;
+    background-color: #ffffff;
 }
 
 .react-kanban-column-header {

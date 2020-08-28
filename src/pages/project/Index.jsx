@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Box, AppBar, Tabs, Tab } from '@material-ui/core';
 import './Style.css';
 import Api from '../../util/api/Index';
@@ -7,8 +8,6 @@ import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 import Board, { moveCard } from '@lourenci/react-kanban';
-
-import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 function Dashboard(props) {
@@ -183,17 +182,7 @@ function Dashboard(props) {
         'aria-controls': `scrollable-auto-tabpanel-${index}`,
     };
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
-
-const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -201,8 +190,8 @@ const classes = useStyles();
 
     return (
         <React.Fragment>
-            <Body>
-                <div className={classes.root}>
+        <Body>
+        <div>
                   <AppBar position='static' color='default'>
                     <Tabs
                       value={value}
@@ -226,7 +215,7 @@ const classes = useStyles();
                     Item Two
                   </TabPanel>
                 </div>
-            </Body>
+                </Body>
             <Dialog
                 type={dialog.type}
                 title={dialog.title}
