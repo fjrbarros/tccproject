@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -48,17 +47,6 @@ function ComponentCard(props) {
                                     />
                                 </Tooltip>
                             }
-                            <Tooltip title='Cronograma' placement='right'>
-                                <Link
-                                    to={{
-                                        pathname: '/graphic',
-                                        state: { Project: project }
-                                    }}
-                                    style={{ color: '#ffffff' }}
-                                >
-                                    <TimelineIcon className={classes.cardMoreOption} />
-                                </Link>
-                            </Tooltip>
                         </Box>
                         <Box className={classes.flex} />
                         <Button

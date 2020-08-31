@@ -73,7 +73,6 @@ function Routes() {
                     <PrivateRoute path='/register-template' Auth={isAuthenticated} component={ComponentRegisterTemplate} />
                     <PrivateRoute path='/my-data' Auth={isAuthenticated} component={ComponentRegisterUser} />
                     <PrivateRoute path='/project' Auth={isAuthenticated} component={PageProject} />
-                    <PrivateRoute path='/graphic' Auth={isAuthenticated} component={PageGraphic} />
                     <Route exact path='*' component={() => <Redirect to={{ pathname: '/login' }} />} />
                 </Switch>
             </BrowserRouter>

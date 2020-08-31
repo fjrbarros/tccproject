@@ -9,6 +9,7 @@ import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 import Board, { moveCard } from '@lourenci/react-kanban';
 import PropTypes from 'prop-types';
+import Chart from 'react-google-charts';
 
 function Dashboard(props) {
     const userId = useSelector(state => state.id);
@@ -16,6 +17,13 @@ function Dashboard(props) {
     const Project = propsLocation.state ? propsLocation.state.Project : null;
     const propRefresh = propsLocation.state ? propsLocation.state.Refresh : false;
     const [isLoading, setIsLoading] = useState(false);
+
+
+    const [data, setData] = useState([]);
+    const [showGraphic, setShowGraphic] = useState(false);
+
+
+
     const [columns, setColumns] = useState({
         columns: [{
             id: 'TODO',
@@ -40,6 +48,7 @@ function Dashboard(props) {
 
     useEffect(() => {
         getActivitiesProject();
+        getSchedule();
     }, []);
 
     if (propRefresh) getActivitiesProject();
@@ -57,6 +66,67 @@ function Dashboard(props) {
                 setIsLoading(false);
                 openDialog('alert', error.response.data.message);
             });
+    }
+
+    function getSchedule() {
+        if (!Project) return;
+
+        setIsLoading(true);
+        Api.get(`/projeto/${Project.id}/cronograma`)
+            .then(resp => {
+                assembleGraphic(resp);
+            })
+            .catch(error => {               
+                openDialog('alert', error.response.data.message);
+                setIsLoading(false);
+            });
+    }
+
+    function assembleGraphic(resp) {
+        const defaultData = [[
+            { type: 'string', label: 'Activitie ID' },
+            { type: 'string', label: 'Activitie Name' },
+            { type: 'string', label: 'Resource' },
+            { type: 'date', label: 'Start Date' },
+            { type: 'date', label: 'End Date' },
+            { type: 'number', label: 'Duration' },
+            { type: 'number', label: 'Percent Complete' },
+            { type: 'string', label: 'Dependencies' },
+        ]];
+
+        resp.data.atividades.map(item => {
+            item.atividades.map(item => {
+                var splitStartDate = null;
+                var splitEndDate = null;
+                var startDate = null;
+                var endDate = null;
+
+                if (item.dataInicio && item.dataTermino) {
+                    splitStartDate = item.dataInicio.split('/');
+                    splitEndDate = item.dataTermino.split('/');
+                    startDate = new Date(`${splitStartDate[2]}/${splitStartDate[1]}/${splitStartDate[0]}`);
+                    endDate = new Date(`${splitEndDate[2]}/${splitEndDate[1]}/${splitEndDate[0]}`);
+                } else {
+                    splitStartDate = item.dataPrevistaInicio.split('/');
+                    splitEndDate = item.dataPrevistaTermino.split('/');
+                    startDate = new Date(`${splitStartDate[2]}/${splitStartDate[1]}/${splitStartDate[0]}`);
+                    endDate = new Date(`${splitEndDate[2]}/${splitEndDate[1]}/${splitEndDate[0]}`);
+                }
+
+                defaultData.push([
+                    item.id,
+                    item.descricao,
+                    item.estagio,
+                    startDate,
+                    endDate,
+                    null,
+                    item.percentualConclusao,
+                    null,
+                ]);
+            });
+        });
+        setData(defaultData);
+        setIsLoading(false);
     }
 
     function setDataActivities(dados) {
@@ -107,12 +177,11 @@ function Dashboard(props) {
         });
     }
 
-    function handleCloseDialog() {
+    function resetData() {
         setDialog({
-            ...dialog,
+            open: false,
             message: '',
             type: '',
-            open: false,
             title: ''
         });
     }
@@ -188,10 +257,21 @@ function Dashboard(props) {
     setValue(newValue);
   };
 
+  function getComponentDialog(type, message, fnClickYes) {
+        return (
+            <Dialog
+                type={type}
+                title={type === 'confirm' ? 'Confirmação' : 'Atenção'}
+                text={openDialog.message}
+                open={openDialog.isAlert}
+                optionOk={resetData}
+            />
+        );
+    }
+
     return (
         <React.Fragment>
         <Body>
-        <div>
                   <AppBar position='static' color='default'>
                     <Tabs
                       value={value}
@@ -212,20 +292,24 @@ function Dashboard(props) {
                      </Board>
                   </TabPanel>
                   <TabPanel value={value} index={1}>
-                    Item Two
+                    <Chart
+                        width={'100%'}
+                        height={'100%'}
+                        chartType='Gantt'
+                        loader={<Loading />}
+                        data={data}
+                        options={{
+                            height: '100%',
+                            gantt: {
+                                trackHeight: 30,
+                            },
+                        }}
+                        rootProps={{ 'data-testid': '2' }}
+                    />
                   </TabPanel>
-                </div>
                 </Body>
-            <Dialog
-                type={dialog.type}
-                title={dialog.title}
-                text={dialog.message}
-                open={dialog.open}
-                optionOk={handleCloseDialog}
-                // optionYes={handleClickOptionYes}
-                optionNo={handleCloseDialog}
-            />
             {isLoading && <Loading />}
+            { openDialog.isAlert && getComponentDialog('alert') }
         </React.Fragment>
     );
 }
