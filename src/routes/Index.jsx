@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import Login from '../pages/login/Index';
 import PageRegisterUser from '../pages/registeruser/Index';
 import PageDashboard from '../pages/dashboard/Index';
-import PageGraphic from '../pages/graphic/Index';
 import TopBar from '../components/topbar/Index';
 import ComponentRegisterProject from '../components/registerproject/Index';
 import ComponentRegisterTemplate from '../components/registertemplate/Index';

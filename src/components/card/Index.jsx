@@ -10,7 +10,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import TimelineIcon from '@material-ui/icons/Timeline';
 
 function ComponentCard(props) {
     const [hiddenCard, setHiddenCard] = useState(true);

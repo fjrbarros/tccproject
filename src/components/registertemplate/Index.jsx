@@ -7,7 +7,6 @@ import 'toasted-notes/src/styles.css';
 import uniqid from 'uniqid';
 import Api from '../../util/api/Index';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import Autocomplete from '../../core/input/autocomplete/Index';
 import SaveButton from '../../core/buttons/savebutton/Index';
 import Body from '../../components/body/Index';
 import CloseIcon from '@material-ui/icons/Close';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Box, AppBar, Tabs, Tab } from '@material-ui/core';
+import { useStyles } from './Style';
+import { Box, AppBar, Tabs, Tab } from '@material-ui/core';
 import './Style.css';
 import Api from '../../util/api/Index';
 import Body from '../../components/body/Index';
@@ -12,18 +12,12 @@ import PropTypes from 'prop-types';
 import Chart from 'react-google-charts';
 
 function Dashboard(props) {
+    const classes = useStyles();
     const userId = useSelector(state => state.id);
     const propsLocation = props.history.location;
     const Project = propsLocation.state ? propsLocation.state.Project : null;
     const propRefresh = propsLocation.state ? propsLocation.state.Refresh : false;
     const [isLoading, setIsLoading] = useState(false);
-
-
-    const [data, setData] = useState([]);
-    const [showGraphic, setShowGraphic] = useState(false);
-
-
-
     const [columns, setColumns] = useState({
         columns: [{
             id: 'TODO',
@@ -48,7 +42,6 @@ function Dashboard(props) {
 
     useEffect(() => {
         getActivitiesProject();
-        getSchedule();
     }, []);
 
     if (propRefresh) getActivitiesProject();
@@ -68,85 +61,42 @@ function Dashboard(props) {
             });
     }
 
-    function getSchedule() {
-        if (!Project) return;
+    // function getSchedule() {
+    //     if (!Project) return;
 
-        setIsLoading(true);
-        Api.get(`/projeto/${Project.id}/cronograma`)
-            .then(resp => {
-                assembleGraphic(resp);
-            })
-            .catch(error => {               
-                openDialog('alert', error.response.data.message);
-                setIsLoading(false);
-            });
-    }
+    //     setIsLoading(true);
+    //     Api.get(`/projeto/${Project.id}/cronograma`)
+    //         .then(resp => {
+    //             assembleGraphic(resp);
+    //         })
+    //         .catch(error => {
+    //             setDialog('alert', error.response.data.message);
+    //             setIsLoading(false);
+    //         });
+    // }
 
-    function assembleGraphic(resp) {
-        const defaultData = [[
-            { type: 'string', label: 'Activitie ID' },
-            { type: 'string', label: 'Activitie Name' },
-            { type: 'string', label: 'Resource' },
-            { type: 'date', label: 'Start Date' },
-            { type: 'date', label: 'End Date' },
-            { type: 'number', label: 'Duration' },
-            { type: 'number', label: 'Percent Complete' },
-            { type: 'string', label: 'Dependencies' },
-        ]];
-
-        resp.data.atividades.map(item => {
-            item.atividades.map(item => {
-                var splitStartDate = null;
-                var splitEndDate = null;
-                var startDate = null;
-                var endDate = null;
-
-                if (item.dataInicio && item.dataTermino) {
-                    splitStartDate = item.dataInicio.split('/');
-                    splitEndDate = item.dataTermino.split('/');
-                    startDate = new Date(`${splitStartDate[2]}/${splitStartDate[1]}/${splitStartDate[0]}`);
-                    endDate = new Date(`${splitEndDate[2]}/${splitEndDate[1]}/${splitEndDate[0]}`);
-                } else {
-                    splitStartDate = item.dataPrevistaInicio.split('/');
-                    splitEndDate = item.dataPrevistaTermino.split('/');
-                    startDate = new Date(`${splitStartDate[2]}/${splitStartDate[1]}/${splitStartDate[0]}`);
-                    endDate = new Date(`${splitEndDate[2]}/${splitEndDate[1]}/${splitEndDate[0]}`);
-                }
-
-                defaultData.push([
-                    item.id,
-                    item.descricao,
-                    item.estagio,
-                    startDate,
-                    endDate,
-                    null,
-                    item.percentualConclusao,
-                    null,
-                ]);
-            });
-        });
-        setData(defaultData);
-        setIsLoading(false);
-    }
-
-    function setDataActivities(dados) {
+    function setDataActivities(data) {
         const todo = [];
         const doing = [];
         const done = [];
 
-        dados.map(item => {
+        data.map(item => {
             switch (item.estagio) {
                 case 'TO_DO':
-                    todo.push({ id: item.id, description: item.descricao, state: item.estagio });
+                    arrayPushData(todo, item);
                     break;
                 case 'DOING':
-                    doing.push({ id: item.id, description: item.descricao, state: item.estagio });
+                    arrayPushData(doing, item);
                     break;
                 case 'DONE':
-                    done.push({ id: item.id, description: item.descricao, state: item.estagio });
+                    arrayPushData(done, item);
                     break;
             }
         });
+
+        function arrayPushData(array, item) {
+            array.push({ id: item.id, description: item.descricao, state: item.estagio });
+        }
 
         setColumns({
             columns: [{
@@ -220,50 +170,51 @@ function Dashboard(props) {
     }
 
     function TabPanel(props) {
-      const { children, value, index, ...other } = props;
+        const { children, value, index, ...other } = props;
 
-      return (
-        <div
-            role='tabpanel'
-            hidden={value !== index}
-            id={`scrollable-auto-tabpanel-${index}`}
-            aria-labelledby={`scrollable-auto-tab-${index}`}
-            {...other}
-        >
-        {value === index && (
-            <Box p={3}>
-                <Typography>{children}</Typography>
-            </Box>
-            )}
-        </div>
+        return (
+            <div
+                role='tabpanel'
+                hidden={value !== index}
+                id={`scrollable-auto-tabpanel-${index}`}
+                aria-labelledby={`scrollable-auto-tab-${index}`}
+                {...other}
+            >
+                {
+                    value === index &&
+                    <Box className={classes.containerTab}>
+                        {children}
+                    </Box>
+                }
+            </div>
         );
     }
 
-  TabPanel.propTypes = {
-      children: PropTypes.node,
-      index: PropTypes.any.isRequired,
-      value: PropTypes.any.isRequired,
-  };
-
-  function a11yProps(index) {
-      return {
-        id: `scrollable-auto-tab-${index}`,
-        'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    TabPanel.propTypes = {
+        children: PropTypes.node,
+        index: PropTypes.any.isRequired,
+        value: PropTypes.any.isRequired,
     };
-}
-  const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    function a11yProps(index) {
+        return {
+            id: `scrollable-auto-tab-${index}`,
+            'aria-controls': `scrollable-auto-tabpanel-${index}`,
+        };
+    }
+    const [value, setValue] = useState(0);
 
-  function getComponentDialog(type, message, fnClickYes) {
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    function getComponentDialog(type, message, fnClickYes) {
         return (
             <Dialog
                 type={type}
                 title={type === 'confirm' ? 'Confirmação' : 'Atenção'}
-                text={openDialog.message}
-                open={openDialog.isAlert}
+                text={dialog.message}
+                open={dialog.open}
                 optionOk={resetData}
             />
         );
@@ -271,45 +222,69 @@ function Dashboard(props) {
 
     return (
         <React.Fragment>
-        <Body>
-                  <AppBar position='static' color='default'>
+            <Body>
+                <AppBar position='static' color='default'>
                     <Tabs
-                      value={value}
-                      onChange={handleChange}
-                      indicatorColor='primary'
-                      textColor='primary'
-                      variant='scrollable'
-                      scrollButtons='auto'
-                      aria-label='scrollable auto tabs example'
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor='primary'
+                        textColor='primary'
+                        variant='scrollable'
+                        scrollButtons='auto'
                     >
-                      <Tab label='Atividades' {...a11yProps(0)} />
-                      <Tab label='Cronograma' {...a11yProps(1)} />
+                        <Tab label='Atividades' {...a11yProps(0)} />
+                        <Tab label='Cronograma' {...a11yProps(1)} />
                     </Tabs>
-                  </AppBar>
-                  <TabPanel value={value} index={0}>
-                     <Board onCardDragEnd={handleCardMove} disableColumnDrag>
-                         {columns}
-                     </Board>
-                  </TabPanel>
-                  <TabPanel value={value} index={1}>
+                </AppBar>
+                <TabPanel value={value} index={0}>
+                    <Board onCardDragEnd={handleCardMove} disableColumnDrag>
+                        {columns}
+                    </Board>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
                     <Chart
                         width={'100%'}
-                        height={'100%'}
-                        chartType='Gantt'
-                        loader={<Loading />}
-                        data={data}
+                        height={350}
+                        chartType="Calendar"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            [{ type: 'date', id: 'Date' }, { type: 'number', id: 'teste' }],
+                            [new Date(2012, 3, 13), 1],
+                            [new Date(2012, 4, 15), 2]
+                        ]}
                         options={{
-                            height: '100%',
-                            gantt: {
-                                trackHeight: 30,
-                            },
+                            title: 'Cronograma atividades',
+                            calendar: {
+                                daysOfWeek: 'DSTQQSS',
+                                underYearSpace: 10,
+                                underMonthSpace: 16,
+                                monthLabel: {
+                                    fontName: 'Times-Roman',
+                                    fontSize: 15,
+                                    color: '#0026f7',
+                                    bold: true,
+                                    italic: true
+                                },
+                                yearLabel: {
+                                    fontName: 'Times-Roman',
+                                    fontSize: 15,
+                                    color: '#0026f7',
+                                    bold: true,
+                                    italic: true
+                                },
+                                monthOutlineColor: {
+                                    stroke: '#0026f7',
+                                    strokeOpacity: 0.8,
+                                    strokeWidth: 2
+                                }
+                            }
                         }}
-                        rootProps={{ 'data-testid': '2' }}
+                        rootProps={{ 'data-testid': '1' }}
                     />
-                  </TabPanel>
-                </Body>
+                </TabPanel>
+            </Body>
             {isLoading && <Loading />}
-            { openDialog.isAlert && getComponentDialog('alert') }
+            {dialog.open && getComponentDialog('alert')}
         </React.Fragment>
     );
 }
