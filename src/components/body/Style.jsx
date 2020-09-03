@@ -5,6 +5,6 @@ export const useStyles = makeStyles(props => ({
         height: 'calc(100vh - 65px)',
         width: '100%',
         backgroundColor: props => props.backgroundColor ? props.backgroundColor : '#f0f0f0',
-        overflow: props => props.overflow ? props.overflow : 'auto',
+        overflow: props => props.overflow ? props.overflow : 'auto'
     }
 }))
