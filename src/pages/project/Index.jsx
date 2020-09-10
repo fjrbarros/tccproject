@@ -8,8 +8,7 @@ import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 import Board, { moveCard } from '@lourenci/react-kanban';
-import PropTypes from 'prop-types';
-import Chart from 'react-google-charts';
+import Chart from '../../components/chart/Index';
 
 function Dashboard(props) {
     const classes = useStyles();
@@ -60,20 +59,6 @@ function Dashboard(props) {
                 openDialog('alert', error.response.data.message);
             });
     }
-
-    // function getSchedule() {
-    //     if (!Project) return;
-
-    //     setIsLoading(true);
-    //     Api.get(`/projeto/${Project.id}/cronograma`)
-    //         .then(resp => {
-    //             assembleGraphic(resp);
-    //         })
-    //         .catch(error => {
-    //             setDialog('alert', error.response.data.message);
-    //             setIsLoading(false);
-    //         });
-    // }
 
     function setDataActivities(data) {
         const todo = [];
@@ -176,8 +161,6 @@ function Dashboard(props) {
             <div
                 role='tabpanel'
                 hidden={value !== index}
-                id={`scrollable-auto-tabpanel-${index}`}
-                aria-labelledby={`scrollable-auto-tab-${index}`}
                 {...other}
             >
                 {
@@ -190,21 +173,9 @@ function Dashboard(props) {
         );
     }
 
-    TabPanel.propTypes = {
-        children: PropTypes.node,
-        index: PropTypes.any.isRequired,
-        value: PropTypes.any.isRequired,
-    };
-
-    function a11yProps(index) {
-        return {
-            id: `scrollable-auto-tab-${index}`,
-            'aria-controls': `scrollable-auto-tabpanel-${index}`,
-        };
-    }
     const [value, setValue] = useState(0);
 
-    const handleChange = (event, newValue) => {
+    function handleChange(event, newValue) {
         setValue(newValue);
     };
 
@@ -232,8 +203,8 @@ function Dashboard(props) {
                         variant='scrollable'
                         scrollButtons='auto'
                     >
-                        <Tab label='Atividades' {...a11yProps(0)} />
-                        <Tab label='Cronograma' {...a11yProps(1)} />
+                        <Tab label='Atividades' />
+                        <Tab label='Cronograma' />
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
@@ -242,45 +213,7 @@ function Dashboard(props) {
                     </Board>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Chart
-                        width={'100%'}
-                        height={350}
-                        chartType="Calendar"
-                        loader={<div>Loading Chart</div>}
-                        data={[
-                            [{ type: 'date', id: 'Date' }, { type: 'number', id: 'teste' }],
-                            [new Date(2012, 3, 13), 1],
-                            [new Date(2012, 4, 15), 2]
-                        ]}
-                        options={{
-                            title: 'Cronograma atividades',
-                            calendar: {
-                                daysOfWeek: 'DSTQQSS',
-                                underYearSpace: 10,
-                                underMonthSpace: 16,
-                                monthLabel: {
-                                    fontName: 'Times-Roman',
-                                    fontSize: 15,
-                                    color: '#0026f7',
-                                    bold: true,
-                                    italic: true
-                                },
-                                yearLabel: {
-                                    fontName: 'Times-Roman',
-                                    fontSize: 15,
-                                    color: '#0026f7',
-                                    bold: true,
-                                    italic: true
-                                },
-                                monthOutlineColor: {
-                                    stroke: '#0026f7',
-                                    strokeOpacity: 0.8,
-                                    strokeWidth: 2
-                                }
-                            }
-                        }}
-                        rootProps={{ 'data-testid': '1' }}
-                    />
+                    <Chart />
                 </TabPanel>
             </Body>
             {isLoading && <Loading />}
