@@ -13,16 +13,21 @@ import SaveIcon from '@material-ui/icons/Save';
 import Body from '../../components/body/Index';
 import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
+import EditIcon from '@material-ui/icons/Edit';
+import Modal from '../modal/Index';
 
 function ComponentRegisterUser(props) {
     const classes = useStyles(props);
     const location = useLocation();
     const isNewUser = props.isNewUser;
-    const _id = useSelector(state => state.id);
+    const idUser = useSelector(state => state.id);
     const _name = useSelector(state => state.name);
     const _email = useSelector(state => state.email);
     const _phone = useSelector(state => state.phone);
     const [isLoading, setIsLoading] = useState(false);
+    const [openModal, setOpenModal] = useState({
+        editPassword: false
+    });
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -49,7 +54,7 @@ function ComponentRegisterUser(props) {
     }
 
     useEffect(() => {
-        if(location.pathname === '/register-user') return;
+        if (location.pathname === '/register-user') return;
         setValues({
             ...values,
             name: _name,
@@ -64,61 +69,71 @@ function ComponentRegisterUser(props) {
     }
 
     function validateFormCadastro() {
+
+        const _values = values;
         const errors = {};
-        validateForm(values, (campo, msg) => errors[campo] = msg);
+
+        if (!isNewUser) {
+            delete _values.password;
+            delete _values.confPassword;
+        }
+
+        validateForm(_values, (campo, msg) => errors[campo] = msg);
         setError(errors);
         if (Object.keys(errors).length === 0) {
-            if (isNewUser) {
-                registerNewUser();
-            } else {
-                updateUser();
-            }
+            registerUser();
         }
     }
 
-    function updateUser() {
-        const urlInfo = `/usuario/${_id}`;
-        const urlPassword = `/usuario/alteracaoSenha/${_id}`;
-        const newPassword = { senha: values.password };
-        const dataInfo = {
-            email: values.email,
-            nome: values.name,
-            foneContato: values.phone.replace(/\D/g, '')
-        };
-
-        setIsLoading(true);
-        Api.all([
-            Api.put(urlInfo, dataInfo),
-            Api.post(urlPassword, newPassword)
-        ]).then(Api.spread((respInf, respPass) => {
-            setIsLoading(false);
-            resetData();
-            Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
-        })).catch(error => {
-            setIsLoading(false);
-            openDialog('alert', error.response.data.message);
-        });
-    }
-
-    function registerNewUser() {
-        const url = '/usuario';
+    function registerUser() {
         const data = {
             email: values.email,
             nome: values.name,
-            senha: values.password,
             foneContato: values.phone.replace(/\D/g, '')
         };
 
+        if (isNewUser) {
+            data.senha = values.password;
+
+            setIsLoading(true);
+            Api.post('/usuario', data)
+                .then(() => {
+                    fnSuccess();
+                })
+                .catch(error => {
+                    fnError(error);
+                });
+        } else {
+            setIsLoading(true);
+            Api.put(`/usuario/${idUser}`, data)
+                .then(() => {
+                    fnSuccess();
+                })
+                .catch(error => {
+                    fnError(error);
+                });
+        }
+    }
+
+    function fnSuccess() {
+        setIsLoading(false);
+        resetData();
+        Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
+    }
+
+    function fnError(error) {
+        setIsLoading(false);
+        openDialog('alert', error.response.data.message);
+    }
+
+    function updatePassword() {
         setIsLoading(true);
-        Api.post(url, data)
-            .then(resp => {
-                setIsLoading(false);
-                resetData();
-                Toast.notify('Dados salvos com sucesso.', { duration: 2000 });
+        Api.post(`usuario/alteracaoSenha/${idUser}`, { senha: values.password })
+            .then(() => {
+                fnSuccess();
             })
             .catch(error => {
-                setIsLoading(false);
-                openDialog('alert', error.response.data.message);
+                fnError(error);
             });
     }
 
@@ -152,10 +167,121 @@ function ComponentRegisterUser(props) {
         });
     }
 
+    function getPassWordFields() {
+        return (
+            <React.Fragment>
+                <PasswordField
+                    label='Senha'
+                    fullWidth
+                    className={classes.marginBottom}
+                    name='password'
+                    value={values.password}
+                    error={!!error.password}
+                    helperText={error.password}
+                    onChange={handleChange}
+                />
+                <PasswordField
+                    label='Confirmação senha'
+                    fullWidth
+                    className={classes.marginBottom}
+                    name='confPassword'
+                    value={values.confPassword}
+                    error={!!error.confPassword}
+                    helperText={error.confPassword}
+                    onChange={handleChange}
+                />
+            </React.Fragment>
+        );
+    }
+
+    function getButtonSave() {
+        return (
+            <Button
+                className={classes.saveButton}
+                variant='contained'
+                color='primary'
+                startIcon={<SaveIcon />}
+                type='submit'
+            >
+                Salvar
+            </Button>
+        )
+    }
+
+    function getButtonEdit() {
+        return (
+            <Button
+                className={classes.editPasswordButton}
+                variant='contained'
+                color='primary'
+                startIcon={<EditIcon />}
+                onClick={() => setOpenModal({
+                    ...openModal,
+                    editPassword: true
+                })}
+            >
+                Editar senha
+            </Button>
+        )
+    }
+
+    function getButtons() {
+        if (isNewUser) {
+            return getButtonSave();
+        }
+
+        return (
+            <React.Fragment>
+                {
+                    getButtonEdit()
+                }
+                {
+                    getButtonSave()
+                }
+
+            </React.Fragment>
+        );
+    }
+
+    function handleClickCancel() {
+        const errors = {
+            ...error,
+            password: '',
+            confPassword: ''
+        };
+        setOpenModal({
+            ...openModal,
+            editPassword: false
+        });
+        setValues({
+            ...values,
+            password: '',
+            confPassword: ''
+        });
+        setError(errors);
+    }
+
+    function handleClickSave() {
+        const errors = {};
+        const _values = {
+            password: values.password,
+            confPassword: values.confPassword
+        };
+
+        validateForm(_values, (campo, msg) => errors[campo] = msg);
+        setError(errors);
+        if (Object.keys(errors).length === 0) {
+            updatePassword();
+        }
+    }
+
     return (
         <Body>
             <Box className={classes.container}>
-                <form className={classes.form} onSubmit={handleSubmit}>
+                <form
+                    className={classes.form}
+                    onSubmit={handleSubmit}
+                >
                     <TextField
                         label='Nome completo'
                         name='name'
@@ -187,35 +313,12 @@ function ComponentRegisterUser(props) {
                         helperText={error.email}
                         onChange={handleChange}
                     />
-                    <PasswordField
-                        label='Senha'
-                        fullWidth
-                        className={classes.marginBottom}
-                        name='password'
-                        value={values.password}
-                        error={!!error.password}
-                        helperText={error.password}
-                        onChange={handleChange}
-                    />
-                    <PasswordField
-                        label='Confirmação senha'
-                        fullWidth
-                        className={classes.marginBottom}
-                        name='confPassword'
-                        value={values.confPassword}
-                        error={!!error.confPassword}
-                        helperText={error.confPassword}
-                        onChange={handleChange}
-                    />
-                    <Button
-                        className={classes.saveButton}
-                        variant='contained'
-                        color='primary'
-                        startIcon={<SaveIcon />}
-                        type='submit'
-                    >
-                        Salvar
-                    </Button>
+                    {
+                        isNewUser && getPassWordFields()
+                    }
+                    {
+                        getButtons()
+                    }
                 </form>
             </Box>
             <Dialog
@@ -226,6 +329,18 @@ function ComponentRegisterUser(props) {
                 optionOk={handleCloseDialog}
             />
             {isLoading && <Loading />}
+            {openModal.editPassword &&
+                <Modal
+                    open={openModal.editPassword}
+                    title='Editar senha'
+                    useButtonCancel
+                    useButtonSave
+                    onClickCancel={handleClickCancel}
+                    onClickSave={handleClickSave}
+                >
+                    {getPassWordFields()}
+                </Modal>
+            }
         </Body>
     );
 }

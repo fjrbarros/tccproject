@@ -21,7 +21,7 @@ function PageRegister() {
           <Box className={classes.flex} />
         </Toolbar>
       </AppBar>
-      <ComponentRegisterUser isNewUser={true} />
+      <ComponentRegisterUser isNewUser />
     </React.Fragment>
   );
 }

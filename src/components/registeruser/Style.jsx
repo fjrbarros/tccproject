@@ -25,7 +25,14 @@ export const useStyles = makeStyles(props => ({
         margin: '0px 0px 15px 0px'
     },
 
+    editPasswordButton: {
+        width: '49%',
+        marginRight: '5px',
+        textTransform: 'none'
+    },
+
     saveButton: {
-        width: '70%'
+        width: '49%',
+        textTransform: 'none'
     }
 }))

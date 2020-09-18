@@ -48,7 +48,7 @@ export function validateForm(values, errorFn) {
     }
 }
 
-function validateName(name, required) {
+function validateName(name) {
     if(!name) {
         return 'Nome é obrigatório!';
     } else {
