@@ -46,7 +46,8 @@ function Routes() {
             iconMenu: true,
             iconFilter: true,
             iconLogOut: true,
-            menuDrawer: true
+            menuDrawer: true,
+            iconChat: true
         }
     }
 

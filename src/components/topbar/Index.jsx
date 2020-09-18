@@ -14,6 +14,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import Modal from '../../core/dialog/Index';
 import ComponentDrawer from '../../components/drawer/Index';
+import ChatIcon from '@material-ui/icons/Chat';
+import Chat from '../chat/Index';
 
 function TopBar(props) {
   const { action } = props;
@@ -24,6 +26,7 @@ function TopBar(props) {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(state => state.name);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openChat, setOpenChat] = useState(false);
 
   function fnClickYes() {
     setOpenModal(false);
@@ -74,6 +77,11 @@ function TopBar(props) {
 
   function handleToggleMenu(event, openModal) {
     setOpenModal(openModal);
+    setMenuActive(!isMenuActive);
+  }
+
+  function handleOpenChat() {
+    setOpenChat(!openChat);
     setMenuActive(!isMenuActive);
   }
 
@@ -144,6 +152,15 @@ function TopBar(props) {
               </Tooltip>
             }
             {
+              action.iconChat &&
+              <Tooltip title='Chat' placement='bottom'>
+                <ChatIcon
+                  className={classes.allIcon}
+                  onClick={() => setOpenChat(!openChat)}
+                />
+              </Tooltip>
+            }
+            {
               action.iconLogOut &&
               <Tooltip title='Logout' placement='bottom'>
                 <PowerSettingsNewIcon
@@ -202,6 +219,15 @@ function TopBar(props) {
           </Tooltip>
         }
         {
+          action.iconChat &&
+          <Tooltip title='Chat' placement='left'>
+            <ChatIcon
+              className={classes.allIconMenu}
+              onClick={() => handleOpenChat()}
+            />
+          </Tooltip>
+        }
+        {
           action.iconLogOut &&
           <Tooltip title='Logout' placement='left'>
             <PowerSettingsNewIcon
@@ -216,6 +242,7 @@ function TopBar(props) {
         toggleDrawer={toggleDrawer}
       />
       {openModal && getModal()}
+      {openChat && <Chat open={openChat} />}
     </Box>
   );
 }

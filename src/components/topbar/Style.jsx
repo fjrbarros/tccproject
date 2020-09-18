@@ -42,11 +42,11 @@ export const useStyles = makeStyles(isMenuActive => ({
     },
 
     allIcon: {
-        fontSize: '22px',
+        fontSize: '10px',
         cursor: 'pointer',
         margin: '0px 10px 0px 0px',
-        width: '28px',
-        height: '28px',
+        width: '25px',
+        height: '25px',
         color: '#ffffff',
         display: 'flex',
         alignItems: 'center',
@@ -61,26 +61,8 @@ export const useStyles = makeStyles(isMenuActive => ({
         }
     },
 
-    iconLogout: {
-        fontSize: '22px',
-        cursor: 'pointer',
-        width: '28px',
-        height: '28px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '3px',
-        transition: 'background-color .5s',
-        '&:hover': {
-            backgroundColor: 'rgb(0,0,0,0.3)'
-        },
-        '@media (max-width: 705px)': {
-            display: 'none'
-        }
-    },
-
     menuIcon: {
-        width: '28px',
+        width: '25px',
         display: 'none',
         padding: '0px 2px',
         cursor: 'pointer',
@@ -108,10 +90,10 @@ export const useStyles = makeStyles(isMenuActive => ({
     },
 
     menuItems: {
-        height: isMenuActive => isMenuActive ? '200px' : '0px',
-        width: '70px',
+        height: isMenuActive => isMenuActive ? '215px' : '0px',
+        width: '50px',
         position: 'absolute',
-        marginLeft: 'calc(100% - 70px)',
+        marginLeft: 'calc(100% - 50px)',
         zIndex: '9999',
         background: 'rgb(0,0,0,0.5)',
         transition: 'all 0.5s ease',
@@ -124,10 +106,10 @@ export const useStyles = makeStyles(isMenuActive => ({
     allIconMenu: {
         fontSize: '22px',
         cursor: 'pointer',
-        margin: '10px 0px 0px 21px',
+        margin: '10px 0px 0px 15px',
         color: '#ffffff',
-        width: '28px',
-        height: isMenuActive => isMenuActive ? '28px' : '0px',
+        width: '25px',
+        height: isMenuActive => isMenuActive ? '25px' : '0px',
         display: isMenuActive => isMenuActive ? 'block' : 'none',
         borderRadius: '3px',
         transition: 'all 0.2s ease',
