@@ -17,6 +17,7 @@ function Dashboard(props) {
     const Project = propsLocation.state ? propsLocation.state.Project : null;
     const propRefresh = propsLocation.state ? propsLocation.state.Refresh : false;
     const [isLoading, setIsLoading] = useState(false);
+    const [dataChart, setDataChart] = useState({});
     const [columns, setColumns] = useState({
         columns: [{
             id: 'TODO',
@@ -40,24 +41,41 @@ function Dashboard(props) {
     });
 
     useEffect(() => {
-        getActivitiesProject();
+        getDataProject();
     }, []);
 
-    if (propRefresh) getActivitiesProject();
+    if (propRefresh) {
+        getDataProject();
+    };
 
-    function getActivitiesProject() {
+    function getDataProject() {
         if (!Project) return;
+
         setIsLoading(true);
         propsLocation.state.Refresh = false;
 
         Api.get(`/projeto/${Project.id}/atividades`)
             .then(resp => {
                 setDataActivities(resp.data);
+                setIsLoading(false);
             })
             .catch(error => {
-                setIsLoading(false);
-                openDialog('alert', error.response.data.message);
+                fnError(error.response.data.message);
             });
+
+        Api.get(`/projeto/${Project.id}/cronograma`)
+            .then(resp => {
+                setIsLoading(false);
+                setDataChart(resp.data);
+            })
+            .catch(error => {
+                fnError(error.response.data.message);
+            });
+
+        function fnError(message) {
+            setIsLoading(false);
+            openDialog('alert', message);
+        }
     }
 
     function setDataActivities(data) {
@@ -213,7 +231,7 @@ function Dashboard(props) {
                     </Board>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Chart />
+                    <Chart data={dataChart} />
                 </TabPanel>
             </Body>
             {isLoading && <Loading />}
