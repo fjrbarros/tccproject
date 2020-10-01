@@ -25,3 +25,9 @@ function getMsgDay() {
 
     return '';
 }
+
+export function getFormattedScheduleData(data) {
+    // return new Promise(resolve => {
+
+    // });
+}

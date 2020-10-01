@@ -9,6 +9,7 @@ import Dialog from '../../core/dialog/Index';
 import Loading from '../../components/loading/Index';
 import Board, { moveCard } from '@lourenci/react-kanban';
 import Chart from '../../components/chart/Index';
+import { getFormattedScheduleData } from '../../util/otherfunctions/Index';
 
 function Dashboard(props) {
     const classes = useStyles();
@@ -67,6 +68,7 @@ function Dashboard(props) {
             .then(resp => {
                 setIsLoading(false);
                 setDataChart(resp.data);
+                getFormattedScheduleData();
             })
             .catch(error => {
                 fnError(error.response.data.message);

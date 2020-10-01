@@ -43,7 +43,7 @@ function Chart(props) {
         const svgElement = select(ref.current);
         const width = svgElement.attr('width');
         const height = svgElement.attr('height');
-        const margin = { top: 20, right: 20, bottom: 20, left: 50 };
+        const margin = { top: 20, right: 20, bottom: 20, left: 150 };
         const innerWidth = width - margin.left - margin.right;
         const innerHeight = height - margin.top - margin.bottom;
         const xScale = scaleLinear()
@@ -78,7 +78,7 @@ function Chart(props) {
 
         tooltip.append('text')
             .attr('x', 15)
-            .attr('dy', '1.e2m')
+            .attr('dy', '1.2em')
             .style('font-size', '1.25em')
             .attr('font-weight', 'bold')
 
