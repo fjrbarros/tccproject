@@ -33,7 +33,7 @@ export const useStyles = makeStyles(isMenuActive => ({
         flex: '1',
         display: 'flex',
         '@media (max-width: 600px)': {
-            flex: '0.5'
+            flex: '0.3'
         }
     },
 

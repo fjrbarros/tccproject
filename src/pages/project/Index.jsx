@@ -64,20 +64,27 @@ function Dashboard(props) {
                 fnError(error.response.data.message);
             });
 
+        getCronograma();
+
+    }
+
+    function getCronograma() {
         Api.get(`/projeto/${Project.id}/cronograma`)
             .then(resp => {
                 setIsLoading(false);
-                setDataChart(resp.data);
-                getFormattedScheduleData();
+                getFormattedScheduleData(resp.data)
+                    .then(arrayDataFormat => {
+                        setDataChart(arrayDataFormat)
+                    });
             })
             .catch(error => {
                 fnError(error.response.data.message);
             });
+    }
 
-        function fnError(message) {
-            setIsLoading(false);
-            openDialog('alert', message);
-        }
+    function fnError(message) {
+        setIsLoading(false);
+        openDialog('alert', message);
     }
 
     function setDataActivities(data) {
@@ -159,7 +166,8 @@ function Dashboard(props) {
         setIsLoading(true);
         Api.post(url, data)
             .then(resp => {
-                updateCard(_card, source, destination)
+                updateCard(_card, source, destination);
+                getCronograma();
                 setIsLoading(false);
             })
             .catch(error => {

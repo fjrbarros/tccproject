@@ -27,7 +27,24 @@ function getMsgDay() {
 }
 
 export function getFormattedScheduleData(data) {
-    // return new Promise(resolve => {
-
-    // });
+    return new Promise(resolve => {
+        const arrayDataFormat = [];
+        data.atividades.forEach(itemActivitie => {
+            itemActivitie.atividades.forEach(item => {
+                arrayDataFormat.push({
+                    ano: itemActivitie.ano,
+                    percentual: item.percentualConclusao,
+                    percetualChart: item.percentualConclusao === 0 ? 1 : item.percentualConclusao,
+                    descricao: item.descricao,
+                    estagio: item.estagio,
+                    estagioStr: item.estagio === 'TO_DO' ? 'TO DO' : item.estagio === 'DOING' ? 'Doing' : 'Done',
+                    dataInicio: item.dataInicio,
+                    dataTermino: item.dataTermino,
+                    dataPrevistaInicio: item.dataPrevistaInicio,
+                    dataPrevistaTermino: item.dataPrevistaTermino
+                });
+            })
+        });
+        resolve(arrayDataFormat);
+    });
 }
