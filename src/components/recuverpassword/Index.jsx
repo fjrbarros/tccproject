@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import SendIcon from '@material-ui/icons/Send';
 import CloseIcon from '@material-ui/icons/Close';
 import DialogNotification from '../../core/dialog/Index';
+import Swal from 'sweetalert2'
 
 function ModalRecuverPassword(props) {
     const classes = useStyles(props);
@@ -51,9 +52,14 @@ function ModalRecuverPassword(props) {
                 handleClose();
             })
             .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response ? error.response.data.message : error.message
+                });
                 handleClose();
-                setOpenDialog(true);
-                setTextDialog(error.response ? error.response.data.message : error.message);
+                //setOpenDialog(true);
+                //setTextDialog(error.response ? error.response.data.message : error.message);
             });
     }
 

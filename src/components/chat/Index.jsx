@@ -22,6 +22,7 @@ function Chat(props) {
                 paper: classes.drawerPaper,
             }}
         >
+            <div>aaaaaadfasfsafasfasfa</div>
             <List>
                 {['aaaaaaabbbbbbbbcccccccddddd', 'User 2', 'User 3', 'User 4'].map((text, index) => (
                     <ListItem
