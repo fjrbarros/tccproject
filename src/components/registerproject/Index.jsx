@@ -99,8 +99,9 @@ function ComponentRegisterProject(props) {
 
         Api.get(url)
             .then(resp => {
-                setDisabledBaseModel(!resp.data.length > 0);
                 setDataModelBase(resp.data);
+                setValueModelBase(null);
+                setDisabledBaseModel(!resp.data.length);
             }).catch(error => {
                 openDialog('alert', error.response.data.message);
             });
@@ -120,7 +121,7 @@ function ComponentRegisterProject(props) {
     }
 
     function setDataEditProject(data) {
-        const newTypeProject =  _typeProject.filter(item => item.valor === data.tipoProjeto);
+        const newTypeProject = _typeProject.filter(item => item.valor === data.tipoProjeto);
         const dateInitProject = data.dataInicio.split('/');
         const dateEndProject = data.dataPrevistaTermino.split('/');
         const newDateInit = new Date(`${dateInitProject[2]}/${dateInitProject[1]}/${dateInitProject[0]}`);
@@ -270,14 +271,14 @@ function ComponentRegisterProject(props) {
     }
 
     function handleRemoveMemberProject(idMember) {
-        if(isEdit) {
+        if (isEdit) {
             Api.delete(`/projeto/${Project.id}/membro/${idMember}`)
-            .then(resp => {
-                Toast.notify('Membro removido com sucesso.', { duration: 2000 });
-                setFilterMember(idMember);
-            }).catch(error => {
-                openDialog('alert', error.response.data.message);
-            });
+                .then(resp => {
+                    Toast.notify('Membro removido com sucesso.', { duration: 2000 });
+                    setFilterMember(idMember);
+                }).catch(error => {
+                    openDialog('alert', error.response.data.message);
+                });
             return;
         }
 
