@@ -1,16 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStyles } from './Style';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
+import SearchIcon from '@material-ui/icons/Search';
 import ImgUser from '../../assets/user.png';
+import {
+    Drawer,
+    List,
+    ListItem,
+    ListItemIcon,
+    Typography,
+    Avatar,
+    Box,
+    TextField,
+    IconButton,
+    InputAdornment
+} from '@material-ui/core';
 
 function Chat(props) {
     const { open } = props;
     const classes = useStyles();
+    const data = ['aaaaaaabbbbbbbbcccccccddddd', 'User 2', 'User 3', 'User 4'];
+
+    const [teste, setTeste] = useState(false);
+
+    function handleMouseDownPassword(event) {
+        event.preventDefault();
+    };
+
+    function getDrawerTeste() {
+        return (
+            <Drawer
+                className={classes.drawer}
+                variant='persistent'
+                anchor='right'
+                open={teste}
+                classes={{
+                    paper: classes.drawerPaper,
+                }}
+            >
+                <div>asdfasfsafasfsafsafsafsafsa</div>
+            </Drawer>
+        );
+    }
 
     return (
         <Drawer
@@ -22,19 +52,42 @@ function Chat(props) {
                 paper: classes.drawerPaper,
             }}
         >
-            <div>aaaaaadfasfsafasfasfa</div>
+            <Box className={classes.chatHeader}>
+                <TextField
+                    label='Pesquisar'
+                    fullWidth
+                    // className={classes.marginBottom}
+                    name='search'
+                    // value={values.password}
+                    // onChange={handleChange}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    // onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                >
+                                    <SearchIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }}
+                />
+            </Box>
             <List>
-                {['aaaaaaabbbbbbbbcccccccddddd', 'User 2', 'User 3', 'User 4'].map((text, index) => (
+                {data.map((text, index) => (
                     <ListItem
                         className={classes.listItem}
                         button
                         key={text}
+                        onClick={() => setTeste(true)}
                     >
                         <ListItemIcon>{<Avatar alt='Remy Sharp' src={ImgUser} />}</ListItemIcon>
                         <Typography className={classes.nameUser}>{text}</Typography>
                     </ListItem>
                 ))}
             </List>
+            {teste && getDrawerTeste()}
         </Drawer>
     );
 }

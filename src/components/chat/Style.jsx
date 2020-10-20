@@ -33,5 +33,9 @@ export const useStyles = makeStyles(theme => ({
         whiteSpace: 'nowrap',
         textOverflow: 'Ellipsis',
         overflow: 'hidden'
+    },
+
+    chatHeader: {
+        padding: '10px'
     }
 }))
