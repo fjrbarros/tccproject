@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useStyles } from './Style';
 import SearchIcon from '@material-ui/icons/Search';
-import ImgUser from '../../assets/user.png';
+import ImgUser from '../../../assets/user.png';
+import ChatConversation from '../chatconversation/Index';
 import {
     Drawer,
     List,
@@ -18,28 +19,18 @@ import {
 function Chat(props) {
     const { open } = props;
     const classes = useStyles();
-    const data = ['aaaaaaabbbbbbbbcccccccddddd', 'User 2', 'User 3', 'User 4'];
+    const data = ['aaaaaaabbbbbbbbasdfsafsafsafsafsafsacccccccddddd', 'User 2', 'User 3', 'User 4'];
 
-    const [teste, setTeste] = useState(false);
+    const [openConversation, setOpenConversation] = useState(false);
+    const [nameUser, setNameUser] = useState('');
 
     function handleMouseDownPassword(event) {
         event.preventDefault();
     };
 
-    function getDrawerTeste() {
-        return (
-            <Drawer
-                className={classes.drawer}
-                variant='persistent'
-                anchor='right'
-                open={teste}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div>asdfasfsafasfsafsafsafsafsa</div>
-            </Drawer>
-        );
+    function handleClickListItem(event, nameuser) {
+        setOpenConversation(true);
+        setNameUser(nameuser);
     }
 
     return (
@@ -80,14 +71,21 @@ function Chat(props) {
                         className={classes.listItem}
                         button
                         key={text}
-                        onClick={() => setTeste(true)}
+                        onClick={event => handleClickListItem(event, text)}
                     >
                         <ListItemIcon>{<Avatar alt='Remy Sharp' src={ImgUser} />}</ListItemIcon>
                         <Typography className={classes.nameUser}>{text}</Typography>
                     </ListItem>
                 ))}
             </List>
-            {teste && getDrawerTeste()}
+            {
+                openConversation &&
+                <ChatConversation
+                    open={openConversation}
+                    nameUser={nameUser}
+                    handleCloseChatConversation={() => setOpenConversation(false)}
+                />
+            }
         </Drawer>
     );
 }

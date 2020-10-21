@@ -15,7 +15,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import Modal from '../../core/dialog/Index';
 import ComponentDrawer from '../../components/drawer/Index';
 import ChatIcon from '@material-ui/icons/Chat';
-import Chat from '../chat/Index';
+import Chat from '../chat/chatusers/Index';
 
 function TopBar(props) {
   const { action } = props;
